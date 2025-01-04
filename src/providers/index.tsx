@@ -6,7 +6,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { domMax, LazyMotion } from 'framer-motion'
 import { Provider as JotaiProvider } from 'jotai'
-import { ThemeProvider } from 'next-themes-suemor'
+import { ThemeProvider } from 'next-themes'
 import type { FC, JSX, PropsWithChildren } from 'react'
 
 import { jotaiStore } from '~/atoms/store'
@@ -17,13 +17,11 @@ const contexts: JSX.Element[] = [
   <LazyMotion features={domMax} key="lazyMotion" />,
   <QueryClientProvider client={queryClient} key="queryClientProvider" />,
   <JotaiProvider store={jotaiStore} key="jotaiProvider" />,
-  // @ts-ignore
   <ThemeProvider key="ThemeProvider" />,
 ]
 export const RootProviders: FC<PropsWithChildren> = ({ children }) => (
   <ProviderComposer contexts={contexts}>
     {children}
-
     {isDev && (
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
     )}
