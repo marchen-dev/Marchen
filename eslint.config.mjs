@@ -8,9 +8,11 @@ export default defineConfig(
     tailwindCSS: true,
   },
   {
-    rules:{
+    rules: {
       'antfu/top-level-function': 'off',
-    }
+      '@eslint-react/no-forward-ref': 'off',
+      '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 'off',
+    },
   },
   {
     files: ['**/*/package.json', 'package.json'],

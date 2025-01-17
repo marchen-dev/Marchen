@@ -1,6 +1,7 @@
 import { sansFont, serifFont } from '@base/lib/fonts'
 import type { Metadata } from 'next'
 
+import { SiteLayout } from '~/layout/container/SiteLayout'
 import Footer from '~/layout/footer/Footer'
 import Header from '~/layout/header/Header'
 import { Content } from '~/layout/main/Content'
@@ -22,9 +23,11 @@ export default function MarchenLayout({
         className={`${sansFont.variable} ${serifFont.variable} font-sans antialiased`}
       >
         <MarchenProviders>
-          <Header />
-          <Content>{children}</Content>
-          <Footer />
+          <SiteLayout>
+            <Header />
+            <Content>{children}</Content>
+            <Footer />
+          </SiteLayout>
         </MarchenProviders>
       </body>
     </html>
