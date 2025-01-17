@@ -1,0 +1,9 @@
+html {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+html,
+body {
+  height: 100%;
+}

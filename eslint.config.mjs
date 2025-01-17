@@ -8,6 +8,11 @@ export default defineConfig(
     tailwindCSS: true,
   },
   {
+    rules:{
+      'antfu/top-level-function': 'off',
+    }
+  },
+  {
     files: ['**/*/package.json', 'package.json'],
     rules: {
       'package-json/valid-package-def': 0,
