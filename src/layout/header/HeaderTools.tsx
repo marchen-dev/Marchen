@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@base/components/ui/tooltip'
+} from '@base/components/ui/Tooltip'
 import { useAppTheme } from '@base/hooks/use-app-theme'
 import { cn } from '@base/lib/helper'
 import { useEffect, useState } from 'react'
