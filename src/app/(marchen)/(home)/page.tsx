@@ -1,7 +1,7 @@
-import { HomeMasterCard } from '@domain/home/components/HomeMasterCard'
+import { HomeMasterInfo } from '@domain/home/components/HomeMasterInfo'
 import { HomeRecentPosts } from '@domain/home/components/HomeRecentPosts'
 import { HomeRecommendedPost } from '@domain/home/components/HomeRecommendedPost'
-import { HomeSiteDataStatistics } from '@domain/home/components/HomeSiteDataStatistics'
+import { HomeSiteData } from '@domain/home/components/HomeSiteData'
 
 export default function Home() {
   return (
@@ -15,16 +15,16 @@ export default function Home() {
 const HomeInformation = () => {
   return (
     <section className="grid grid-cols-4 items-center gap-4">
-      <HomeMasterCard />
+      <HomeMasterInfo />
       <HomeRecommendedPost />
-      <HomeSiteDataStatistics />
+      <HomeSiteData />
     </section>
   )
 }
 
 const HomeContent = () => {
   return (
-    <section className="mt-4">
+    <section className="mt-8">
       <HomeRecentPosts />
     </section>
   )
