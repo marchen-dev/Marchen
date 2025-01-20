@@ -69,5 +69,20 @@ export default {
       },
     },
   },
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require('daisyui/src/theming/themes')['light'],
+          secondary: '#737373',
+          'base-200': '#f3f4f6',
+        },
+        dark: {
+          ...require('daisyui/src/theming/themes')['dark'],
+          secondary: '#d4d4d4',
+        },
+      },
+    ],
+  },
   plugins: [daisyui, addDynamicIconSelectors(), require('tailwindcss-animate')],
 } satisfies Config

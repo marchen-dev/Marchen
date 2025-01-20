@@ -9,7 +9,7 @@ const content = `经历了漫长的假期之后，在 9 月 15 日的时候也�
 
 其中兼容 Web 版本尤为烦人，受限于浏览器限制，直到至今 Web 版本也是一个残血的阉割版。`
 
-export const RecommendedPost = () => {
+export const HomeRecommendedPost = () => {
   return (
     <div className="col-span-3 size-full">
       <Card className="size-full overflow-hidden p-0">
@@ -23,7 +23,7 @@ export const RecommendedPost = () => {
               <p className="line-clamp-4 text-lg">{content}</p>
             </div>
             <div className="flex justify-between">
-              <section className="flex items-center space-x-2 text-zinc-500">
+              <section className="flex items-center space-x-2 text-secondary">
                 <i className="icon-[mingcute--tag-2-line] text-lg" />
                 <span>Java</span>
                 <span>Spring</span>

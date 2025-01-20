@@ -1,7 +1,7 @@
 import { Card } from '@base/components/ui/Card/Card'
 import Image from 'next/image'
 
-export const MasterCard = () => {
+export const HomeMasterCard = () => {
   return (
     <Card className=" overflow-hidden">
       <div className="flex  flex-col items-center gap-2">
@@ -13,7 +13,7 @@ export const MasterCard = () => {
           width={100}
         />
         <h2 className="text-2xl font-medium">SuemorのBlog</h2>
-        <p className="text-zinc-600">所谓自由就是可以说二加二等于四的自由</p>
+        <p className="text-secondary">所谓自由就是可以说二加二等于四的自由</p>
         <ul className="mt-2 flex gap-4 text-2xl">
           {socialMediaConfig.map((item) => (
             <li key={item.icon}>

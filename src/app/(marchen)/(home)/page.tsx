@@ -1,23 +1,31 @@
-import { MasterCard } from '@domain/home/components/MasterCard'
-import { RecommendedPost } from '@domain/home/components/RecommendedPost'
-import { SiteDataStatistics } from '@domain/home/components/SiteDataStatistics'
+import { HomeMasterCard } from '@domain/home/components/HomeMasterCard'
+import { HomeRecentPosts } from '@domain/home/components/HomeRecentPosts'
+import { HomeRecommendedPost } from '@domain/home/components/HomeRecommendedPost'
+import { HomeSiteDataStatistics } from '@domain/home/components/HomeSiteDataStatistics'
 
 export default function Home() {
   return (
-    <>
-      <FirstScreen />
-    </>
+    <div className="mx-auto mt-2 min-w-0 max-w-7xl overflow-hidden">
+      <HomeInformation />
+      <HomeContent />
+    </div>
   )
 }
 
-const FirstScreen = () => {
+const HomeInformation = () => {
   return (
-    <div className="mx-auto h-dvh min-w-0 max-w-7xl overflow-hidden">
-      <div className="grid grid-cols-4 items-center gap-4 p-4">
-        <MasterCard />
-        <RecommendedPost />
-        <SiteDataStatistics />
-      </div>
-    </div>
+    <section className="grid grid-cols-4 items-center gap-4">
+      <HomeMasterCard />
+      <HomeRecommendedPost />
+      <HomeSiteDataStatistics />
+    </section>
+  )
+}
+
+const HomeContent = () => {
+  return (
+    <section className="mt-4">
+      <HomeRecentPosts />
+    </section>
   )
 }
