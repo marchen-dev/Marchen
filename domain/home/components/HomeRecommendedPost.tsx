@@ -11,7 +11,7 @@ const content = `经历了漫长的假期之后，在 9 月 15 日的时候也�
 
 export const HomeRecommendedPost = () => {
   return (
-    <div className="col-span-3 size-full">
+    <div className="col-span-2 size-full xl:col-span-3">
       <Card className="size-full overflow-hidden p-0">
         <div className="grid size-full grid-cols-3 ">
           <div className="relative h-full">
