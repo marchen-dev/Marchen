@@ -2,7 +2,7 @@
   "name": "Marchen",
   "version": "0.0.0",
   "private": false,
-  "packageManager": "pnpm@9.15.6",
+  "packageManager": "pnpm@10.5.2",
   "engines": {
     "node": ">=18"
   },
