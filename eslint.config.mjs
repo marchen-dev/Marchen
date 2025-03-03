@@ -20,5 +20,5 @@ export default defineConfig(
       'package-json/valid-package-def': 0,
       'package-json/valid-name': 0,
     },
-  },
+  }
 )

@@ -8,7 +8,7 @@ const Card: Component<ComponentPropsWithRef<'div'>> = ({
 }) => {
   return (
     <div
-      className={cn('rounded-xl bg-base-100 p-4 drop-shadow-sm', className)}
+      className={cn('rounded-xl bg-base-100 p-4 drop-shadow-xs', className)}
       {...props}
     >
       {children}

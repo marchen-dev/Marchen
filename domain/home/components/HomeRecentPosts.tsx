@@ -36,7 +36,7 @@ const content =
 export const PostCard = () => {
   const num = Math.floor(Math.random() * (5 - 1 + 1)) + 1
   return (
-    <div className="border-gray rounded-2xl border-2 bg-white  drop-shadow-sm">
+    <div className="border-gray rounded-2xl border-2 bg-white  drop-shadow-xs">
       <div className="relative h-[155px]">
         <Image src={`/${num}.jpg`} fill className="object-cover" alt="cover" />
       </div>

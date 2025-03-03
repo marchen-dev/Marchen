@@ -5,18 +5,18 @@ import { cva } from 'class-variance-authority'
 import * as React from 'react'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         default:
-          'bg-cn-primary text-cn-primary-foreground shadow hover:bg-cn-primary/90',
+          'bg-cn-primary text-cn-primary-foreground shadow-sm hover:bg-cn-primary/90',
         destructive:
-          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
+          'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90',
         outline:
-          'border border-input bg-background shadow-sm hover:bg-cn-accent hover:text-cn-accent-foreground',
+          'border border-input bg-background shadow-xs hover:bg-cn-accent hover:text-cn-accent-foreground',
         secondary:
-          'bg-cn-secondary text-cn-secondary-foreground shadow-sm hover:bg-cn-secondary/80',
+          'bg-cn-secondary text-cn-secondary-foreground shadow-xs hover:bg-cn-secondary/80',
         ghost: 'hover:bg-cn-accent hover:text-cn-accent-foreground',
         link: 'text-cn-primary underline-offset-4 hover:underline',
       },
