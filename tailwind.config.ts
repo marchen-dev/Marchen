@@ -1,4 +1,5 @@
 import { addDynamicIconSelectors } from '@iconify/tailwind'
+import daisyui from 'daisyui'
 import type { Config } from 'tailwindcss'
 
 export default {
@@ -68,5 +69,20 @@ export default {
       },
     },
   },
-  plugins: [addDynamicIconSelectors(), require('tailwindcss-animate')],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require('daisyui/src/theming/themes')['light'],
+          secondary: '#737373',
+          'base-200': '#f3f4f6',
+        },
+        dark: {
+          ...require('daisyui/src/theming/themes')['dark'],
+          secondary: '#d4d4d4',
+        },
+      },
+    ],
+  },
+  plugins: [daisyui, addDynamicIconSelectors(), require('tailwindcss-animate')],
 } satisfies Config

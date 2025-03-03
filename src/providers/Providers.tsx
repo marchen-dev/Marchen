@@ -11,17 +11,28 @@ import { jotaiStore } from '~/atoms/store'
 
 import { ProviderComposer } from './ProviderComposer'
 
-const contexts: JSX.Element[] = [
+const baseContexts: JSX.Element[] = [
   <LazyMotion features={domMax} key="lazyMotion" />,
   <QueryClientProvider client={queryClient} key="queryClientProvider" />,
   <JotaiProvider store={jotaiStore} key="jotaiProvider" />,
   <ThemeProvider key="ThemeProvider" attribute={['data-theme', 'class']} />,
 ]
-export const MarchenProviders: FC<PropsWithChildren> = ({ children }) => (
-  <ProviderComposer contexts={contexts}>
+
+const webAppContexts: JSX.Element[] = [...baseContexts]
+
+export const WebAppProviders: FC<PropsWithChildren> = ({ children }) => (
+  <ProviderComposer contexts={webAppContexts}>
     {children}
     {/* {isDev && (
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
     )} */}
+  </ProviderComposer>
+)
+
+const marchenAdminContexts: JSX.Element[] = [...baseContexts]
+
+export const MarchenAdminProviders: FC<PropsWithChildren> = ({ children }) => (
+  <ProviderComposer contexts={marchenAdminContexts}>
+    {children}
   </ProviderComposer>
 )
