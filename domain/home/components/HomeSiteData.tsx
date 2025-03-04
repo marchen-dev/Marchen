@@ -1,12 +1,12 @@
 import { Button } from '@base/components/ui/Button'
-import { Card } from '@base/components/ui/Card/Card'
+import { HomeCard } from '@base/components/ui/Card'
 import { cn } from '@base/lib/helper'
 
 export const HomeSiteData = () => {
   return (
     <>
       {homeSiteDataConfig.map((item) => (
-        <Card key={item.title} className={cn('flex-col p-5')}>
+        <HomeCard key={item.title} className={cn('flex-col p-5')}>
           <div className="flex justify-between">
             <div>
               <p className="text-zinc-500">{item.title}</p>
@@ -19,7 +19,7 @@ export const HomeSiteData = () => {
           <div className="ml-0.5 mt-8">
             <Button variant="secondary">查看</Button>
           </div>
-        </Card>
+        </HomeCard>
       ))}
     </>
   )

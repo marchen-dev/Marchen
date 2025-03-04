@@ -6,6 +6,7 @@ import { domMax, LazyMotion } from 'framer-motion'
 import { Provider as JotaiProvider } from 'jotai'
 import { ThemeProvider } from 'next-themes'
 import type { FC, JSX, PropsWithChildren } from 'react'
+import { Toaster } from 'sonner'
 
 import { jotaiStore } from '~/atoms/store'
 
@@ -23,6 +24,7 @@ const webAppContexts: JSX.Element[] = [...baseContexts]
 export const WebAppProviders: FC<PropsWithChildren> = ({ children }) => (
   <ProviderComposer contexts={webAppContexts}>
     {children}
+    <Toaster />
     {/* {isDev && (
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
     )} */}
@@ -34,5 +36,6 @@ const marchenAdminContexts: JSX.Element[] = [...baseContexts]
 export const MarchenAdminProviders: FC<PropsWithChildren> = ({ children }) => (
   <ProviderComposer contexts={marchenAdminContexts}>
     {children}
+    <Toaster />
   </ProviderComposer>
 )

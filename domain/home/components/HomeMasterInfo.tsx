@@ -1,10 +1,10 @@
-import { Card } from '@base/components/ui/Card/Card'
+import { HomeCard } from '@base/components/ui/Card/HomeCard'
 import { cn } from '@base/lib/helper'
 import Image from 'next/image'
 
 export const HomeMasterInfo = () => {
   return (
-    <Card className="col-span-2 overflow-hidden lg:col-span-1">
+    <HomeCard className="col-span-2 overflow-hidden lg:col-span-1">
       <div className="flex flex-col items-center gap-2">
         <Image
           src="https://y.suemor.com/suemor-avatar.jpeg"
@@ -26,7 +26,7 @@ export const HomeMasterInfo = () => {
           ))}
         </ul>
       </div>
-    </Card>
+    </HomeCard>
   )
 }
 

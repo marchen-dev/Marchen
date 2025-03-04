@@ -1,3 +1,4 @@
+import { FullPageErrorAlert } from '@base/components/common/FullPageErrorAlert'
 import { sansFont, serifFont } from '@base/lib/fonts'
 import { apiClient } from '@base/services'
 import type { Metadata } from 'next'
@@ -36,7 +37,9 @@ export default async function RootLayout({
         <body
           className={`${sansFont.variable} ${serifFont.variable} m-0 h-full p-0 font-sans`}
         >
-          <div className="flex h-full items-center justify-center">无数据</div>
+          <div className="flex h-full items-center justify-center">
+            <FullPageErrorAlert message="无数据" />
+          </div>
         </body>
       </html>
     )

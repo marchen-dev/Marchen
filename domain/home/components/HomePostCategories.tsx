@@ -1,9 +1,9 @@
 import { Button } from '@base/components/ui/Button'
-import { Card } from '@base/components/ui/Card'
+import { HomeCard } from '@base/components/ui/Card'
 
 export const HomePostCategories = () => {
   return (
-    <Card className="col-span-2 lg:col-span-3 xl:col-span-4">
+    <HomeCard className="col-span-2 lg:col-span-3 xl:col-span-4">
       <p>文章分类</p>
       <ul className="mt-4 flex flex-wrap gap-6">
         {homePostCategoriesConfig.map((category) => (
@@ -17,7 +17,7 @@ export const HomePostCategories = () => {
           </li>
         ))}
       </ul>
-    </Card>
+    </HomeCard>
   )
 }
 

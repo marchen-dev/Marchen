@@ -18,7 +18,8 @@ export const HeaderTools = () => {
   )
 }
 
-const ThemeToggle = () => {
+export const ThemeToggle: Component = (props) => {
+  const { className } = props
   const { isDarkMode, toggleTheme } = useAppTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -35,7 +36,7 @@ const ThemeToggle = () => {
         <TooltipTrigger asChild>
           <button
             type="button"
-            className="flex items-center"
+            className={cn('flex items-center', className)}
             onClick={() => toggleTheme()}
           >
             <i

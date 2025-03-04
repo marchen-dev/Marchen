@@ -1,4 +1,4 @@
-import { Card } from '@base/components/ui/Card/Card'
+import { HomeCard } from '@base/components/ui/Card'
 import Image from 'next/image'
 
 const content = `经历了漫长的假期之后，在 9 月 15 日的时候也是迎来了全新的大学生活，由于是转本班的缘故，我们班上一共有 60 个人，班主任是个男老师，对我们还是挺关心的，这点不错。
@@ -12,7 +12,7 @@ const content = `经历了漫长的假期之后，在 9 月 15 日的时候也�
 export const HomeRecommendedPost = () => {
   return (
     <div className="col-span-2 size-full xl:col-span-3">
-      <Card className="size-full overflow-hidden p-0">
+      <HomeCard className="size-full overflow-hidden p-0">
         <div className="grid size-full grid-cols-3 ">
           <div className="relative h-full">
             <Image src={`/1.jpg`} fill className="object-cover" alt="cover" />
@@ -36,7 +36,7 @@ export const HomeRecommendedPost = () => {
             </div>
           </div>
         </div>
-      </Card>
+      </HomeCard>
     </div>
   )
 }
