@@ -1,8 +1,15 @@
+'use server'
+
+import { getTokenOnServer } from '@base/lib/cookie.server'
 import { API_URL } from '@base/lib/env'
 import { ofetch } from 'ofetch'
 
 const apiFetch = ofetch.create({
   baseURL: API_URL,
+  onRequest: async (context) => {
+    const token = await getTokenOnServer()
+    context.options.headers.set('Authorization', `Bearer ${token}`)
+  },
 })
 
 const Get = <T = object>(url: string, params?: object): Promise<T> =>

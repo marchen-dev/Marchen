@@ -28,25 +28,15 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { ThemeToggle } from '~/layout/header/HeaderTools'
-
 export default function SetupPage() {
   return (
-    <div className="w-full px-5 sm:w-[460px]">
-      <h2 className="relative text-center text-3xl font-semibold">
-        Marchen Blog
-        <ThemeToggle className="absolute bottom-1 ml-1 inline" />
-      </h2>
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle className="text-xl">初始化博客</CardTitle>
-          <CardDescription>
-            欢迎使用 Marchen 博客，请先完成初始化
-          </CardDescription>
-        </CardHeader>
-        <SetUpForm />
-      </Card>
-    </div>
+    <Card className="mt-4">
+      <CardHeader>
+        <CardTitle className="text-xl">初始化博客</CardTitle>
+        <CardDescription>欢迎使用 Marchen 博客，请先完成初始化</CardDescription>
+      </CardHeader>
+      <SetUpForm />
+    </Card>
   )
 }
 

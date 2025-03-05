@@ -4,7 +4,7 @@
   "private": false,
   "packageManager": "pnpm@10.5.2",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "build": "next build",
@@ -28,6 +28,7 @@
     "daisyui": "^4.12.23",
     "framer-motion": "^12.4.7",
     "jotai": "^2.11.0",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.477.0",
     "next": "15.2.1",
     "next-runtime-env": "^3.2.2",
@@ -36,6 +37,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
+    "react-turnstile": "^1.1.4",
     "sonner": "^2.0.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
@@ -44,6 +46,7 @@
   "devDependencies": {
     "@innei/prettier": "^0.15.0",
     "@tanstack/react-query-devtools": "^5.62.11",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -56,6 +59,7 @@
     "require-in-the-middle": "^7.4.0",
     "simple-git-hooks": "^2.11.1",
     "tailwindcss": "^3.4.1",
+    "turnstile-types": "^1.2.3",
     "typescript": "^5"
   },
   "simple-git-hooks": {

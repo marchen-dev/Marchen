@@ -13,4 +13,20 @@ interface UserRegisterRequestType {
   email: string
 }
 
-export type { GetUserResponseType, UserRegisterRequestType }
+interface UserLoginRequestType {
+  name: string
+  password: string
+  captchaToken: string
+}
+
+interface UserLoginResponseType {
+  token: string
+  expiresIn: number
+}
+
+export type {
+  GetUserResponseType,
+  UserLoginRequestType,
+  UserLoginResponseType,
+  UserRegisterRequestType,
+}

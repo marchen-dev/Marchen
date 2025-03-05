@@ -1,6 +1,8 @@
 import { Get, Post } from '../fetch'
 import type {
   GetUserResponseType,
+  UserLoginRequestType,
+  UserLoginResponseType,
   UserRegisterRequestType,
 } from '../interfaces/user.interface'
 
@@ -9,6 +11,9 @@ export const user = {
     return Get<GetUserResponseType>('/user')
   },
   register(user: UserRegisterRequestType) {
-    return Post<GetUserResponseType>('/user/register', user)
+    return Post('/user/register', user)
+  },
+  login(user: UserLoginRequestType) {
+    return Post<UserLoginResponseType>('/user/login', user)
   },
 }

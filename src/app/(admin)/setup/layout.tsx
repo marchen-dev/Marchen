@@ -3,6 +3,8 @@ import { apiClient } from '@base/services'
 import type { Metadata } from 'next'
 import type { PropsWithChildren } from 'react'
 
+import { PortalLayout } from '~/layout/dashboard/PortalLayout'
+
 export const metadata: Metadata = {
   title: '初始化',
 }
@@ -15,9 +17,5 @@ export default async function SetupLayout(props: PropsWithChildren) {
     return <FullPageErrorAlert message="主人已经存在" />
   }
 
-  return (
-    <div className="flex h-full flex-col items-center justify-center pb-10">
-      {props.children}
-    </div>
-  )
+  return <PortalLayout title="Marchen Blog">{props.children}</PortalLayout>
 }
