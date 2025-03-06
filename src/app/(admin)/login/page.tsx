@@ -4,9 +4,11 @@ import { Button } from '@base/components/ui/Button'
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
-} from '@base/components/ui/Card/Card'
+  CardTitle,
+} from '@base/components/ui/Card'
 import {
   Form,
   FormControl,
@@ -34,7 +36,10 @@ import { z } from 'zod'
 export default function LoginPage() {
   return (
     <Card className="mt-4">
-      <CardHeader />
+      <CardHeader>
+        <CardTitle className="text-2xl">登录</CardTitle>
+        <CardDescription>请使用您的用户名和密码登录</CardDescription>
+      </CardHeader>
       <SetUpForm />
     </Card>
   )
@@ -59,6 +64,7 @@ const SetUpForm = () => {
     onError: (error: Error) => {
       turnstile.reset()
       form.reset()
+      captchaToken.current = null
       toast.error(error?.data?.message)
     },
   })
@@ -125,9 +131,9 @@ const SetUpForm = () => {
             }}
           />
         </CardContent>
-        <CardFooter className="mt-2 flex justify-end">
-          <Button type="submit" disabled={isPending}>
-            登录
+        <CardFooter className="mt-2">
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? '登录中...' : '登录'}
           </Button>
         </CardFooter>
       </form>

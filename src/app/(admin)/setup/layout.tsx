@@ -17,5 +17,5 @@ export default async function SetupLayout(props: PropsWithChildren) {
     return <FullPageErrorAlert message="主人已经存在" />
   }
 
-  return <PortalLayout title="Marchen Blog">{props.children}</PortalLayout>
+  return <PortalLayout title="Marchen 初始化">{props.children}</PortalLayout>
 }

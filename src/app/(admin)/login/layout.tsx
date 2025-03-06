@@ -7,5 +7,5 @@ export const metadata: Metadata = {
   title: '登录',
 }
 export default async function LoginLayout(props: PropsWithChildren) {
-  return <PortalLayout title="登录">{props.children}</PortalLayout>
+  return <PortalLayout title="欢迎回来">{props.children}</PortalLayout>
 }

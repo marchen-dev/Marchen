@@ -152,9 +152,9 @@ const SetUpForm = () => {
             )}
           />
         </CardContent>
-        <CardFooter className="flex justify-end">
-          <Button type="submit" disabled={isPending}>
-            完成
+        <CardFooter>
+          <Button className="w-full" type="submit" disabled={isPending}>
+            {isPending ? '正在初始化...' : '确认'}
           </Button>
         </CardFooter>
       </form>
