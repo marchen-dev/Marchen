@@ -1,7 +1,7 @@
-import type { GetUserResponseType } from './user.interface'
+import type { UserGetResponseType } from './user.interface'
 
 interface GetAggregateeResponseType {
-  user: GetUserResponseType
+  user: UserGetResponseType
 }
 
 export type { GetAggregateeResponseType }

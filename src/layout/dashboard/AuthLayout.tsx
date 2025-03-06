@@ -1,7 +1,15 @@
 import { apiClient } from '@base/services'
+import { redirect } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
 
+import { MasterDataProvider } from '~/providers/dashboard/MasterDataProvider'
+
 export const AuthLayout: React.FC<PropsWithChildren> = async (props) => {
-  await apiClient.user.get()
-  return <div>{props.children}</div>
+  const master = await apiClient.user.master().catch(() => {
+    return redirect('/login')
+  })
+
+  return (
+    <MasterDataProvider value={master}>{props.children}</MasterDataProvider>
+  )
 }

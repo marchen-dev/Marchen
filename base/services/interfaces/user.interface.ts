@@ -1,4 +1,13 @@
-interface GetUserResponseType {
+interface UserGetResponseType {
+  id: string
+  name: string
+  nickname: string
+  email: string
+  introduce: string | null
+  created: Date
+}
+
+interface UserMasterResponseType {
   id: string
   name: string
   nickname: string
@@ -25,8 +34,9 @@ interface UserLoginResponseType {
 }
 
 export type {
-  GetUserResponseType,
+  UserGetResponseType,
   UserLoginRequestType,
   UserLoginResponseType,
+  UserMasterResponseType,
   UserRegisterRequestType,
 }

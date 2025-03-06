@@ -1,14 +1,20 @@
-'use server'
-
+import { getToken } from '@base/lib/cookie'
 import { getTokenOnServer } from '@base/lib/cookie.server'
-import { API_URL } from '@base/lib/env'
+import { API_URL, isServerSide } from '@base/lib/env'
 import { ofetch } from 'ofetch'
 
 const apiFetch = ofetch.create({
   baseURL: API_URL,
   onRequest: async (context) => {
-    const token = await getTokenOnServer()
-    context.options.headers.set('Authorization', `Bearer ${token}`)
+    let token = null
+    if (isServerSide) {
+      token = await getTokenOnServer()
+    } else {
+      token = getToken()
+    }
+    if (token) {
+      context.options.headers.set('Authorization', `Bearer ${token}`)
+    }
   },
 })
 
