@@ -3,6 +3,7 @@ interface UserGetResponseType {
   name: string
   nickname: string
   email: string
+  avatar: string
   introduce: string | null
   created: Date
 }
@@ -12,6 +13,7 @@ interface UserMasterResponseType {
   name: string
   nickname: string
   email: string
+  avatar: string
   introduce: string | null
   created: Date
 }

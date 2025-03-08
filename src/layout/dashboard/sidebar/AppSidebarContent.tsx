@@ -1,63 +1,93 @@
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@base/components/ui/Collapsible'
+import {
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from '@base/components/ui/Sidebar'
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
+import Link from 'next/link'
+import type { FC } from 'react'
 
-// Menu items.
-const items = [
-  {
-    title: 'Home',
-    url: '#',
-    icon: Home,
-  },
-  {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
-  },
-]
+import type { SidebarContentType, SidebarItemType } from './config'
 
-export const AppSidebarContent = () => {
+export const AppSidebarContent: FC<{
+  sidebarContentData: SidebarContentType[]
+}> = (props) => {
+  const { sidebarContentData } = props
   return (
     <SidebarContent>
-      <SidebarGroup>
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
-        <SidebarGroupContent>
+      {sidebarContentData.map((item) => (
+        <SidebarGroup key={item.title}>
+          <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
           <SidebarMenu>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+            {item.items.map((subItem) => (
+              <SidebarContentMenu
+                key={subItem.title}
+                sidebarMenuData={subItem}
+              />
             ))}
           </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarGroup>
+        </SidebarGroup>
+      ))}
     </SidebarContent>
+  )
+}
+
+export const SidebarContentMenu: FC<{
+  sidebarMenuData: SidebarItemType
+}> = (props) => {
+  const { title, items, isActive, icon: Icon, url } = props.sidebarMenuData
+  if (!items) {
+    return (
+      <SidebarMenuItem key={title}>
+        <SidebarMenuButton asChild>
+          <Link href={url!}>
+            {Icon && <Icon />}
+            <span>{title}</span>
+          </Link>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    )
+  }
+  return (
+    <Collapsible
+      key={title}
+      asChild
+      defaultOpen={isActive}
+      className="group/collapsible"
+    >
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton tooltip={title}>
+            {Icon && <Icon />}
+            <span>{title}</span>
+            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {items?.map((subItem) => (
+              <SidebarMenuSubItem key={subItem.title}>
+                <SidebarMenuSubButton asChild>
+                  <Link href={subItem.url!}>
+                    <span>{subItem.title}</span>
+                  </Link>
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
   )
 }

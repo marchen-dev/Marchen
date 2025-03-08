@@ -4,7 +4,9 @@ import type { PropsWithChildren } from 'react'
 
 import { MasterDataProvider } from '~/providers/dashboard/MasterDataProvider'
 
-export const AuthLayout: React.FC<PropsWithChildren> = async (props) => {
+export const AuthenticatedLayout: React.FC<PropsWithChildren> = async (
+  props,
+) => {
   const master = await apiClient.user.master().catch(() => {
     return redirect('/login')
   })

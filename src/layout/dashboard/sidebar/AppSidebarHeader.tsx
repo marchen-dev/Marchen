@@ -10,7 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@base/components/ui/Sidebar'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, SquareArrowOutUpRight } from 'lucide-react'
+import Link from 'next/link'
 
 export const AppSidebarHeader = () => {
   return (
@@ -20,17 +21,17 @@ export const AppSidebarHeader = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton>
-                Select Workspace
+                Marchen 管理面板
                 <ChevronDown className="ml-auto" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
-              <DropdownMenuItem>
-                <span>Acme Inc</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Acme Corp.</span>
-              </DropdownMenuItem>
+              <Link href="/" target="_blank">
+                <DropdownMenuItem className="cursor-pointer">
+                  <SquareArrowOutUpRight />
+                  前往博客
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

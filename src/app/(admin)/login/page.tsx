@@ -21,6 +21,7 @@ import { Input } from '@base/components/ui/Input'
 import { Turnstile } from '@base/components/ui/Turnstile'
 import { setToken } from '@base/lib/cookie'
 import { enableTurnstile } from '@base/lib/env'
+import { routerBuilder, Routes } from '@base/lib/route-builder'
 import { apiClient } from '@base/services'
 import type { Error } from '@base/services/fetch'
 import type { UserLoginRequestType } from '@base/services/interfaces/user.interface'
@@ -59,7 +60,7 @@ const SetUpForm = () => {
     onSuccess: (data) => {
       setToken(data.token, data.expiresIn)
       toast.success('登录成功')
-      router.replace('/dashboard')
+      router.replace(routerBuilder(Routes.DASHBOARD))
     },
     onError: (error: Error) => {
       turnstile.reset()

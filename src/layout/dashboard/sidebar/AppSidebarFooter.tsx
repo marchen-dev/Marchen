@@ -1,7 +1,12 @@
+'use client'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@base/components/ui/Avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@base/components/ui/Dropdown'
 import {
@@ -10,32 +15,68 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@base/components/ui/Sidebar'
-import { ChevronUp, User2 } from 'lucide-react'
+import { useIsMobile } from '@base/hooks/use-mobile'
+import { removeToken } from '@base/lib/cookie'
+import { routerBuilder, Routes } from '@base/lib/route-builder'
+import { ChevronsUpDown, LogOut } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+
+import { useMasterData } from '~/providers/dashboard/MasterDataProvider'
 
 export const AppSidebarFooter = () => {
+  const { name, email, avatar } = useMasterData()
+  const isMobile = useIsMobile()
+  const router = useRouter()
   return (
     <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <SidebarMenuButton>
-                <User2 /> Username
-                <ChevronUp className="ml-auto" />
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
+                <Avatar className="size-8 rounded-lg">
+                  <AvatarImage src={avatar} alt={name} />
+                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{name}</span>
+                  <span className="truncate text-xs">{email}</span>
+                </div>
+                <ChevronsUpDown className="ml-auto size-4" />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              side="top"
-              className="w-[--radix-popper-anchor-width]"
+              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+              side={isMobile ? 'bottom' : 'right'}
+              align="end"
+              sideOffset={4}
             >
-              <DropdownMenuItem>
-                <span>Account</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Billing</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <span>Sign out</span>
+              <DropdownMenuLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                  <Avatar className="size-8 rounded-lg">
+                    <AvatarImage src={avatar} alt={name} />
+                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">{name}</span>
+                    <span className="truncate text-xs">{email}</span>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  removeToken()
+                  router.replace(routerBuilder(Routes.LOGIN))
+                  toast.success('退出登录成功')
+                }}
+              >
+                <LogOut />
+                退出登录
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
