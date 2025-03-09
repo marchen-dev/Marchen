@@ -20,7 +20,7 @@ export const AppSidebarHeader = () => {
         <SidebarMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <SidebarMenuButton>
+              <SidebarMenuButton className="font-medium">
                 Marchen 管理面板
                 <ChevronDown className="ml-auto" />
               </SidebarMenuButton>

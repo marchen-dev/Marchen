@@ -11,7 +11,7 @@ export const HeaderMaster = () => {
         width={42}
       />
       <div className="hidden overflow-hidden lg:block">
-        <h4 className="text-lg font-medium">SuemorのBlog</h4>
+        <h4 className=" font-medium">SuemorのBlog</h4>
         <p className="truncate text-sm text-secondary dark:text-base-content">
           所谓自由就是可以说二加二等于四的自由
         </p>

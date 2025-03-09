@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,6 +18,7 @@ import {
 } from '@base/components/ui/Sidebar'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import type { FC } from 'react'
 
 import type { SidebarContentType, SidebarItemType } from './config'
@@ -46,11 +49,12 @@ export const AppSidebarContent: FC<{
 export const SidebarContentMenu: FC<{
   sidebarMenuData: SidebarItemType
 }> = (props) => {
-  const { title, items, isActive, icon: Icon, url } = props.sidebarMenuData
+  const pathname = usePathname()
+  const { title, items, icon: Icon, url } = props.sidebarMenuData
   if (!items) {
     return (
       <SidebarMenuItem key={title}>
-        <SidebarMenuButton asChild>
+        <SidebarMenuButton asChild isActive={pathname === url}>
           <Link href={url!}>
             {Icon && <Icon />}
             <span>{title}</span>
@@ -63,7 +67,7 @@ export const SidebarContentMenu: FC<{
     <Collapsible
       key={title}
       asChild
-      defaultOpen={isActive}
+      defaultOpen={pathname.includes(url!)}
       className="group/collapsible"
     >
       <SidebarMenuItem>
@@ -78,7 +82,10 @@ export const SidebarContentMenu: FC<{
           <SidebarMenuSub>
             {items?.map((subItem) => (
               <SidebarMenuSubItem key={subItem.title}>
-                <SidebarMenuSubButton asChild>
+                <SidebarMenuSubButton
+                  asChild
+                  isActive={pathname === subItem.url}
+                >
                   <Link href={subItem.url!}>
                     <span>{subItem.title}</span>
                   </Link>

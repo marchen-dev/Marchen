@@ -1,3 +1,5 @@
+'use client'
+
 import { Sidebar } from '@base/components/ui/Sidebar'
 
 import { AppSidebarContent } from './AppSidebarContent'

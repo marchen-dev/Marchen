@@ -19,17 +19,17 @@ export const HomeRecommendedPost = () => {
           </div>
           <div className="relative col-span-2 flex flex-col justify-between p-3">
             <div className="space-y-3">
-              <h4 className="text-2xl font-medium">迟来的 2023 年度总结</h4>
-              <p className="line-clamp-4 text-lg">{content}</p>
+              <h4 className="text-xl font-medium">迟来的 2023 年度总结</h4>
+              <p className="line-clamp-4">{content}</p>
             </div>
             <div className="flex justify-between">
               <section className="flex items-center space-x-2 text-secondary">
-                <i className="icon-[mingcute--tag-2-line] text-lg" />
+                <i className="icon-[mingcute--tag-2-line] text-sm" />
                 <span>Java</span>
                 <span>Spring</span>
                 <span>后端</span>
               </section>
-              <time className="flex items-center gap-1">
+              <time className="flex items-center gap-1 text-sm">
                 <i className="icon-[mingcute--time-duration-line] text-lg" />
                 2023-11-06
               </time>

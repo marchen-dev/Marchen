@@ -12,33 +12,37 @@ import { SidebarTrigger } from '@base/components/ui/Sidebar'
 import { usePathname } from 'next/navigation'
 import { Fragment, useMemo } from 'react'
 
+import type { SidebarContentType } from './config'
 import { sidebarData } from './config'
 
 export const AppSidebarBreadcrumb = () => {
   const pathname = usePathname()
 
   const breadcrumbList = useMemo(() => {
-    const pathnameList: string[] = []
-    sidebarData.content.some((item) => {
-      return item.items.some((subItem) => {
-        if (subItem.url === pathname) {
-          pathnameList.push(subItem.title)
-          return true
-        }
-        if (subItem?.items) {
-          const _pathname = subItem.title
-          return subItem.items.some((nestedItem) => {
-            if (nestedItem.url === pathname) {
-              pathnameList.push(_pathname, nestedItem.title)
-              return true
+    const buildPathnameList = (
+      contentItems: SidebarContentType[],
+      targetPathname: string,
+    ): string[] => {
+      for (const item of contentItems) {
+        for (const subItem of item.items) {
+          if (subItem.url === targetPathname) {
+            return [subItem.title]
+          }
+          if (subItem.items) {
+            const result = buildPathnameList(
+              [{ title: subItem.title, items: subItem.items }],
+              targetPathname,
+            )
+            if (result.length > 0) {
+              return [subItem.title, ...result]
             }
-            return false
-          })
+          }
         }
-        return false
-      })
-    })
-    return pathnameList
+      }
+      return []
+    }
+
+    return buildPathnameList(sidebarData.content, pathname)
   }, [pathname])
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

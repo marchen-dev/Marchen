@@ -44,7 +44,7 @@ export const ThemeToggle: Component = (props) => {
                 isDarkMode
                   ? 'icon-[mingcute--moon-stars-line]'
                   : 'icon-[mingcute--sun-line]',
-                'text-2xl',
+                'text-xl',
               )}
             />
           </button>

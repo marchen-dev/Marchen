@@ -10,13 +10,13 @@ export const HomeSiteData = () => {
           <div className="flex justify-between">
             <div>
               <p className="text-zinc-500">{item.title}</p>
-              <p className="mt-3 text-3xl font-medium">{item.value}</p>
+              <p className="mt-3 text-2xl font-medium">{item.value}</p>
             </div>
             <div className="flex items-center">
-              <i className={cn(item.icon, 'text-4xl text-secondary')} />
+              <i className={cn(item.icon, 'text-3xl text-secondary')} />
             </div>
           </div>
-          <div className="ml-0.5 mt-8">
+          <div className="ml-0.5 mt-5">
             <Button variant="secondary">查看</Button>
           </div>
         </HomeCard>

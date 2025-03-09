@@ -6,9 +6,6 @@ export const HomeDropDown = () => {
   return (
     <div className="relative mt-32">
       <div className="absolute bottom-16 flex w-full flex-col items-center gap-2">
-        <p className="text-sm">
-          当第一颗卫星飞向大气层外，我们便以为自己终有一日会征服宇宙。
-        </p>
         <m.i
           className="icon-[mingcute--down-line] text-2xl"
           animate={{ y: 10 }}

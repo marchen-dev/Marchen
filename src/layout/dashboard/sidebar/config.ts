@@ -20,10 +20,11 @@ export const sidebarData = {
         {
           title: '博文',
           icon: BookOpen,
+          url: Routes.DASHBOARD_POSTS,
           items: [
             {
               title: '列表',
-              url: Routes.DASHBOARD_POSTS,
+              url: Routes.DASHBOARD_POSTS_VIEW,
             },
             {
               title: '编写',
@@ -38,7 +39,7 @@ export const sidebarData = {
           items: [
             {
               title: '用户',
-              url: '#',
+              url: Routes.DASHBOARD_SETTINGS_USER,
             },
             {
               title: '系统',

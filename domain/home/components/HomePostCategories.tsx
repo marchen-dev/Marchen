@@ -10,7 +10,7 @@ export const HomePostCategories = () => {
           <li key={category} className="text-sm text-gray-500">
             <Button
               variant="secondary"
-              className="h-12 px-8 text-lg text-zinc-600 dark:text-zinc-400"
+              className="h-10 px-6  text-zinc-600 dark:text-zinc-400"
             >
               {category}
             </Button>
