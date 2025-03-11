@@ -1,19 +1,24 @@
+'use client'
+
 import Image from 'next/image'
 
+import { useAggregationData } from '~/providers/root/AggregationDataProvider'
+
 export const HeaderMaster = () => {
+  const { site, user } = useAggregationData()
   return (
-    <section className="flex items-center gap-3 lg:ml-6">
+    <section className="flex items-center gap-3 xl:ml-6">
       <Image
-        src="https://y.suemor.com/suemor-avatar.jpeg"
+        src={user.avatar}
         alt="avatar"
         className="rounded-full"
         height={42}
         width={42}
       />
       <div className="hidden overflow-hidden lg:block">
-        <h4 className=" font-medium">SuemorのBlog</h4>
+        <h4 className=" font-medium">{site.title}</h4>
         <p className="truncate text-sm text-secondary dark:text-base-content">
-          所谓自由就是可以说二加二等于四的自由
+          {site.description}
         </p>
       </div>
     </section>

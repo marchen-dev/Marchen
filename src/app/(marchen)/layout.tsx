@@ -37,9 +37,7 @@ export default async function RootLayout({
         <body
           className={`${sansFont.variable} ${serifFont.variable} m-0 h-full p-0 font-sans`}
         >
-          <div className="flex h-full items-center justify-center">
-            <FullPageErrorAlert message="无数据" />
-          </div>
+          <FullPageErrorAlert message="无数据" />
         </body>
       </html>
     )

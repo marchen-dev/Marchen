@@ -1,8 +1,8 @@
 import { Get } from '../fetch'
-import type { GetAggregateeResponseType } from '../interfaces/aggregate.interface'
+import type { GetAggregateResponseType } from '../interfaces/aggregate.interface'
 
 export const aggregate = {
   get() {
-    return Get<GetAggregateeResponseType>('/aggregate')
+    return Get<GetAggregateResponseType>('/aggregate')
   },
 }

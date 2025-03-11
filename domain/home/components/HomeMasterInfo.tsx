@@ -1,22 +1,25 @@
+'use client'
+
 import { HomeCard } from '@base/components/ui/Card/HomeCard'
 import { cn } from '@base/lib/helper'
 import Image from 'next/image'
 
+import { useAggregationData } from '~/providers/root/AggregationDataProvider'
+
 export const HomeMasterInfo = () => {
+  const { user } = useAggregationData()
   return (
     <HomeCard className="col-span-2 overflow-hidden lg:col-span-1">
       <div className="flex flex-col items-center gap-2">
         <Image
-          src="https://y.suemor.com/suemor-avatar.jpeg"
+          src={user.avatar}
           alt="avatar"
           className="rounded-full border-2 border-neutral-content"
           height={100}
           width={100}
         />
-        <h2 className="text-xl font-medium">SuemorのBlog</h2>
-        <p className="text-sm text-secondary">
-          所谓自由就是可以说二加二等于四的自由
-        </p>
+        <h2 className="text-xl font-medium">{user.nickname}</h2>
+        <p className="text-sm text-secondary">{user.introduce}</p>
         <ul className="mt-2 flex gap-4 ">
           {socialMediaConfig.map((item) => (
             <li
