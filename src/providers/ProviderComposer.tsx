@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/no-clone-element */
 'use client'
 
 import type { FC, JSX, PropsWithChildren } from 'react'

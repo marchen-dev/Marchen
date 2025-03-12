@@ -8,7 +8,7 @@ import Link from 'next/link'
 import type { FC } from 'react'
 import { memo } from 'react'
 
-import { imageVariants, tagVariants } from './homeMotion'
+import { imageVariants, tagVariants } from '../../lib/home-motion'
 
 interface HomePostProps {
   post: PostResponseType

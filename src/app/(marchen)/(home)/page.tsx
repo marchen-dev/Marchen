@@ -16,14 +16,12 @@ export default function Home() {
 
 const HomeInformation = () => {
   return (
-    <section className="relative flex min-h-[calc(100dvh-4rem)] flex-col">
-      <div className="flex flex-1 items-center">
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4 ">
-          <HomeMasterInfo />
-          <HomeRecommendedPost />
-          <HomeSiteData />
-          <HomePostCategories />
-        </div>
+    <section className="relative mt-10 flex min-h-[calc(100dvh-4rem)] flex-col">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4 ">
+        <HomeMasterInfo />
+        <HomeRecommendedPost />
+        <HomeSiteData />
+        <HomePostCategories />
       </div>
       <HomeDropDown />
     </section>

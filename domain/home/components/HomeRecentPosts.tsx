@@ -4,7 +4,7 @@ import { AnimatePresence, m } from 'framer-motion'
 
 import { useAggregationData } from '~/providers/root/AggregationDataProvider'
 
-import { HomeFadeInVariants } from './shared/homeMotion'
+import { HomeFadeInVariants } from '../lib/home-motion'
 import { HomePost } from './shared/HomePost'
 
 export const HomeRecentPosts = () => {

@@ -5,7 +5,7 @@ interface UserGetResponseType {
   email: string
   avatar: string
   introduce: string | null
-  social: null
+  social: Record<string, string>
   created: Date
 }
 
@@ -15,7 +15,7 @@ interface UserMasterResponseType {
   nickname: string
   email: string
   avatar: string
-  social: null
+  social: Record<string, string>
   introduce: string | null
   created: Date
 }
