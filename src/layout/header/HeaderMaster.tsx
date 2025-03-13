@@ -1,5 +1,6 @@
 'use client'
 
+import { m } from 'framer-motion'
 import Image from 'next/image'
 
 import { useAggregationData } from '~/providers/root/AggregationDataProvider'
@@ -7,7 +8,7 @@ import { useAggregationData } from '~/providers/root/AggregationDataProvider'
 export const HeaderMaster = () => {
   const { site, user } = useAggregationData()
   return (
-    <section className="flex items-center gap-3 xl:ml-6">
+    <m.section className="flex items-center gap-3 xl:ml-6">
       <Image
         src={user.avatar}
         alt="avatar"
@@ -21,6 +22,6 @@ export const HeaderMaster = () => {
           {site.description}
         </p>
       </div>
-    </section>
+    </m.section>
   )
 }
