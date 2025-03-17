@@ -19,6 +19,7 @@ export default {
       },
       maxWidth: {
         screen: '100vw',
+        content: '1350px',
       },
       colors: {
         background: 'hsl(var(--background))',

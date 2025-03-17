@@ -6,9 +6,11 @@ import { HeaderTools } from './HeaderTools'
 export default function Header() {
   return (
     <HeaderMotion>
-      <HeaderMaster />
-      <HeaderNav />
-      <HeaderTools />
+      <div className="mx-auto grid h-full  max-w-content grid-cols-3 ">
+        <HeaderMaster />
+        <HeaderNav />
+        <HeaderTools />
+      </div>
     </HeaderMotion>
   )
 }
