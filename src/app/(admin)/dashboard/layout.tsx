@@ -8,7 +8,9 @@ import { AppSidebarBreadcrumb } from '~/layout/dashboard/sidebar/AppSidebarBread
 
 export default async function DashboardLayout(props: PropsWithChildren) {
   const cookieStore = await cookies()
-  const defaultOpen = cookieStore.get('sidebar_state')?.value === 'true'
+  const sidebarState = cookieStore.get('sidebar_state')?.value
+  const defaultOpen =
+    sidebarState === undefined ? true : sidebarState === 'true'
 
   return (
     <AuthenticatedLayout>

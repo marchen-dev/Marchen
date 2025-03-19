@@ -1,10 +1,9 @@
 import { HomeDropDown } from '@domain/home/components/HomeDropDown'
 import { HomeFriends } from '@domain/home/components/HomeFriends'
-import { HomeMasterInfo } from '@domain/home/components/HomeMasterInfo'
-import { HomePostCategories } from '@domain/home/components/HomePostCategories'
+import { HomeLeftColumn } from '@domain/home/components/HomeLeftColumn'
 import { HomeRecentPosts } from '@domain/home/components/HomeRecentPosts'
-import { HomeRecommendedPost } from '@domain/home/components/HomeRecommendedPost'
-import { HomeSiteData } from '@domain/home/components/HomeSiteData'
+import { HomeRightColumn } from '@domain/home/components/HomeRightColumn'
+import { HomeSiteAnalysis } from '@domain/home/components/HomeSiteAnalysis'
 
 export default function Home() {
   return (
@@ -17,14 +16,16 @@ export default function Home() {
 
 const HomeInformation = () => {
   return (
-    <section className="relative flex min-h-[calc(100dvh-4rem)] flex-col justify-center pb-20">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4 ">
-        <HomeMasterInfo />
-        <HomeRecommendedPost />
-        <HomeSiteData />
-        <HomePostCategories />
+    <section className="relative flex min-h-[calc(100dvh-4rem)] flex-col justify-center pb-36">
+      <div className="grid grid-cols-1 items-center gap-5 px-5 md:grid-cols-2">
+        <HomeLeftColumn />
+        <HomeRightColumn />
       </div>
-      <HomeDropDown />
+
+      <div className="absolute bottom-10 hidden w-full flex-col items-center gap-6 xl:flex">
+        <HomeSiteAnalysis />
+        <HomeDropDown />
+      </div>
     </section>
   )
 }

@@ -3,7 +3,7 @@ import type { ImageProps } from 'next/image'
 import Image from 'next/image'
 import type { FC } from 'react'
 
-export const AvatarNext: FC<ImageProps> = (props) => {
+export const UserAvatar: FC<ImageProps> = (props) => {
   const { className } = props
   return (
     <Image

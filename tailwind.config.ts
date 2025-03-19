@@ -86,7 +86,7 @@ export default {
         light: {
           ...require('daisyui/src/theming/themes')['light'],
           secondary: '#737373',
-          'base-200': '#f3f4f6',
+          'base-200': '#fafafa',
         },
         dark: {
           ...require('daisyui/src/theming/themes')['dark'],

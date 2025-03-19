@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Marchen
 
-## Getting Started
+Marchen 是一个基于 Next.js 19 构建的现代化博客平台，使用 TailwindCSS 进行样式设计，采用 TypeScript 进行类型安全的开发。
 
-First, run the development server:
+## 项目特点
+
+- 🚀 基于 Next.js 19 和 React 19 构建
+- 💅 使用 TailwindCSS 和 shadcn/ui 组件库进行美观的界面设计
+- 🔍 支持博客文章的分类、推荐和展示功能
+- 👨‍💻 包含管理后台功能
+- 📱 完全响应式设计，适配各种设备
+- 🌙 支持浅色/深色主题切换
+
+## 技术栈
+
+- [Next.js](https://nextjs.org/) - React 框架
+- [React](https://react.dev/) - 用户界面库
+- [TailwindCSS](https://tailwindcss.com/) - CSS 框架
+- [TypeScript](https://www.typescriptlang.org/) - 类型安全的 JavaScript 超集
+- [Zustand](https://github.com/pmndrs/zustand) - 状态管理
+- [React Query](https://tanstack.com/query/latest) - 服务端状态管理
+- [React Hook Form](https://react-hook-form.com/) - 表单处理
+- [Zod](https://zod.dev/) - 模式验证
+
+## 开发环境要求
+
+- Node.js >= 20
+- pnpm >= 10.6.1
+
+## 快速开始
+
+1. 克隆仓库
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/marchen.git
+cd marchen
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. 安装依赖
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. 配置环境变量
 
-## Learn More
+```bash
+cp .env.template .env
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. 启动开发服务器
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+应用将在 [http://localhost:23116](http://localhost:23116) 运行。
 
-## Deploy on Vercel
+## 构建项目
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 项目结构
+
+- `src/` - 应用源代码
+  - `app/` - Next.js 应用路由
+  - `providers/` - React 上下文提供者
+  - `layout/` - 应用布局组件
+- `domain/` - 领域模块和组件
+- `base/` - 基础功能和工具
+- `public/` - 静态资源
+
+## 贡献
+
+欢迎提交 Pull Request 和 Issue。
