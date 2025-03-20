@@ -3,9 +3,10 @@ import { HomeFadeInVariants } from '@domain/home/lib/home-motion'
 import type { HTMLMotionProps } from 'framer-motion'
 import { m } from 'framer-motion'
 import Link from 'next/link'
-import type { FC } from 'react'
+import type { FC, PropsWithChildren } from 'react'
 
-interface HomeLayoutProps extends HTMLMotionProps<'section'> {
+interface HomeLayoutProps
+  extends PropsWithChildren<HTMLMotionProps<'section'>> {
   title: string
   icon: string
   href: string
