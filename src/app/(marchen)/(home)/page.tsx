@@ -1,3 +1,5 @@
+'use client'
+
 import { HomeDropDown } from '@domain/home/components/HomeDropDown'
 import { HomeFriends } from '@domain/home/components/HomeFriends'
 import { HomeLeftColumn } from '@domain/home/components/HomeLeftColumn'
@@ -6,7 +8,7 @@ import { HomeRightColumn } from '@domain/home/components/HomeRightColumn'
 
 export default function Home() {
   return (
-    <div className="mx-auto flex min-w-0 max-w-content flex-col overflow-hidden lg:px-7 ">
+    <div className="mx-auto flex min-w-0 max-w-wider flex-col overflow-hidden lg:px-7 ">
       <HomeInformation />
       <HomeContent />
     </div>

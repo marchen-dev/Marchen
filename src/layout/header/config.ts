@@ -1,3 +1,5 @@
+import { routerBuilder, Routes } from '@base/lib/route-builder'
+
 export const HeaderNavConfig = [
   {
     href: '/',
@@ -5,9 +7,9 @@ export const HeaderNavConfig = [
     icon: 'icon-[mingcute--home-3-line]',
   },
   {
-    href: '/category',
-    label: '分类',
-    icon: 'icon-[mingcute--list-check-3-line]',
+    href: routerBuilder(Routes.POSTS),
+    label: '文章',
+    icon: 'icon-[mingcute--book-6-line]',
   },
   {
     href: '/archive',

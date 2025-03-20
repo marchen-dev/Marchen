@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@innei/prettier": "^0.15.0",
+    "@radix-ui/react-select": "^2.1.6",
     "@tanstack/react-query-devtools": "^5.62.11",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash-es": "^4.17.12",

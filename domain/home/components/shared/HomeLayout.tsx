@@ -1,17 +1,18 @@
 import { cn } from '@base/lib/helper'
 import { HomeFadeInVariants } from '@domain/home/lib/home-motion'
+import type { HTMLMotionProps } from 'framer-motion'
 import { m } from 'framer-motion'
 import Link from 'next/link'
-import type { FC, PropsWithChildren } from 'react'
+import type { FC } from 'react'
 
-interface HomeLayoutProps extends PropsWithChildren {
+interface HomeLayoutProps extends HTMLMotionProps<'section'> {
   title: string
   icon: string
   href: string
 }
 
 export const HomeLayout: FC<HomeLayoutProps> = (props) => {
-  const { children, title, icon, href } = props
+  const { children, title, icon, href, ...rest } = props
   return (
     <m.section
       initial="hidden"
@@ -19,6 +20,7 @@ export const HomeLayout: FC<HomeLayoutProps> = (props) => {
       viewport={{ once: true, amount: 0.2 }}
       variants={HomeFadeInVariants}
       className="pb-8"
+      {...rest}
     >
       <div className="relative mb-5">
         <m.h2 className="flex items-center gap-2  text-2xl font-semibold">

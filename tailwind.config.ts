@@ -19,7 +19,8 @@ export default {
       },
       maxWidth: {
         screen: '100vw',
-        content: '1450px',
+        normal: '1200px',
+        wider: '1450px',
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -85,6 +86,7 @@ export default {
       {
         light: {
           ...require('daisyui/src/theming/themes')['light'],
+          primary: '#60a5fa',
           secondary: '#737373',
           'base-200': '#fafafa',
         },

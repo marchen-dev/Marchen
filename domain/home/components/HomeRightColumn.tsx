@@ -2,10 +2,25 @@
 
 import { Button } from '@base/components/ui/Button'
 import { cn } from '@base/lib/helper'
+import { routerBuilder, Routes } from '@base/lib/route-builder'
 import { m } from 'framer-motion'
+import Link from 'next/link'
 import type { FC } from 'react'
 
 export const HomeRightColumn = () => {
+  const handleScrollToPosts = () => {
+    const target = document.querySelector('#home-scroll-target')
+    if (target) {
+      const headerHeight = 80
+      const targetPosition =
+        target.getBoundingClientRect().top + window.pageYOffset - headerHeight
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth',
+      })
+    }
+  }
+
   return (
     <m.div
       className="flex flex-col gap-6 lg:px-4"
@@ -30,6 +45,7 @@ export const HomeRightColumn = () => {
         <Button
           variant="outline"
           className="rounded-xl  px-7 py-5 text-lg font-medium text-zinc-600 shadow-sm  dark:text-white"
+          onClick={handleScrollToPosts}
         >
           <i className="icon-[mingcute--large-arrow-down-line] mr-1 text-xl" />
           滚动浏览
@@ -37,9 +53,12 @@ export const HomeRightColumn = () => {
         <Button
           variant="outline"
           className="rounded-xl  bg-blue-400 px-7 py-5 text-lg font-medium text-base-100 shadow-sm hover:bg-blue-500 hover:text-base-100"
+          asChild
         >
-          文章列表
-          <i className="icon-[mingcute--folder-open-line] ml-1 text-xl" />
+          <Link href={routerBuilder(Routes.POSTS)}>
+            文章列表
+            <i className="icon-[mingcute--folder-open-line] ml-1 text-xl" />
+          </Link>
         </Button>
       </m.div>
     </m.div>
@@ -154,8 +173,8 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      duration: 0.4,
-      delay: 0.2,
+      duration: 0.2,
+      delay: 0.1,
       when: 'beforeChildren',
       staggerChildren: 0.1,
     },
@@ -168,7 +187,7 @@ const gridVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
+      duration: 0.2,
       type: 'spring',
       stiffness: 100,
       damping: 15,
@@ -183,8 +202,8 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      delay: 0.1 * custom,
+      duration: 0.2,
+      delay: 0.08 * custom,
       type: 'spring',
       stiffness: 120,
       damping: 12,
@@ -198,7 +217,7 @@ const valueVariants = {
     scale: 1,
     opacity: 1,
     transition: {
-      delay: 0.5 + 0.08 * custom,
+      delay: 0.2 + 0.05 * custom,
       type: 'spring',
       stiffness: 150,
       damping: 10,

@@ -93,8 +93,8 @@ const fadeInUpVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      delay: 0.2 + custom * 0.1,
+      duration: 0.2,
+      delay: 0.1 + custom * 0.05,
       type: 'spring',
       stiffness: 100,
       damping: 15,
@@ -108,8 +108,8 @@ const socialIconVariants = {
     opacity: 1,
     scale: 1,
     transition: {
-      duration: 0.4,
-      delay: 0.5 + custom * 0.08,
+      duration: 0.2,
+      delay: 0.2 + custom * 0.05,
       type: 'spring',
       stiffness: 200,
     },

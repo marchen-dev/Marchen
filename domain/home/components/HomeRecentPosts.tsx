@@ -16,6 +16,7 @@ export const HomeRecentPosts = () => {
       title="最新文章"
       icon="icon-[mingcute--history-line]"
       href={routerBuilder(Routes.POSTS)}
+      id="home-scroll-target"
     >
       <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {posts.map((post) => (
