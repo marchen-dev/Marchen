@@ -1,6 +1,7 @@
 'use client'
 
 import { HomeCard } from '@base/components/ui/Card'
+import { routerBuilder, Routes } from '@base/lib/route-builder'
 import type { FriendResponseType } from '@base/services/interfaces/friend.interface'
 import { AnimatePresence, m } from 'framer-motion'
 import Image from 'next/image'
@@ -13,7 +14,11 @@ import { HomeLayout } from './shared/HomeLayout'
 export const HomeFriends = () => {
   const { friend: friends } = useAggregationData()
   return (
-    <HomeLayout title="朋友们" icon="icon-[mingcute--contacts-4-line]">
+    <HomeLayout
+      title="朋友们"
+      icon="icon-[mingcute--contacts-4-line]"
+      href={routerBuilder(Routes.FRIENDS)}
+    >
       <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <AnimatePresence>
           {friends.slice(0, 10).map((friend, index) => (
@@ -21,7 +26,7 @@ export const HomeFriends = () => {
               key={friend.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
+              transition={{ delay: index * 0.04, duration: 0.3 }}
               viewport={{ once: true, amount: 0.2 }}
               exit={{ opacity: 0, scale: 0.9 }}
             >

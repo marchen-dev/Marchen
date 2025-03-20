@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@base/components/ui/Button'
+import { UserAvatar } from '@base/components/ui/Avatar'
 import { cn } from '@base/lib/helper'
 import { parseSocialIcon } from '@base/lib/social-icon'
 import { m } from 'framer-motion'
@@ -15,42 +15,105 @@ export const HomeLeftColumn = () => {
     [user.social],
   )
   return (
-    <div className="flex flex-col gap-5 ">
-      <h3 className="text-4xl font-medium">{site.title}</h3>
-      <h4 className=" text-2xl">{user.introduce}</h4>
-      <ul className="mt-2 flex gap-4 ">
-        {socialMedias.map(({ color, icon, link, name }) => (
-          <li key={name}>
+    <div className="flex flex-col items-center gap-5 lg:items-start">
+      <m.div
+        variants={fadeInUpVariants}
+        initial="hidden"
+        animate="visible"
+        custom={0}
+      >
+        <UserAvatar
+          src={user.avatar}
+          alt={user.name}
+          width={150}
+          height={150}
+        />
+      </m.div>
+
+      <m.h3
+        variants={fadeInUpVariants}
+        initial="hidden"
+        animate="visible"
+        custom={1}
+        className="text-3xl font-medium lg:text-4xl"
+      >
+        {site.title}
+      </m.h3>
+      <m.h4
+        variants={fadeInUpVariants}
+        initial="hidden"
+        animate="visible"
+        custom={2}
+        className="text-xl lg:text-2xl"
+      >
+        {user.introduce}
+      </m.h4>
+      <m.ul
+        className="mt-6 flex gap-4"
+        variants={fadeInUpVariants}
+        initial="hidden"
+        animate="visible"
+        custom={3}
+      >
+        {socialMedias.map(({ color, icon, link, name }, index) => (
+          <m.li
+            key={name}
+            variants={socialIconVariants}
+            initial="hidden"
+            animate="visible"
+            custom={index}
+          >
             <m.a
               href={link}
               className={cn(
                 'flex size-10 items-center justify-center rounded-full text-base-100 shadow-sm transition-shadow hover:shadow-md',
               )}
-              style={{ backgroundColor: color }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              style={{ backgroundColor: `${color}20` }}
+              whileHover="hover"
+              whileTap="tap"
               target="_blank"
               rel="noreferrer"
             >
-              <i className={cn(icon, 'text-[1.5rem] text-white')} />
+              <i
+                className={cn(icon, 'text-2xl text-white')}
+                style={{ color }}
+              />
             </m.a>
-          </li>
+          </m.li>
         ))}
-      </ul>
-      <div className="mt-8 flex gap-4">
-        <Button
-          variant="outline"
-          className="rounded-lg px-8 py-5 text-lg font-medium  "
-        >
-          滚动浏览
-        </Button>
-        <Button
-          variant="outline"
-          className="rounded-lg px-8 py-5 text-lg font-medium  "
-        >
-          文章详情
-        </Button>
-      </div>
+      </m.ul>
     </div>
   )
+}
+
+// 定义统一的动画变量
+const fadeInUpVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      delay: 0.2 + custom * 0.1,
+      type: 'spring',
+      stiffness: 100,
+      damping: 15,
+    },
+  }),
+}
+
+const socialIconVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: (custom: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      delay: 0.5 + custom * 0.08,
+      type: 'spring',
+      stiffness: 200,
+    },
+  }),
+  hover: { scale: 1.15, rotate: 5 },
+  tap: { scale: 0.9 },
 }

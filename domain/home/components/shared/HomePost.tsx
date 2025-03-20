@@ -69,7 +69,7 @@ export const HomePost: FC<HomePostProps> = memo((props) => {
               {title}
             </m.span>
           </Link>
-          <p className="mt-2 line-clamp-4 text-sm ">{content}</p>
+          <p className="mt-2 line-clamp-3 text-sm ">{content}</p>
         </div>
         <div className="flex items-center justify-between space-x-2 text-sm">
           <div className="flex items-center gap-1.5 overflow-hidden">
