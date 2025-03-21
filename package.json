@@ -2,7 +2,7 @@
   "name": "Marchen",
   "version": "0.0.0",
   "private": false,
-  "packageManager": "pnpm@10.6.1",
+  "packageManager": "pnpm@10.6.5",
   "engines": {
     "node": ">=20"
   },
@@ -38,8 +38,8 @@
     "jotai": "^2.12.2",
     "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
-    "lucide-react": "^0.477.0",
-    "next": "15.2.1",
+    "lucide-react": "^0.483.0",
+    "next": "15.2.3",
     "next-runtime-env": "^3.2.2",
     "next-themes": "^0.4.4",
     "ofetch": "^1.4.1",
