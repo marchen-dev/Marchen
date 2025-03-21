@@ -29,7 +29,7 @@ export const HomeRightColumn = () => {
       animate="visible"
     >
       <m.div
-        className="grid w-full grid-cols-2 overflow-hidden rounded-xl border border-base-300 shadow-sm dark:border-zinc-700"
+        className="grid w-full grid-cols-2 overflow-hidden rounded-xl border border-base-300 bg-primary shadow-sm dark:border-zinc-700"
         variants={gridVariants}
       >
         {homeSiteDataConfig.map((item, index) => (

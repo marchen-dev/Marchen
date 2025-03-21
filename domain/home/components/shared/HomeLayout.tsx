@@ -24,7 +24,7 @@ export const HomeLayout: FC<HomeLayoutProps> = (props) => {
       {...rest}
     >
       <div className="relative mb-5">
-        <m.h2 className="flex items-center gap-2  text-2xl font-semibold">
+        <m.h2 className="flex items-center gap-2 text-2xl font-semibold">
           <i className={cn(icon)} />
           {title}
         </m.h2>

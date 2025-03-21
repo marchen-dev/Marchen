@@ -16,24 +16,24 @@ export default function Footer() {
             <strong>关于 &gt;</strong>
             <Link
               href="/about/me"
-              className="transition-colors hover:text-primary"
+              className="transition-colors hover:text-secondary"
             >
               关于我
             </Link>
             <Link
               href="/about/project"
-              className="transition-colors hover:text-primary"
+              className="transition-colors hover:text-secondary"
             >
               关于此项目
             </Link>
             <Link
               href="/about/site"
-              className="transition-colors hover:text-primary"
+              className="transition-colors hover:text-secondary"
             >
               关于本站
             </Link>
           </div>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p>
             @2025 - {currentYear} {user?.name}
           </p>
           <p className="flex flex-wrap items-center gap-1">

@@ -1,4 +1,5 @@
 import type { CategoryResponseType } from './category.interface'
+import type { DataWrapper } from './pagination.interface'
 
 interface PostResponseType {
   id: string
@@ -31,4 +32,15 @@ interface PostUpdateRequestType {
   categoryId?: string
 }
 
-export type { PostCreateRequestType, PostResponseType, PostUpdateRequestType }
+interface PostPaginationResponseType extends DataWrapper<PostResponseType[]> {
+  total: number
+  page: number
+  pageSize: number
+}
+
+export type {
+  PostCreateRequestType,
+  PostPaginationResponseType,
+  PostResponseType,
+  PostUpdateRequestType,
+}

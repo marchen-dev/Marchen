@@ -20,7 +20,7 @@ export default {
       maxWidth: {
         screen: '100vw',
         normal: '1200px',
-        wider: '1450px',
+        wider: '1400px',
       },
       colors: {
         background: 'hsl(var(--background))',
@@ -86,14 +86,17 @@ export default {
       {
         light: {
           ...require('daisyui/src/theming/themes')['light'],
-          primary: '#60a5fa',
-          secondary: '#737373',
+          primary: '#fff',
+          secondary: '#60a5fa',
+          accent: '#F2F2F2',
           'base-200': '#fafafa',
         },
         dark: {
           ...require('daisyui/src/theming/themes')['dark'],
+          primary: '#000',
+          secondary: '#60a5fa',
+          accent: '#1A1A1A',
           'base-100': '#fff',
-          secondary: '#d4d4d4',
         },
       },
     ],
