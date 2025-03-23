@@ -66,7 +66,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-hyoban": "^3.1.15",
+    "eslint-config-hyoban": "^4.0.0",
     "lint-staged": "^15.3.0",
     "postcss": "^8",
     "postcss-import": "^16.1.0",
