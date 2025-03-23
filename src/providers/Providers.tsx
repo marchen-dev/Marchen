@@ -8,12 +8,14 @@ import type { FC, JSX, PropsWithChildren } from 'react'
 import { Toaster } from 'sonner'
 
 import { ProviderComposer } from './ProviderComposer'
+import { JotaiProvider } from './root/JotaiProvider'
 import { ViewPortProvider } from './root/ViewPortProvider'
 
 const baseContexts: JSX.Element[] = [
   <LazyMotion features={domMax} key="lazyMotion" />,
   <QueryClientProvider client={queryClient} key="queryClientProvider" />,
   <ThemeProvider key="ThemeProvider" attribute={['data-theme', 'class']} />,
+  <JotaiProvider key="JotaiProvider" />,
   <ViewPortProvider key="ViewPortProvider" />,
 ]
 

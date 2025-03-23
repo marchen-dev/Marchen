@@ -2,14 +2,14 @@
 import { ExternalLink } from '@base/components/ui/Link'
 import Link from 'next/link'
 
-import { useAggregationData } from '~/providers/root/AggregationDataProvider'
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 export default function Footer() {
-  const { user } = useAggregationData()
+  const username = useAggregationDataSelector((state) => state?.user.name)
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="relative border-t bg-white py-6 text-sm dark:bg-black">
+    <footer className="relative border-t bg-white py-6  text-sm dark:bg-black">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap gap-4">
@@ -34,7 +34,7 @@ export default function Footer() {
             </Link>
           </div>
           <p>
-            @2025 - {currentYear} {user?.name}
+            @2025 - {currentYear} {username}
           </p>
           <p className="flex flex-wrap items-center gap-1">
             <span>Powered by</span>

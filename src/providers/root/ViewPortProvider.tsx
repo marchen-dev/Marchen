@@ -1,11 +1,22 @@
-import { useToolStore } from '@base/store/tool'
+import { jotaiStore } from '@base/atom'
+import { viewportAtom } from '@base/atom/viewport'
+import { throttle } from 'lodash-es'
 import type { FC, PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 
 export const ViewPortProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { updateViewPort } = useToolStore()
   useEffect(() => {
-    const handleResize = () => updateViewPort() // 包裹防抖逻辑
+    const handleResize = throttle(() => {
+      const { innerWidth, innerHeight } = window
+      jotaiStore.set(viewportAtom, {
+        isMobile: innerWidth < 768,
+        isTablet: innerWidth >= 768 && innerWidth < 1024,
+        isDesktop: innerWidth >= 1024,
+        isLargeDesktop: innerWidth >= 1440,
+        width: innerWidth,
+        height: innerHeight,
+      })
+    }, 200) // 包裹防抖逻辑
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => {

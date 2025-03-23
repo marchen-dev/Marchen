@@ -1,6 +1,6 @@
-import { useToolStore } from '@base/store/tool'
+import { useViewportSelector } from '@base/atom/selectors/viewport'
 
 export function useIsMobile() {
-  const isMobile = useToolStore((state) => state.isMobile)
+  const isMobile = useViewportSelector((state) => state.isMobile)
   return !!isMobile
 }

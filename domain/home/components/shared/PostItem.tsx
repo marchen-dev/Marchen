@@ -1,4 +1,3 @@
-import { linkVariants } from '@base/components/ui/Animation/motion'
 import { HomeCard } from '@base/components/ui/Card'
 import { relativeTimeToNow } from '@base/lib/day'
 import { cn } from '@base/lib/helper'
@@ -15,7 +14,7 @@ interface HomePostProps {
   layout?: 'vertical' | 'horizontal' // Add new prop for layout
 }
 
-export const HomePost: FC<HomePostProps> = memo((props) => {
+export const PostItem: FC<HomePostProps> = memo((props) => {
   const {
     post: { cover, title, content, tags, created, category, slug },
     layout = 'vertical', // Default layout is vertical
@@ -36,13 +35,13 @@ export const HomePost: FC<HomePostProps> = memo((props) => {
         <Link
           href={routerBuilder(Routes.POST, { category: category.slug, slug })}
         >
-          <m.div whileHover={{ scale: 1.05 }} className="size-full">
+          <m.div whileHover={{ scale: 1.05 }} className="relative size-full">
             <Image
               src={cover}
+              sizes="auto"
               fill
               className="object-cover"
               alt={`Cover image for ${title}`}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           </m.div>
         </Link>
@@ -61,13 +60,9 @@ export const HomePost: FC<HomePostProps> = memo((props) => {
             })}
             className="line-clamp-1 text-lg font-bold"
           >
-            <m.span
-              initial="initial"
-              variants={linkVariants}
-              whileHover="whileHover"
-            >
+            <span className="transition-colors hover:text-secondary">
               {title}
-            </m.span>
+            </span>
           </Link>
           <p className="mt-2 line-clamp-3 text-sm ">{content}</p>
         </div>
@@ -83,7 +78,6 @@ export const HomePost: FC<HomePostProps> = memo((props) => {
             ))}
           </div>
           <time className="ml-auto flex shrink-0 items-center gap-1 whitespace-nowrap text-sm text-gray-500">
-            <i className="icon-[mingcute--time-duration-line] shrink-0 text-lg text-gray-400" />
             {relativeTimeToNow(created)}
           </time>
         </div>

@@ -7,12 +7,12 @@ import { AnimatePresence, m } from 'framer-motion'
 import Image from 'next/image'
 import type { FC } from 'react'
 
-import { useAggregationData } from '~/providers/root/AggregationDataProvider'
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 import { HomeLayout } from './shared/HomeLayout'
 
 export const HomeFriends = () => {
-  const { friend: friends } = useAggregationData()
+  const friends = useAggregationDataSelector((state) => state?.friend)
   return (
     <HomeLayout
       title="朋友们"
@@ -21,7 +21,7 @@ export const HomeFriends = () => {
     >
       <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <AnimatePresence>
-          {friends.slice(0, 10).map((friend, index) => (
+          {friends?.slice(0, 10).map((friend, index) => (
             <m.li
               key={friend.id}
               initial={{ opacity: 0, y: 20 }}

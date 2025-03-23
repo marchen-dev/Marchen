@@ -5,15 +5,15 @@ import { m } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { useAggregationData } from '~/providers/root/AggregationDataProvider'
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 export const HeaderMaster = () => {
-  const { user } = useAggregationData()
+  const userAvatar = useAggregationDataSelector((state) => state?.user.avatar)
   return (
     <m.section className="flex items-center gap-3 xl:ml-6">
       <Link href={routerBuilder(Routes.HOME)}>
         <Image
-          src={user.avatar}
+          src={userAvatar ?? ''}
           alt="avatar"
           className="rounded-full"
           height={40}

@@ -13,14 +13,14 @@ interface HomeLayoutProps
 }
 
 export const HomeLayout: FC<HomeLayoutProps> = (props) => {
-  const { children, title, icon, href, ...rest } = props
+  const { children, className, title, icon, href, ...rest } = props
   return (
     <m.section
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={HomeFadeInVariants}
-      className="pb-8"
+      className={cn('pb-8', className)}
       {...rest}
     >
       <div className="relative mb-5">

@@ -1,36 +1,37 @@
 'use client'
 
+import { jotaiStore } from '@base/atom'
+import { useBeforeMounted } from '@base/hooks/use-before-mounted'
 import type { GetAggregateResponseType } from '@base/services/interfaces/aggregate.interface'
-import { useUserStore } from '@base/store/user'
+import type { ExtractAtomValue } from 'jotai'
+import { atom, useAtomValue } from 'jotai'
+import { selectAtom } from 'jotai/utils'
 import type { FC, PropsWithChildren } from 'react'
-import { createContext, use, useEffect, useMemo } from 'react'
+import { useCallback } from 'react'
 
-const AggregationDataContext = createContext<GetAggregateResponseType | null>(
-  null,
-)
+const aggregationDataAtom = atom<GetAggregateResponseType | null>(null)
 
 export const AggregationDataProvider: FC<
   PropsWithChildren<{ value: GetAggregateResponseType }>
 > = (props) => {
   const { value, children } = props
-  const { setMaster } = useUserStore()
-  const memoizedValue = useMemo(() => value, [value])
-  useEffect(() => {
-    setMaster({ ...value.user })
-  }, [setMaster, value])
-  return (
-    <AggregationDataContext value={memoizedValue}>
-      {children}
-    </AggregationDataContext>
-  )
+
+  useBeforeMounted(() => {
+    if (!value) {
+      return
+    }
+    jotaiStore.set(aggregationDataAtom, value)
+  })
+  return children
 }
 
-export const useAggregationData = () => {
-  const aggregationData = use(AggregationDataContext)
-  if (!aggregationData) {
-    throw new Error(
-      'useAggregationData has to be used within AggregationDataProvider',
-    )
-  }
-  return aggregationData
+export const useAggregationDataSelector = <T,>(
+  selector: (value: ExtractAtomValue<typeof aggregationDataAtom>) => T,
+): T => {
+  return useAtomValue(
+    selectAtom(
+      aggregationDataAtom,
+      useCallback((atomValue) => selector(atomValue), []),
+    ),
+  )
 }

@@ -1,3 +1,5 @@
+import type { PaginationRequestType } from '@base/services/interfaces/pagination.interface'
+
 export enum Routes {
   HOME = '/',
   POSTS = '/posts',
@@ -16,10 +18,18 @@ type PostParams = {
   category: string
   slug: string
 }
+type PaginationParams = Partial<PaginationRequestType>
+
+type PostsParams = {
+  direction?: 'desc' | 'asc'
+} & PaginationParams
 
 export type RouteParams<T extends Routes> = T extends Routes.POST
   ? PostParams
-  : object
+  : T extends Routes.POSTS
+    ? PostsParams
+    : object
+
 export function routerBuilder<T extends Routes>(
   route: T,
   params?: RouteParams<typeof route>,
@@ -30,6 +40,11 @@ export function routerBuilder<T extends Routes>(
     case Routes.POST: {
       const p = params as PostParams
       href += `${p.category}/${p.slug}`
+      break
+    }
+    case Routes.POSTS: {
+      const p = params as PostsParams
+      href += `?${new URLSearchParams(p as any).toString()}`
       break
     }
   }

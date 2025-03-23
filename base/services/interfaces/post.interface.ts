@@ -36,6 +36,10 @@ interface PostPaginationResponseType extends DataWrapper<PostResponseType[]> {
   total: number
   page: number
   pageSize: number
+  totalPages: number
+  direction: 'desc' | 'asc'
+  order: string
+  orderby: string
 }
 
 export type {

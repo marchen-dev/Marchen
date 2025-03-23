@@ -6,13 +6,14 @@ import { parseSocialIcon } from '@base/lib/social-icon'
 import { m } from 'framer-motion'
 import { useMemo } from 'react'
 
-import { useAggregationData } from '~/providers/root/AggregationDataProvider'
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 export const HomeLeftColumn = () => {
-  const { user, site } = useAggregationData()
+  const user = useAggregationDataSelector((state) => state?.user)
+  const siteTitle = useAggregationDataSelector((state) => state?.site.title)
   const socialMedias = useMemo(
-    () => parseSocialIcon(user.social),
-    [user.social],
+    () => parseSocialIcon(user?.social ?? {}),
+    [user?.social],
   )
   return (
     <div className="flex flex-col items-center gap-5 lg:items-start">
@@ -23,8 +24,8 @@ export const HomeLeftColumn = () => {
         custom={0}
       >
         <UserAvatar
-          src={user.avatar}
-          alt={user.name}
+          src={user?.avatar ?? ''}
+          alt={user?.name ?? ''}
           width={150}
           height={150}
         />
@@ -37,7 +38,7 @@ export const HomeLeftColumn = () => {
         custom={1}
         className="text-3xl font-medium lg:text-4xl"
       >
-        {site.title}
+        {siteTitle}
       </m.h3>
       <m.h4
         variants={fadeInUpVariants}
@@ -46,7 +47,7 @@ export const HomeLeftColumn = () => {
         custom={2}
         className="text-xl lg:text-2xl"
       >
-        {user.introduce}
+        {user?.introduce}
       </m.h4>
       <m.ul
         className="mt-6 flex gap-4"

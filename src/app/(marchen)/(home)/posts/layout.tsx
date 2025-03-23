@@ -14,11 +14,7 @@ export const metadata: Metadata = {
 export default async function PostsLayout({ children }: PropsWithChildren) {
   const queryClient = getServerQueryClient()
   await queryClient.prefetchQuery(postPaginationQuery())
-  const dehydrateState = dehydrate(queryClient, {
-    shouldDehydrateQuery() {
-      return true
-    },
-  })
+  const dehydrateState = dehydrate(queryClient)
 
   return (
     <NormalContainer title="文章列表">
