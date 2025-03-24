@@ -13,16 +13,15 @@ import {
   PopoverTrigger,
 } from '@base/components/ui/Popover'
 import { cn } from '@base/lib/helper'
-import { useSetAtom } from 'jotai'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { useState } from 'react'
 
-import { postsAtom } from '../atom/postsAtom'
+import { usePostsSelector } from '../atom/selectors/posts-selector'
 
 export const PostCategoryFilter = () => {
+  const postData = usePostsSelector((state) => state.data)
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState('')
-  const setPosts = useSetAtom(postsAtom)
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -31,12 +30,6 @@ export const PostCategoryFilter = () => {
           role="combobox"
           aria-expanded={open}
           className="w-[200px] justify-between"
-          onClick={() => {
-            setPosts((state) => ({
-              ...state,
-              page: 2,
-            }))
-          }}
         >
           {value
             ? frameworks.find((framework) => framework.value === value)?.label
@@ -50,20 +43,20 @@ export const PostCategoryFilter = () => {
           <CommandList>
             <CommandEmpty>没有找到分类</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {postData.map(({ category }) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={category.id}
+                  value={category.slug}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? '' : currentValue)
                     setOpen(false)
                   }}
                 >
-                  {framework.label}
+                  {category.name}
                   <Check
                     className={cn(
                       'ml-auto',
-                      value === framework.value ? 'opacity-100' : 'opacity-0',
+                      value === category.slug ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                 </CommandItem>

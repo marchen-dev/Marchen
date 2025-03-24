@@ -1,18 +1,15 @@
+import type { PostsParams } from '@base/lib/route-builder'
 import { apiClient } from '@base/services'
-import type { PaginationRequestType } from '@base/services/interfaces/pagination.interface'
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
 
-export const postPaginationQuery = (
-  params?: Partial<PaginationRequestType>,
-) => {
+export const postPaginationQuery = (params?: Partial<PostsParams>) => {
   const page = params?.page ?? DEFAULT_POST_PAGINATION_PARAMS.page
   const pageSize = params?.pageSize ?? DEFAULT_POST_PAGINATION_PARAMS.pageSize
-  // const order = params?.order
-  // const orderby = params?.orderby
-  // const direction = params?.direction
+  const orderBy = params?.orderBy
+  const category = params?.category
   return queryOptions({
-    queryKey: ['posts', 'pagination', page, pageSize],
-    queryFn: () => apiClient.posts.get({ page, pageSize }),
+    queryKey: ['posts', 'pagination', page, pageSize, category, orderBy],
+    queryFn: () => apiClient.posts.get({ page, pageSize, category, orderBy }),
     placeholderData: keepPreviousData,
   })
 }

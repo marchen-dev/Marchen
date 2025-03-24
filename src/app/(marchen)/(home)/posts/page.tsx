@@ -2,6 +2,7 @@
 
 import { jotaiStore } from '@base/atom'
 import { useBeforeMounted } from '@base/hooks/use-before-mounted'
+import type { PostsParams } from '@base/lib/route-builder'
 import { PostItem } from '@domain/home/components/shared/PostItem'
 import { postsAtom } from '@domain/posts/atom/postsAtom'
 import { usePostsSelector } from '@domain/posts/atom/selectors/posts-selector'
@@ -16,12 +17,19 @@ import { memo, useEffect } from 'react'
 
 export default function PostsPage() {
   const page = usePostsSelector((state) => state.page)
-  const pageParams = useSearchParams().get('page')
+  const searchParams = useSearchParams()
+  const pageParams = searchParams.get('page')
+  const categoryParams = searchParams.get('category')
+  const orderByParams = searchParams.get('orderBy') as PostsParams['orderBy']
+
   const { data } = useQuery(
     postPaginationQuery({
       page: pageParams ? Number.parseInt(pageParams as string) : page,
+      category: categoryParams ?? undefined,
+      orderBy: orderByParams ?? undefined,
     }),
   )
+
   useBeforeMounted(() => {
     if (!data) {
       return

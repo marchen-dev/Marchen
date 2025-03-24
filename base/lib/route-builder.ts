@@ -20,8 +20,9 @@ type PostParams = {
 }
 type PaginationParams = Partial<PaginationRequestType>
 
-type PostsParams = {
-  direction?: 'desc' | 'asc'
+export type PostsParams = {
+  orderBy?: 'desc' | 'asc'
+  category?: string
 } & PaginationParams
 
 export type RouteParams<T extends Routes> = T extends Routes.POST
