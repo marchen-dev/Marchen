@@ -5,6 +5,6 @@ import type { PostPaginationResponseType } from '../interfaces/post.interface'
 
 export const posts = {
   get(params: PostsParams) {
-    return Get<PostPaginationResponseType>('/posts', params)
+    return Get<PostPaginationResponseType>(`/posts`, params)
   },
 }

@@ -32,16 +32,19 @@ interface PostUpdateRequestType {
   categoryId?: string
 }
 
-interface PostPaginationResponseType extends DataWrapper<PostResponseType[]> {
-  total: number
-  page: number
-  pageSize: number
-  totalPages: number
-  orderBy: 'desc' | 'asc'
-  category: string
+interface PostPaginationResponseType
+  extends DataWrapper<PostCategoryResponseType> {
+  take: number
+  nextId?: string
+}
+
+interface PostCategoryResponseType {
+  posts: PostResponseType[]
+  categories: CategoryResponseType[]
 }
 
 export type {
+  PostCategoryResponseType,
   PostCreateRequestType,
   PostPaginationResponseType,
   PostResponseType,

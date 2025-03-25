@@ -1,5 +1,7 @@
 import type { PaginationRequestType } from '@base/services/interfaces/pagination.interface'
 
+import { mergeUrlParams } from './merge-url'
+
 export enum Routes {
   HOME = '/',
   POSTS = '/posts',
@@ -44,8 +46,8 @@ export function routerBuilder<T extends Routes>(
       break
     }
     case Routes.POSTS: {
-      const p = params as PostsParams
-      href += `?${new URLSearchParams(p as any).toString()}`
+      const p = mergeUrlParams(params as Record<string, string>)
+      href += `?${new URLSearchParams(p).toString()}`
       break
     }
   }

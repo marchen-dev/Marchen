@@ -13,15 +13,22 @@ import {
   PopoverTrigger,
 } from '@base/components/ui/Popover'
 import { cn } from '@base/lib/helper'
+import { routerBuilder, Routes } from '@base/lib/route-builder'
 import { Check, ChevronsUpDown } from 'lucide-react'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { memo, useMemo, useState } from 'react'
 
-import { usePostsSelector } from '../atom/selectors/posts-selector'
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
-export const PostCategoryFilter = () => {
-  const postData = usePostsSelector((state) => state.data)
+export const PostCategoryFilter = memo(() => {
+  const categories = useAggregationDataSelector((state) => state?.category)
+  const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
+  const searchParams = useSearchParams()
+  const currentCategory = useMemo(() => {
+    return searchParams.get('category')
+  }, []) // 只在路径改变时重新计算
+  const [value, setValue] = useState(currentCategory)
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -31,9 +38,11 @@ export const PostCategoryFilter = () => {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : '选择分类'}
+          {value ? (
+            categories?.find((category) => category.slug === value)?.name
+          ) : (
+            <span>全部类别</span>
+          )}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -43,20 +52,25 @@ export const PostCategoryFilter = () => {
           <CommandList>
             <CommandEmpty>没有找到分类</CommandEmpty>
             <CommandGroup>
-              {postData.map(({ category }) => (
+              {categories?.map(({ id, name, slug }) => (
                 <CommandItem
-                  key={category.id}
-                  value={category.slug}
+                  key={id}
+                  value={slug}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? '' : currentValue)
                     setOpen(false)
+                    router.push(
+                      routerBuilder(Routes.POSTS, {
+                        category: currentValue,
+                      }),
+                    )
                   }}
                 >
-                  {category.name}
+                  {name}
                   <Check
                     className={cn(
                       'ml-auto',
-                      value === category.slug ? 'opacity-100' : 'opacity-0',
+                      value === slug ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                 </CommandItem>
@@ -67,27 +81,4 @@ export const PostCategoryFilter = () => {
       </PopoverContent>
     </Popover>
   )
-}
-
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Next.js',
-  },
-  {
-    value: 'sveltekit',
-    label: 'SvelteKit',
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nuxt.js',
-  },
-  {
-    value: 'remix',
-    label: 'Remix',
-  },
-  {
-    value: 'astro',
-    label: 'Astro',
-  },
-]
+})

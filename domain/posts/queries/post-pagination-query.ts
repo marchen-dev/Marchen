@@ -1,21 +1,26 @@
 import type { PostsParams } from '@base/lib/route-builder'
 import { apiClient } from '@base/services'
-import { keepPreviousData, queryOptions } from '@tanstack/react-query'
+import { infiniteQueryOptions } from '@tanstack/react-query'
 
 export const postPaginationQuery = (params?: Partial<PostsParams>) => {
-  const page = params?.page ?? DEFAULT_POST_PAGINATION_PARAMS.page
-  const pageSize = params?.pageSize ?? DEFAULT_POST_PAGINATION_PARAMS.pageSize
-  const orderBy = params?.orderBy
+  const take = params?.take ?? DEFAULT_POST_PAGINATION_PARAMS.take
+  const orderBy = params?.orderBy ?? DEFAULT_POST_PAGINATION_PARAMS.orderBy
   const category = params?.category
-  return queryOptions({
-    queryKey: ['posts', 'pagination', page, pageSize, category, orderBy],
-    queryFn: () => apiClient.posts.get({ page, pageSize, category, orderBy }),
-    placeholderData: keepPreviousData,
+  return infiniteQueryOptions({
+    queryKey: ['posts', 'pagination', take, orderBy, category],
+    queryFn: ({ pageParam }) => {
+      let cursor
+      if (pageParam !== '0') {
+        cursor = pageParam
+      }
+      return apiClient.posts.get({ take, orderBy, category, cursor })
+    },
+    getNextPageParam: (lastPage) => lastPage.nextId,
+    initialPageParam: '0',
   })
 }
 
 export const DEFAULT_POST_PAGINATION_PARAMS = {
-  page: 1,
-  pageSize: 9,
-  direction: 'desc',
-}
+  take: 12,
+  orderBy: 'desc',
+} as const

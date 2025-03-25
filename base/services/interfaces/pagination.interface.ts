@@ -1,6 +1,6 @@
 export interface PaginationRequestType {
-  page: number
-  pageSize: number
+  take?: number
+  cursor?: string
 }
 
 export interface DataWrapper<T> {

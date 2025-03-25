@@ -1,74 +1,30 @@
-import { Button } from '@base/components/ui/Button'
-import { routerBuilder, Routes } from '@base/lib/route-builder'
-import { usePostsSelector } from '@domain/posts/atom/selectors/posts-selector'
-import { useRouter } from 'next/navigation'
-import type { ComponentProps, FC } from 'react'
+import LoadingThreeDotsPulse from '@base/components/ui/Loading/LoadingThreeDotsPulse'
+import { useInView } from 'framer-motion'
+import type { FC } from 'react'
+import { useEffect, useRef } from 'react'
 
-export const PostPaginationArea = () => {
-  const page = usePostsSelector((state) => state.page)
-  const totalPages = usePostsSelector((state) => state.totalPages)
-  const router = useRouter()
+interface PostPaginationAreaProps {
+  isFetchingNextPage: boolean
+  hasNextPage: boolean
+  fetchNextPage: () => void
+}
 
-  const hasPrev = page > 1
-  const hasNext = page < totalPages
-
-  const handlePageChange = (type: 'prev' | 'next') => {
-    switch (type) {
-      case 'prev': {
-        router.push(
-          routerBuilder(Routes.POSTS, {
-            page: page - 1,
-          }),
-        )
-        break
-      }
-      case 'next': {
-        router.push(
-          routerBuilder(Routes.POSTS, {
-            page: page + 1,
-          }),
-        )
-      }
+export const PostPaginationArea: FC<PostPaginationAreaProps> = (props) => {
+  const { isFetchingNextPage, hasNextPage, fetchNextPage } = props
+  const ref = useRef<HTMLDivElement | null>(null)
+  const inView = useInView(ref)
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage()
     }
-  }
+  }, [inView, hasNextPage, fetchNextPage])
 
   return (
-    <div className="mt-5 flex w-full items-center justify-end gap-5 pb-8">
-      {hasPrev && (
-        <PaginationButton
-          direction="left"
-          label="上一页"
-          onClick={() => handlePageChange('prev')}
-        />
-      )}
-      {hasNext && (
-        <PaginationButton
-          direction="right"
-          label="下一页"
-          onClick={() => handlePageChange('next')}
-        />
-      )}
+    <div
+      className="mt-5 flex w-full items-center justify-center gap-5 pb-8"
+      ref={ref}
+    >
+      {isFetchingNextPage ? <LoadingThreeDotsPulse className="mt-10" /> : null}
     </div>
-  )
-}
-
-interface PaginationButtonProps extends ComponentProps<typeof Button> {
-  direction: 'left' | 'right'
-  label: string
-}
-
-const PaginationButton: FC<PaginationButtonProps> = (props) => {
-  const { direction, label, ...rest } = props
-  return (
-    <Button variant="outline" {...rest} className="flex  gap-2">
-      {/* {direction === 'left' && <ChevronLeft className="size-4" />} */}
-      {direction === 'left' && (
-        <i className="icon-[mingcute--left-line] size-4" />
-      )}
-      <span>{label}</span>
-      {direction === 'right' && (
-        <i className="icon-[mingcute--right-line] size-4" />
-      )}
-    </Button>
   )
 }
