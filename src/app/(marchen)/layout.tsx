@@ -1,6 +1,6 @@
 import { FullPageErrorAlert } from '@base/components/common/FullPageErrorAlert'
 import { sansFont, serifFont } from '@base/lib/fonts'
-import { apiClient } from '@base/services'
+import { fetchAggregation } from '@domain/home/queries/aggregation-query'
 import { redirect } from 'next/navigation'
 import { PublicEnvScript } from 'next-runtime-env'
 
@@ -12,7 +12,7 @@ import { WebAppProviders } from '~/providers/Providers'
 import { AggregationDataProvider } from '~/providers/root/AggregationDataProvider'
 
 export const generateMetadata = async () => {
-  const { site } = await apiClient.aggregate.get()
+  const { site } = await fetchAggregation()
   return {
     title: {
       template: `%s | ${site.title}`,
@@ -39,7 +39,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const aggregateData = await apiClient.aggregate.get().catch((error) => {
+  const aggregateData = await fetchAggregation().catch((error) => {
     if (error.response?.status === 404) {
       return redirect('/setup')
     }

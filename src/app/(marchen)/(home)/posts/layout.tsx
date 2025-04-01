@@ -19,10 +19,11 @@ export default async function PostsLayout({ children }: PropsWithChildren) {
   const searchParams = new URLSearchParams(query)
   const orderBy = (searchParams.get('orderBy') as 'desc' | 'asc') ?? undefined
   const category = searchParams.get('category') ?? undefined
+  const search = searchParams.get('search') ?? undefined
 
   const queryClient = getServerQueryClient()
   await queryClient.prefetchInfiniteQuery(
-    postPaginationQuery({ orderBy, category }),
+    postPaginationQuery({ orderBy, category, search }),
   )
   const dehydrateState = dehydrate(queryClient)
   return (

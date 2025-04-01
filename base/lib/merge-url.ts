@@ -14,7 +14,7 @@ export const mergeUrlParams = (p: Record<string, string>) => {
   })
 
   // 再添加传入的参数，如果有重复的 key，会覆盖当前 URL 的值
-  Object.entries(p).forEach(([key, value]) => {
+  Object.entries(p ?? {}).forEach(([key, value]) => {
     mergedParams.set(key, value)
   })
 

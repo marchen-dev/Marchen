@@ -9,13 +9,15 @@ import { postPaginationQuery } from '../queries/post-pagination-query'
 
 export const usePostsData = () => {
   const searchParams = useSearchParams()
-  const categoryParams = searchParams.get('category') ?? undefined
-  const orderByParams = searchParams.get('orderBy') as PostsParams['orderBy']
+  const categoryContent = searchParams.get('category') ?? undefined
+  const orderByContent = searchParams.get('orderBy') as PostsParams['orderBy']
+  const searchContent = searchParams.get('search') ?? undefined
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useInfiniteQuery(
       postPaginationQuery({
-        category: categoryParams,
-        orderBy: orderByParams,
+        category: categoryContent,
+        orderBy: orderByContent,
+        search: searchContent,
       }),
     )
 

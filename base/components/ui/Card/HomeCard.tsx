@@ -22,7 +22,7 @@ const HomeCard = <T extends ElementType = 'div'>({
   return (
     <Component
       className={cn(
-        'rounded-lg border border-base-300 bg-white p-5 shadow-sm transition-shadow dark:border-zinc-700 dark:bg-zinc-900',
+        'rounded-lg border border-base-300 bg-neutral-content  p-5 shadow-sm transition-shadow',
         className,
       )}
       {...props}

@@ -25,6 +25,7 @@ type PaginationParams = Partial<PaginationRequestType>
 export type PostsParams = {
   orderBy?: 'desc' | 'asc'
   category?: string
+  search?: string
 } & PaginationParams
 
 export type RouteParams<T extends Routes> = T extends Routes.POST
@@ -46,7 +47,7 @@ export function routerBuilder<T extends Routes>(
       break
     }
     case Routes.POSTS: {
-      const p = mergeUrlParams(params as Record<string, string>)
+      const p = mergeUrlParams(params as Record<string, string>) ?? {}
       href += `?${new URLSearchParams(p).toString()}`
       break
     }

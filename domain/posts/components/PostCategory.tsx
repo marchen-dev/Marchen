@@ -27,8 +27,9 @@ export const PostCategoryFilter = memo(() => {
   const searchParams = useSearchParams()
   const currentCategory = useMemo(() => {
     return searchParams.get('category')
-  }, []) // 只在路径改变时重新计算
+  }, [searchParams]) // 只在路径改变时重新计算
   const [value, setValue] = useState(currentCategory)
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -57,8 +58,15 @@ export const PostCategoryFilter = memo(() => {
                   key={id}
                   value={slug}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue)
                     setOpen(false)
+                    if (currentValue === value) {
+                      setValue('')
+                      return router.push(
+                        routerBuilder(Routes.POSTS, { category: '' }),
+                      )
+                    }
+
+                    setValue(currentValue)
                     router.push(
                       routerBuilder(Routes.POSTS, {
                         category: currentValue,
