@@ -43,10 +43,29 @@ interface PostCategoryResponseType {
   categories: CategoryResponseType[]
 }
 
+type PostsArchiveResponseType = DataWrapper<
+  Array<{
+    year: number
+    posts: PostArchiveItemType[]
+  }>
+>
+
+interface PostArchiveItemType {
+  id: string
+  title: string
+  created: string
+  slug: string
+  category: {
+    name: string
+  }
+}
+
 export type {
+  PostArchiveItemType,
   PostCategoryResponseType,
   PostCreateRequestType,
   PostPaginationResponseType,
   PostResponseType,
+  PostsArchiveResponseType,
   PostUpdateRequestType,
 }

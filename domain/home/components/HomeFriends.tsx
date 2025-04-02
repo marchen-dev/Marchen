@@ -1,6 +1,6 @@
 'use client'
 
-import { HomeCard } from '@base/components/ui/Card'
+import { MarchenCard } from '@base/components/ui/Card'
 import { routerBuilder, Routes } from '@base/lib/route-builder'
 import type { FriendResponseType } from '@base/services/interfaces/friend.interface'
 import { AnimatePresence, m } from 'framer-motion'
@@ -42,7 +42,7 @@ export const HomeFriends = () => {
 export const HomeFriendItem: FC<FriendResponseType> = (props) => {
   const { avatar, name, url } = props
   return (
-    <HomeCard className="p-4">
+    <MarchenCard className="p-4">
       <m.a
         target="_blank"
         rel="noreferrer"
@@ -58,6 +58,6 @@ export const HomeFriendItem: FC<FriendResponseType> = (props) => {
         />
         <p className="line-clamp-2 text-[1.05rem] font-semibold">{name}</p>
       </m.a>
-    </HomeCard>
+    </MarchenCard>
   )
 }

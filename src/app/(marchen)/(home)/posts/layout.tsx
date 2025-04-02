@@ -27,7 +27,7 @@ export default async function PostsLayout({ children }: PropsWithChildren) {
   )
   const dehydrateState = dehydrate(queryClient)
   return (
-    <NormalContainer title="文章列表">
+    <NormalContainer title="文章列表" icon="icon-[mingcute--book-6-line]">
       <HydrationBoundary state={dehydrateState}>{children}</HydrationBoundary>
     </NormalContainer>
   )

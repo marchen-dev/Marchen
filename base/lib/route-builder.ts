@@ -7,6 +7,7 @@ export enum Routes {
   POSTS = '/posts',
   POST = '/posts/',
   FRIENDS = '/friends',
+  ARCHIVE = '/archives',
   LOGIN = '/login',
   REGISTER = '/setup',
   DASHBOARD = '/dashboard',

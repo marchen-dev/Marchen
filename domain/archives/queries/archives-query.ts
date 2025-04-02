@@ -1,9 +1,9 @@
 import { apiClient } from '@base/services'
 import { queryOptions } from '@tanstack/react-query'
 
-export const categoriesQuery = () => {
+export const archivesQuery = () => {
   return queryOptions({
-    queryKey: ['categories'],
-    queryFn: () => apiClient,
+    queryKey: ['archives'],
+    queryFn: () => apiClient.posts.archives(),
   })
 }

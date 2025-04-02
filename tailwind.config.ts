@@ -99,6 +99,7 @@ export default {
           accent: '#1A1A1A',
           neutral: '#000',
           'neutral-content': '#0A0A0A',
+          'base-300': '#3f3f46',
         },
       },
     ],

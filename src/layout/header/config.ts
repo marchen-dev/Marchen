@@ -12,7 +12,7 @@ export const HeaderNavConfig = [
     icon: 'icon-[mingcute--book-6-line]',
   },
   {
-    href: '/archive',
+    href: routerBuilder(Routes.ARCHIVE),
     label: '归档',
     icon: 'icon-[mingcute--folder-open-line]',
   },

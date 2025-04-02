@@ -30,7 +30,7 @@ export const HomeLayout: FC<HomeLayoutProps> = (props) => {
         </m.h2>
         <Link
           href={href}
-          className="absolute  right-0 top-1/2 flex -translate-y-1/2 flex-col items-center justify-center rounded-xl bg-blue-400 px-3 py-1 text-base-100 transition-colors duration-300 hover:bg-blue-500"
+          className="absolute  right-0 top-1/2 flex -translate-y-1/2 flex-col items-center justify-center rounded-xl border border-base-300 bg-primary px-3 py-1  transition-colors duration-300 hover:text-secondary"
         >
           <i className="icon-[mingcute--right-line] text-2xl" />
         </Link>

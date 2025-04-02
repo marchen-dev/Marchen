@@ -1,3 +1,4 @@
+import { HydratingDetector } from '@base/atom/hydration'
 import { FullPageErrorAlert } from '@base/components/common/FullPageErrorAlert'
 import { sansFont, serifFont } from '@base/lib/fonts'
 import { fetchAggregation } from '@domain/home/queries/aggregation-query'
@@ -63,6 +64,7 @@ export default async function RootLayout({
     <html lang="zh-CN" data-theme="light" suppressHydrationWarning>
       <head>
         <PublicEnvScript />
+        <HydratingDetector />
       </head>
       <body
         className={`${sansFont.variable} ${serifFont.variable} font-sans antialiased`}

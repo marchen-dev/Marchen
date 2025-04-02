@@ -5,7 +5,7 @@ import { infiniteQueryOptions } from '@tanstack/react-query'
 export const postPaginationQuery = (params?: Partial<PostsParams>) => {
   const take = params?.take ?? DEFAULT_POST_PAGINATION_PARAMS.take
   const orderBy = params?.orderBy ?? DEFAULT_POST_PAGINATION_PARAMS.orderBy
-  const category = params?.category
+  const category = params?.category ?? ''
   const search = params?.search
   return infiniteQueryOptions({
     queryKey: ['posts', 'pagination', take, orderBy, category, search],

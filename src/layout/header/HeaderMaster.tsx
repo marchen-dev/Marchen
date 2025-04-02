@@ -16,8 +16,8 @@ export const HeaderMaster = () => {
           src={userAvatar ?? ''}
           alt="avatar"
           className="rounded-full"
-          height={40}
-          width={40}
+          height={35}
+          width={35}
         />
       </Link>
     </m.section>

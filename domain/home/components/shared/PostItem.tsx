@@ -1,4 +1,4 @@
-import { HomeCard } from '@base/components/ui/Card'
+import { MarchenCard } from '@base/components/ui/Card'
 import { relativeTimeToNow } from '@base/lib/day'
 import { cn } from '@base/lib/helper'
 import { routerBuilder, Routes } from '@base/lib/route-builder'
@@ -20,7 +20,7 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
     layout = 'vertical', // Default layout is vertical
   } = props
   return (
-    <HomeCard
+    <MarchenCard
       className={cn(
         'h-full overflow-hidden p-0',
         layout === 'horizontal' && 'flex',
@@ -82,6 +82,6 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
           </time>
         </div>
       </div>
-    </HomeCard>
+    </MarchenCard>
   )
 })
