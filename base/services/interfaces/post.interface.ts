@@ -7,6 +7,7 @@ interface PostResponseType {
   content: string
   cover: string
   slug: string
+  read: number
   tags: string[]
   categoryId: string
   updated: Date

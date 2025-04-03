@@ -1,77 +1,36 @@
-'use client'
+import { REQUEST_QUERY } from '@base/constants/request'
+import { getServerQueryClient } from '@base/lib/query-client.server'
+import PostsContent from '@domain/posts/components/PostContent'
+import { postsPaginationQuery } from '@domain/posts/queries/posts-pagination-query'
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
+import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 
-import { jotaiStore } from '@base/atom'
-import {
-  createFadeInOutTransition,
-} from '@base/components/ui/Transition/create-transition'
-import { PostItem } from '@domain/home/components/shared/PostItem'
-import { postsAtom } from '@domain/posts/atom/postsAtom'
-import { usePostsSelector } from '@domain/posts/atom/selectors/posts-selector'
-import { PostCategoryFilter } from '@domain/posts/components/PostCategory'
-import { PostPaginationArea } from '@domain/posts/components/PostPagination'
-import { PostsSearch } from '@domain/posts/components/PostSearch'
-import { PostSort } from '@domain/posts/components/PostSort'
-import { usePostsData } from '@domain/posts/hooks/use-posts-data'
-import { usePostsSearchParams } from '@domain/posts/hooks/use-posts-params'
-import { m } from 'framer-motion'
-import { useResetAtom } from 'jotai/utils'
-import { memo, useEffect } from 'react'
+import { NormalContainer } from '~/layout/container/NormalContainer'
 
-export default function PostsPage() {
-  const resetPostsAtom = useResetAtom(postsAtom)
-  const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
-    usePostsData()
-  useEffect(() => {
-    if (data) {
-      jotaiStore.set(postsAtom, data)
-    }
-    return () => {
-      resetPostsAtom()
-    }
-  }, [data])
-  return (
-    <div className="flex w-full flex-col items-center gap-2">
-      <FilterArea />
-      <PostListArea />
-      <PostPaginationArea
-        isFetchingNextPage={isFetchingNextPage}
-        hasNextPage={hasNextPage}
-        fetchNextPage={fetchNextPage}
-      />
-    </div>
-  )
+export const metadata: Metadata = {
+  title: '文章列表',
+  description: '文章列表',
 }
 
-const FilterArea = memo(() => {
-  return (
-    <div className="flex w-full items-center gap-2">
-      <PostsSearch />
-      <PostCategoryFilter />
-      <PostSort />
-    </div>
-  )
-})
+export default async function PostsPage() {
+  const header = await headers()
+  const query = header.get(REQUEST_QUERY) ?? ''
+  const searchParams = new URLSearchParams(query)
+  const orderBy = (searchParams.get('orderBy') as 'desc' | 'asc') ?? undefined
+  const category = searchParams.get('category') ?? undefined
+  const search = searchParams.get('search') ?? undefined
 
-const PostListArea = memo(() => {
-  const pagesData = usePostsSelector((state) => state.pages)
-  const { category, orderBy, search } = usePostsSearchParams()
-  const postListTransition = createFadeInOutTransition({
-    lcpOptimization: false,
-  })
-
-  return (
-    <m.ul
-      className="mt-3 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
-      {...postListTransition}
-      key={`${search}-${category}-${orderBy}`}
-    >
-      {pagesData.map((page) =>
-        page?.data?.posts?.map((postItem) => (
-          <m.li key={postItem.id}>
-            <PostItem post={postItem} />
-          </m.li>
-        )),
-      )}
-    </m.ul>
+  const queryClient = getServerQueryClient()
+  await queryClient.prefetchInfiniteQuery(
+    postsPaginationQuery({ orderBy, category, search }),
   )
-})
+  const dehydrateState = dehydrate(queryClient)
+  return (
+    <NormalContainer title="文章列表" icon="icon-[mingcute--book-6-line]">
+      <HydrationBoundary state={dehydrateState}>
+        <PostsContent />
+      </HydrationBoundary>
+    </NormalContainer>
+  )
+}

@@ -1,4 +1,4 @@
-import LoadingThreeDotsPulse from '@base/components/ui/Loading/LoadingThreeDotsPulse'
+import { LoadingThreeDotsJumping } from '@base/components/ui/Loading'
 import { useInView } from 'framer-motion'
 import type { FC } from 'react'
 import { useEffect, useRef } from 'react'
@@ -24,7 +24,9 @@ export const PostPaginationArea: FC<PostPaginationAreaProps> = (props) => {
       className="mt-5 flex w-full items-center justify-center gap-5 pb-8"
       ref={ref}
     >
-      {isFetchingNextPage ? <LoadingThreeDotsPulse className="mt-10" /> : null}
+      {isFetchingNextPage ? (
+        <LoadingThreeDotsJumping className="mt-10" />
+      ) : null}
     </div>
   )
 }

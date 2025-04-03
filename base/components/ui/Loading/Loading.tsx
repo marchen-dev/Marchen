@@ -39,4 +39,33 @@ const LoadingThreeDotsJumping: Component = ({ className }) => {
   )
 }
 
-export default LoadingThreeDotsJumping
+const LoadingCircleSpinner: Component = ({ className }) => {
+  return (
+    <div
+      className={cn(
+        'flex items-center justify-center rounded-lg p-10',
+        className,
+      )}
+    >
+      <motion.div
+        className="size-[50px] rounded-full border-4 border-t-black will-change-transform dark:border-t-white"
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
+    </div>
+  )
+}
+
+const FullPageLoading = () => {
+  return (
+    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <LoadingCircleSpinner />
+    </div>
+  )
+}
+
+export { FullPageLoading, LoadingCircleSpinner, LoadingThreeDotsJumping }

@@ -1,7 +1,5 @@
 'use client'
 
-import queryClient from '@base/lib/query-client'
-import { QueryClientProvider } from '@tanstack/react-query'
 import { domMax, LazyMotion } from 'framer-motion'
 import { ThemeProvider } from 'next-themes'
 import type { FC, JSX, PropsWithChildren } from 'react'
@@ -9,11 +7,12 @@ import { Toaster } from 'sonner'
 
 import { ProviderComposer } from './ProviderComposer'
 import { JotaiProvider } from './root/JotaiProvider'
+import { ReactQueryProvider } from './root/ReactQueryProvider'
 import { ViewPortProvider } from './root/ViewPortProvider'
 
 const baseContexts: JSX.Element[] = [
   <LazyMotion features={domMax} key="lazyMotion" />,
-  <QueryClientProvider client={queryClient} key="queryClientProvider" />,
+  <ReactQueryProvider key="ReactQueryProvider" />,
   <ThemeProvider key="ThemeProvider" attribute={['data-theme', 'class']} />,
   <JotaiProvider key="JotaiProvider" />,
   <ViewPortProvider key="ViewPortProvider" />,

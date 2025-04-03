@@ -1,5 +1,3 @@
-'use client'
-
 import { HomeDropDown } from '@domain/home/components/HomeDropDown'
 import { HomeFriends } from '@domain/home/components/HomeFriends'
 import { HomeLeftColumn } from '@domain/home/components/HomeLeftColumn'

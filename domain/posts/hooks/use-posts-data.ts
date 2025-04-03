@@ -3,14 +3,14 @@ import { useBeforeMounted } from '@base/hooks/use-before-mounted'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { postsAtom } from '../atom/postsAtom'
-import { postPaginationQuery } from '../queries/post-pagination-query'
+import { postsPaginationQuery } from '../queries/posts-pagination-query'
 import { usePostsSearchParams } from './use-posts-params'
 
 export const usePostsData = () => {
   const { category, orderBy, search } = usePostsSearchParams()
   const { data, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useInfiniteQuery(
-      postPaginationQuery({
+      postsPaginationQuery({
         category,
         orderBy,
         search,

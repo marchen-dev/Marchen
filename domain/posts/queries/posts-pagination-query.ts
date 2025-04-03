@@ -2,7 +2,7 @@ import type { PostsParams } from '@base/lib/route-builder'
 import { apiClient } from '@base/services'
 import { infiniteQueryOptions } from '@tanstack/react-query'
 
-export const postPaginationQuery = (params?: Partial<PostsParams>) => {
+export const postsPaginationQuery = (params?: Partial<PostsParams>) => {
   const take = params?.take ?? DEFAULT_POST_PAGINATION_PARAMS.take
   const orderBy = params?.orderBy ?? DEFAULT_POST_PAGINATION_PARAMS.orderBy
   const category = params?.category ?? ''
