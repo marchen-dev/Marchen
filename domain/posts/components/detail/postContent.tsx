@@ -1,13 +1,17 @@
 'use client'
 
+import { Markdown } from '@base/components/ui/Markdown'
 import { usePostSelector } from '@domain/posts/atom/selectors/post-selector'
-import Markdown from 'react-markdown'
 
 export const PostContent = () => {
   const post = usePostSelector((state) => state?.content)
+
+  if (!post) {
+    return
+  }
   return (
-    <section className="mt-7">
-      <Markdown>{post}</Markdown>
-    </section>
+    <div className="mt-7">
+      <Markdown content={post} as="main" />/
+    </div>
   )
 }

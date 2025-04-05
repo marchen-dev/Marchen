@@ -3,5 +3,9 @@ export default async function PostLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <div className="relative mx-auto my-5 max-w-reader">{children}</div>
+  return (
+    <div className="relative mx-auto my-5 size-full max-w-reader">
+      {children}
+    </div>
+  )
 }

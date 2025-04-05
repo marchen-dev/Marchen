@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 export const PostHeader = () => {
   const post = usePostSelector((state) => state)
   return (
-    <section>
+    <div>
       <h2 className="my-7 text-2xl font-semibold">{post?.title}</h2>
       <span className="flex items-center text-sm text-zinc-600 dark:text-zinc-400">
         <IconWrapper line as="time" icon="icon-[mingcute--time-duration-line]">
@@ -23,7 +23,7 @@ export const PostHeader = () => {
           {post?.tags.map((tag) => <span key={tag}>{tag}</span>)}
         </IconWrapper>
       </span>
-    </section>
+    </div>
   )
 }
 
