@@ -1,13 +1,11 @@
 'use client'
 
-import './github-markdown.css'
-
 import { cn } from '@base/lib/helper'
 import { compiler } from 'markdown-to-jsx'
 import type { ElementType, FC } from 'react'
 import { useMemo } from 'react'
 
-import { SyntaxHighlightedCode } from './overrides/SyntaxHighlightedCode'
+import { Code } from './overrides/Code'
 
 export interface MarkdownProps {
   content: string
@@ -21,7 +19,9 @@ export const Markdown: FC<MarkdownProps> = (props) => {
     const mdContent = compiler(content, {
       wrapper: null,
       overrides: {
-        code: SyntaxHighlightedCode,
+        pre: {
+          component: Code,
+        },
       },
     })
     return mdContent

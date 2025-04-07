@@ -4,7 +4,7 @@ import { archivesQuery } from '@domain/archives/queries/archives-query'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 
-import { NormalContainer } from '~/layout/container/NormalContainer'
+import { NarrowContainer } from '~/layout/container/NarrowContainer'
 
 export const metadata: Metadata = {
   title: '归档',
@@ -16,10 +16,10 @@ export default async function ArchiveLayout() {
   await queryClient.prefetchQuery(archivesQuery())
   const dehydrateState = dehydrate(queryClient)
   return (
-    <NormalContainer title="归档" icon="icon-[mingcute--folder-open-line]">
+    <NarrowContainer title="归档" icon="icon-[mingcute--folder-open-line]">
       <HydrationBoundary state={dehydrateState}>
         <ArchivesContent />
       </HydrationBoundary>
-    </NormalContainer>
+    </NarrowContainer>
   )
 }

@@ -1,12 +1,12 @@
 import { cn } from '@base/lib/helper'
 import type { PropsWithChildren } from 'react'
 
-interface NormalContainerProps extends PropsWithChildren {
+interface NarrowContainerProps extends PropsWithChildren {
   title?: string
   icon?: string
 }
 
-export const NormalContainer: Component<NormalContainerProps> = ({
+export const NarrowContainer: Component<NarrowContainerProps> = ({
   children,
   className,
   title,
@@ -15,7 +15,7 @@ export const NormalContainer: Component<NormalContainerProps> = ({
   return (
     <div
       className={cn(
-        'mx-auto min-w-0 max-w-normal overflow-hidden md:p-2',
+        'mx-auto mb-5 min-w-0 max-w-narrow overflow-hidden md:p-2',
         className,
       )}
     >

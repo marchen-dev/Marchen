@@ -43,11 +43,11 @@ export const HomeFriendItem: FC<FriendResponseType> = (props) => {
   const { avatar, name, url } = props
   return (
     <MarchenCard className="p-4">
-      <m.a
+      <a
         target="_blank"
         rel="noreferrer"
         href={url}
-        className="flex  items-center gap-4"
+        className="flex items-center gap-4"
       >
         <Image
           className="rounded-lg"
@@ -57,7 +57,7 @@ export const HomeFriendItem: FC<FriendResponseType> = (props) => {
           alt="avatar"
         />
         <p className="line-clamp-2 text-[1.05rem] font-semibold">{name}</p>
-      </m.a>
+      </a>
     </MarchenCard>
   )
 }
