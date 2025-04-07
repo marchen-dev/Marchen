@@ -51,7 +51,7 @@
     "react-syntax-highlighter": "^15.6.1",
     "react-turnstile": "^1.1.4",
     "server-only": "^0.0.1",
-    "sonner": "^2.0.1",
+    "sonner": "^2.0.3",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "use-sync-external-store": "^1.4.0",

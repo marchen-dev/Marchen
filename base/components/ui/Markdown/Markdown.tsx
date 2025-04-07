@@ -5,7 +5,7 @@ import { compiler } from 'markdown-to-jsx'
 import type { ElementType, FC } from 'react'
 import { useMemo } from 'react'
 
-import { Code } from './overrides/Code'
+import { MCode } from './overrides/Code'
 
 export interface MarkdownProps {
   content: string
@@ -19,14 +19,10 @@ export const Markdown: FC<MarkdownProps> = (props) => {
     const mdContent = compiler(content, {
       wrapper: null,
       overrides: {
-        pre: {
-          component: Code,
-        },
+        code: MCode,
       },
     })
     return mdContent
   }, [content])
-  return (
-    <Component className={cn('markdown-body', className)}>{node}</Component>
-  )
+  return <Component className={cn(className)}>{node}</Component>
 }

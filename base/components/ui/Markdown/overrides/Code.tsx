@@ -1,12 +1,15 @@
 import { useAppTheme } from '@base/hooks/use-app-theme'
-import type { FC, PropsWithChildren } from 'react'
+import { cn } from '@base/lib/helper'
+import type { FC } from 'react'
+import { useEffect, useState } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import {
   oneDark,
   oneLight,
 } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { toast } from 'sonner'
 
-export function CodeBlock({
+export function MCode({
   className,
   children,
 }: {
@@ -14,18 +17,74 @@ export function CodeBlock({
   children: string
 }) {
   const { isDarkMode } = useAppTheme()
-  const codeBlock = className?.replace('lang-', '')
-  if (!codeBlock) {
+  const [style, setStyle] = useState(oneLight)
+  useEffect(() => {
+    setStyle(isDarkMode ? oneDark : oneLight)
+  }, [isDarkMode])
+  const language = className?.replace('lang-', '')
+  if (!language) {
     return <InlineCodeBlock text={children} />
   }
-
   return (
-    <SyntaxHighlighter
-      language={codeBlock}
-      style={isDarkMode ? oneDark : oneLight}
-    >
-      {children}
-    </SyntaxHighlighter>
+    <div className="my-5 rounded-md bg-zinc-50 p-4 dark:bg-zinc-900">
+      <CodeBlockHeader language={language} content={children} />
+      <SyntaxHighlighter
+        language={language}
+        style={style}
+        codeTagProps={{
+          className: 'bg-zinc-50 dark:bg-zinc-900',
+        }}
+        PreTag={({ children }) => <div>{children}</div>}
+      >
+        {children}
+      </SyntaxHighlighter>
+    </div>
+  )
+}
+
+interface PreTagProps {
+  language: string
+  content: string
+}
+
+const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = (text: string) => {
+    if (copied) return
+    navigator.clipboard.writeText(text.toString())
+    setCopied(true)
+    toast.success('已复制')
+    setTimeout(() => {
+      setCopied(false)
+    }, 5000)
+  }
+  return (
+    <div className="mb-3  flex items-center justify-between text-xs">
+      <span className=" text-zinc-500">{language}</span>
+      <button
+        type="button"
+        className={cn(
+          'flex items-center gap-1 rounded-md px-2 py-1.5 text-xs text-zinc-500  ',
+          !copied && 'hover:bg-zinc-100 dark:hover:bg-zinc-800',
+          copied && 'cursor-default',
+        )}
+        onClick={() => {
+          handleCopy(content)
+        }}
+      >
+        {copied ? (
+          <>
+            <i className="icon-[mingcute--check-line]" />
+            <span>已复制</span>
+          </>
+        ) : (
+          <>
+            <i className="icon-[mingcute--copy-2-line]" />
+            <span>复制</span>
+          </>
+        )}
+      </button>
+    </div>
   )
 }
 
@@ -35,17 +94,4 @@ const InlineCodeBlock: FC<{ text: string }> = ({ text }) => {
       {text}
     </code>
   )
-}
-
-export const Code: FC<PropsWithChildren> = ({ children, ...rest }) => {
-  if (
-    typeof children === 'object' &&
-    children !== null &&
-    'type' in children &&
-    children.type === 'code'
-  ) {
-    const props = children.props as { className: string; children: string }
-    return CodeBlock(props)
-  }
-  return <pre {...rest}>{children}</pre>
 }

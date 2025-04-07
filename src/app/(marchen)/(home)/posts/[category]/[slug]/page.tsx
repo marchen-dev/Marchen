@@ -3,6 +3,7 @@ import { getServerQueryClient } from '@base/lib/query-client.server'
 import { InjectPostData } from '@domain/posts/components/detail/InjectPostData'
 import { PostContent } from '@domain/posts/components/detail/postContent'
 import { PostHeader } from '@domain/posts/components/detail/PostHeader'
+import { PostTransitionAnimate } from '@domain/posts/components/detail/PostTransitionAnimate'
 import type { PostParams } from '@domain/posts/queries/post-detail-query'
 import { postDetailQuery } from '@domain/posts/queries/post-detail-query'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
@@ -29,10 +30,12 @@ export default async function PostPage(props: PostLayoutProps) {
   return (
     <HydrationBoundary state={dehydrateState}>
       <InjectPostData />
-      <MarchenCard className="p-8">
-        <PostHeader />
-        <PostContent />
-      </MarchenCard>
+      <PostTransitionAnimate>
+        <MarchenCard className="p-8">
+          <PostHeader />
+          <PostContent />
+        </MarchenCard>
+      </PostTransitionAnimate>
     </HydrationBoundary>
   )
 }

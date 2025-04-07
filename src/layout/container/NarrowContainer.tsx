@@ -20,7 +20,7 @@ export const NarrowContainer: Component<NarrowContainerProps> = ({
       )}
     >
       {title && (
-        <div className="mb-3 flex items-center py-3">
+        <div className="mb-3 flex items-center justify-center py-3">
           <i className={cn('mr-2 size-7', icon)} />
           <h2 className="text-2xl font-semibold">{title}</h2>
         </div>

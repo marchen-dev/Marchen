@@ -1,9 +1,9 @@
 'use client'
 
+import { Toaster } from '@base/components/ui/Sonner/Sonner'
 import { domMax, LazyMotion } from 'framer-motion'
 import { ThemeProvider } from 'next-themes'
 import type { FC, JSX, PropsWithChildren } from 'react'
-import { Toaster } from 'sonner'
 
 import { ProviderComposer } from './ProviderComposer'
 import { JotaiProvider } from './root/JotaiProvider'
