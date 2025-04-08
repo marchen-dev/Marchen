@@ -1,6 +1,6 @@
 'use client'
 
-import { Toaster } from '@base/components/ui/Sonner/Sonner'
+import { Toaster } from '@base/components/ui/Sonner'
 import { domMax, LazyMotion } from 'framer-motion'
 import { ThemeProvider } from 'next-themes'
 import type { FC, JSX, PropsWithChildren } from 'react'

@@ -8,7 +8,7 @@ export const PostHeader = () => {
   const post = usePostSelector((state) => state)
   return (
     <div>
-      <h2 className="my-7 text-2xl font-semibold">{post?.title}</h2>
+      <h1 className="my-7 text-2xl font-semibold">{post?.title}</h1>
       <span className="flex items-center text-sm text-zinc-600 dark:text-zinc-400">
         <IconWrapper line as="time" icon="icon-[mingcute--time-duration-line]">
           {dayjs(post?.created).format('YYYY 年 M 月 DD 日')}

@@ -10,8 +10,8 @@ export const PostContent = () => {
     return
   }
   return (
-    <div className="mt-7">
-      <Markdown content={post} as="main" />/
+    <div className="mt-3">
+      <Markdown content={post} as="article" />
     </div>
   )
 }

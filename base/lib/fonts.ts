@@ -9,7 +9,7 @@ const sansFont = Manrope({
 
 const serifFont = Noto_Serif_SC({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['400', '500', '600'],
   variable: '--font-serif',
   display: 'swap',
   fallback: ['Noto Serif SC'],

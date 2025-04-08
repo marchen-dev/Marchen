@@ -26,7 +26,7 @@ export function MCode({
     return <InlineCodeBlock text={children} />
   }
   return (
-    <div className="my-5 rounded-md bg-zinc-50 p-4 dark:bg-zinc-900">
+    <div className="my-5 rounded-md bg-zinc-50 p-4 pt-3 dark:bg-zinc-900">
       <CodeBlockHeader language={language} content={children} />
       <SyntaxHighlighter
         language={language}
