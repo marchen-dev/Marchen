@@ -6,8 +6,11 @@ import type { ElementType, FC } from 'react'
 import { useMemo } from 'react'
 
 import styles from './markdown.module.css'
-import { MCode } from './overrides/MCode'
-import { MLink } from './overrides/MLink'
+import { MarkdownCode } from './overrides/MarkdownCode'
+import { MarkdownHeading } from './overrides/MarkdownHeading'
+import { MarkdownImage } from './overrides/MarkdownImage'
+import { MarkdownLink } from './overrides/MarkdownLink'
+import { MarkdownParagraph } from './overrides/MarkdownParagraph'
 
 export interface MarkdownProps {
   content: string
@@ -21,16 +24,28 @@ export const Markdown: FC<MarkdownProps> = (props) => {
     const mdContent = compiler(content, {
       wrapper: null,
       overrides: {
-        code: MCode,
+        code: MarkdownCode,
         h1: ({ children }) => (
-          <h1 className="text-2xl font-bold">{children}</h1>
+          <MarkdownHeading level={1}>{children}</MarkdownHeading>
         ),
-        h2: ({ children }) => <h2 className="text-xl">{children}</h2>,
-        h3: ({ children }) => <h3 className="text-lg">{children}</h3>,
-        p: ({ children }) => (
-          <p className="my-4 text-base leading-7">{children}</p>
+        h2: ({ children }) => (
+          <MarkdownHeading level={2}>{children}</MarkdownHeading>
         ),
-        a: MLink,
+        h3: ({ children }) => (
+          <MarkdownHeading level={3}>{children}</MarkdownHeading>
+        ),
+        h4: ({ children }) => (
+          <MarkdownHeading level={4}>{children}</MarkdownHeading>
+        ),
+        h5: ({ children }) => (
+          <MarkdownHeading level={5}>{children}</MarkdownHeading>
+        ),
+        h6: ({ children }) => (
+          <MarkdownHeading level={6}>{children}</MarkdownHeading>
+        ),
+        p: MarkdownParagraph,
+        a: MarkdownLink,
+        img: MarkdownImage,
       },
     })
     return mdContent

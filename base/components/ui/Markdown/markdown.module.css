@@ -4,19 +4,6 @@
   font-weight: 400;
   overflow-x: hidden;
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    line-height: 1.5;
-    margin-top: 35px;
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    font-weight: 600;
-  }
-
   img {
     max-width: 100%;
   }
@@ -29,16 +16,6 @@
     margin-top: 32px;
     margin-bottom: 32px;
   }
-
-  /* a {
-    text-decoration: none;
-    color: #0269c8;
-    border-bottom: 1px solid #d1e9ff;
-    &:hover,
-    &:active {
-      color: #275b8c;
-    }
-  } */
 
   table {
     display: inline-block !important;

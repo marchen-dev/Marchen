@@ -2,12 +2,12 @@
 
 import { m } from 'framer-motion'
 
-interface MLinkProps {
+interface MarkdownLinkProps {
   children: React.ReactNode
   href: string
 }
 
-export const MLink = ({ children, ...props }: MLinkProps) => {
+export const MarkdownLink = ({ children, ...props }: MarkdownLinkProps) => {
   return (
     <span className="px-0.5">
       <m.a

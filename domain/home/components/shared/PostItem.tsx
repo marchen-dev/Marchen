@@ -42,6 +42,7 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
               fill
               className="object-cover"
               alt={`Cover image for ${title}`}
+              priority
             />
           </m.div>
         </Link>

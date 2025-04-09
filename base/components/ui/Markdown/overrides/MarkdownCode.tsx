@@ -9,7 +9,7 @@ import {
 } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { toast } from 'sonner'
 
-export function MCode({
+export function MarkdownCode({
   className,
   children,
 }: {
