@@ -22,7 +22,7 @@ export const MarkdownImage: FC<ComponentPropsWithoutRef<'img'>> = ({
 
   if (!src) return null
   return (
-    <span className=" flex flex-col px-2">
+    <span className=" my-2 flex flex-col px-2">
       <Image
         src={src}
         alt={alt ?? 'image'}

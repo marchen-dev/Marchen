@@ -5,7 +5,16 @@ import { compiler } from 'markdown-to-jsx'
 import type { ElementType, FC } from 'react'
 import { useMemo } from 'react'
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../Table'
 import styles from './markdown.module.css'
+import { MarkdownBlockquote } from './overrides/MarkdownBlockquote'
 import { MarkdownCode } from './overrides/MarkdownCode'
 import { MarkdownHeading } from './overrides/MarkdownHeading'
 import { MarkdownImage } from './overrides/MarkdownImage'
@@ -46,6 +55,15 @@ export const Markdown: FC<MarkdownProps> = (props) => {
         p: MarkdownParagraph,
         a: MarkdownLink,
         img: MarkdownImage,
+        ul: ({ children }) => <ul className="list-disc pl-7">{children}</ul>,
+        ol: ({ children }) => <ol className="list-decimal pl-7">{children}</ol>,
+        thead: TableHeader,
+        th: TableHead,
+        tr: TableRow,
+        tbody: TableBody,
+        td: TableCell,
+        table: Table,
+        blockquote: MarkdownBlockquote,
       },
     })
     return mdContent
