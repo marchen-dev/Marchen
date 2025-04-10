@@ -26,7 +26,7 @@ export function MarkdownCode({
     return <InlineCodeBlock text={children} />
   }
   return (
-    <div className="my-5 rounded-md bg-zinc-50 p-4 pt-3 dark:bg-zinc-900">
+    <div className="my-5 rounded-md bg-zinc-50 dark:bg-zinc-900">
       <CodeBlockHeader language={language} content={children} />
       <SyntaxHighlighter
         language={language}
@@ -34,7 +34,7 @@ export function MarkdownCode({
         codeTagProps={{
           className: 'bg-zinc-50 dark:bg-zinc-900',
         }}
-        PreTag={({ children }) => <div>{children}</div>}
+        PreTag={({ children }) => <div className="px-4 pb-3">{children}</div>}
       >
         {children}
       </SyntaxHighlighter>
@@ -59,13 +59,13 @@ const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
     }, 5000)
   }
   return (
-    <div className="mb-3  flex items-center justify-between text-xs">
-      <span className=" text-zinc-500">{language}</span>
+    <div className="mb-3 flex h-9 items-center justify-between bg-zinc-100 px-4 text-xs dark:bg-zinc-800">
+      <span className=" text-zinc-600 dark:text-zinc-300">{language}</span>
       <button
         type="button"
         className={cn(
-          'flex items-center gap-1 rounded-md px-2 py-1.5 text-xs text-zinc-500  ',
-          !copied && 'hover:bg-zinc-100 dark:hover:bg-zinc-800',
+          'flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400',
+          !copied && 'hover:text-zinc-700 dark:hover:text-zinc-300',
           copied && 'cursor-default',
         )}
         onClick={() => {

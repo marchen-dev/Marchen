@@ -2,7 +2,7 @@
 
 import { cn } from '@base/lib/helper'
 import type { FC } from 'react'
-import { createElement } from 'react'
+import { createElement, useId } from 'react'
 
 interface MarkdownHeadingProps {
   children: React.ReactNode
@@ -23,9 +23,14 @@ export const MarkdownHeading: FC<MarkdownHeadingProps> = ({
   level,
 }) => {
   const Tag = `h${level}` as const
+  const rid = useId()
   return createElement(
     Tag,
-    { className: cn(baseClassName, classNameMap[level]) },
+    {
+      className: cn(baseClassName, classNameMap[level]),
+      id: `heading-${level}-${rid}`,
+      'markdown-level': level,
+    },
     children,
   )
 }
