@@ -1,78 +1,108 @@
 'use client'
 import { cn } from '@base/lib/helper'
 import { useMarkdownElement } from '@domain/posts/providers/MarkdownElementProvider'
-import { useEffect, useMemo, useState } from 'react'
+import { useMotionValueEvent, useScroll } from 'framer-motion'
+import { atom, useAtomValue, useSetAtom } from 'jotai'
+import { throttle } from 'lodash-es'
+import { memo, useMemo, useState } from 'react'
 
 import { ScrollArea } from '../ScrollArea'
 
+const scrollYProgressAtom = atom(0)
+
 export const TocTree = () => {
   const markdownElement = useMarkdownElement()
-
-  const [activeId, setActiveId] = useState<string>('')
+  const { scrollYProgress } = useScroll()
+  const setScrollYProgress = useSetAtom(scrollYProgressAtom)
+  const [currentActive, setCurrentActive] = useState({
+    id: '',
+  })
   const elementTrees = useMemo(() => {
     if (!markdownElement) {
       return []
     }
-    const tree = [
+    const headings = [
       ...(markdownElement?.querySelectorAll(
         'h1,h2,h3,h4,h5,h6',
       ) as unknown as HTMLHeadingElement[]),
-    ]
-      .filter((element) => element.getAttribute('markdown-level') !== null)
-      .map((element) => {
-        const level = element.getAttribute('markdown-level')!
-        return {
-          title: element.textContent ?? '',
-          level: +level,
-          id: element.id,
-        }
-      })
+    ].filter((element) => element.getAttribute('markdown-level') !== null)
+    if (headings.length === 0) {
+      return []
+    }
+
+    let currentElementHeight = 0
+
+    const headingElementTotalHeight =
+      markdownElement.offsetHeight - headings[0].offsetTop
+
+    const tree = headings.map((heading, index) => {
+      const level = heading.getAttribute('markdown-level')!
+      const headingOffsetTop = heading.offsetTop
+      let elementHeight = 0
+      if (index !== headings.length - 1) {
+        elementHeight = headings[index + 1].offsetTop - headingOffsetTop
+      } else {
+        elementHeight = markdownElement.offsetHeight - headingOffsetTop
+      }
+      currentElementHeight += elementHeight
+      return {
+        title: heading.textContent ?? '',
+        level: +level,
+        id: heading.id,
+        heightPercentage: currentElementHeight / headingElementTotalHeight,
+      }
+    })
 
     return tree
   }, [markdownElement])
 
-  // 处理滚动高亮
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100 // 偏移量可以调整
-      // 找到当前可视区域的标题
-      const currentHeading = elementTrees
-        .map((item) => {
-          const element = document.querySelector(
-            `#${item.id}`,
-          ) as HTMLHeadingElement
-          if (!element) return null
-          const rect = element.getBoundingClientRect()
-          return {
-            id: item.id,
-            top: element.offsetTop,
-            isVisible: rect.top >= 0 && rect.top < window.innerHeight,
-          }
-        })
-        .filter(Boolean)
-        .findLast((item) => item!.top <= scrollPosition)
-      // console.log(window.scrollY,currentHeading?.top, ' =========')
-      // 设置当前激活的标题ID
-      if (currentHeading) {
-        setActiveId(currentHeading.id)
-      } else {
-        // 如果滚动到顶部，则取消高亮
-        if (window.scrollY === 0) {
-          setActiveId('')
-        }
+  useMotionValueEvent(
+    scrollYProgress,
+    'change',
+    throttle((latest) => {
+      let currentProgress = latest
+      if (latest > 1) {
+        currentProgress = 1
       }
-    }
+      setScrollYProgress(currentProgress)
+      if (elementTrees.length === 0) {
+        return
+      }
+      const target = elementTrees.find(
+        (element) => element.heightPercentage >= currentProgress,
+      )
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [elementTrees])
-
+      if (target && target.id !== currentActive.id) {
+        setCurrentActive({
+          id: target.id,
+        })
+      }
+    }, 100),
+  )
   const handleScrollIntoView = (id: string) => {
-    const target = document.querySelector(`#${id}`)
+    if (!markdownElement) {
+      return
+    }
+    const targetIndex =
+      elementTrees.findIndex((element) => element.id === id) - 1
+    if (targetIndex < 0) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
+      return
+    }
+    const target = elementTrees[targetIndex]
     if (target) {
-      const headerOffset = 80
-      const elementPosition = target.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+      if (target === elementTrees[0]) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        })
+        return
+      }
+      const offsetPosition =
+        target.heightPercentage * markdownElement.offsetHeight
 
       window.scrollTo({
         top: offsetPosition,
@@ -80,15 +110,11 @@ export const TocTree = () => {
       })
     }
   }
-
   return (
     <div className="text-sm">
       <p className="flex items-center justify-between">
         <span>目录</span>
-        <span className="mr-5 flex items-center gap-1">
-          <i className="icon-[mingcute--book-6-line]" />
-          <span>55%</span>
-        </span>
+        <Progress />
       </p>
       <ScrollArea className="mt-3 h-[500px]" type="scroll">
         <ul className=" text-zinc-600">
@@ -100,7 +126,7 @@ export const TocTree = () => {
               }}
               className={cn(
                 'cursor-pointer py-1 text-left',
-                activeId === element.id && 'text-blue-500',
+                currentActive.id === element.id && 'text-blue-500',
               )}
               onClick={() => handleScrollIntoView(element.id)}
             >
@@ -112,3 +138,13 @@ export const TocTree = () => {
     </div>
   )
 }
+
+const Progress = memo(() => {
+  const scrollYProgress = useAtomValue(scrollYProgressAtom)
+  return (
+    <span className="mr-5 flex items-center gap-1">
+      <i className="icon-[mingcute--book-6-line]" />
+      <span>{Math.round(scrollYProgress * 100)}%</span>
+    </span>
+  )
+})

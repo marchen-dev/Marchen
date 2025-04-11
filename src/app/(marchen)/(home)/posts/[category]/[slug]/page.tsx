@@ -35,7 +35,7 @@ export default async function PostPage(props: PostLayoutProps) {
       <InjectPostData />
       <PostTransitionAnimate>
         <MarkdownElementProvider>
-          <div className="grid grid-cols-1 gap-8 xl:grid-cols-[1fr_850px_1fr]">
+          <div className="grid grid-cols-1 xl:grid-cols-[200px_850px_200px]">
             <MarchenCard className="max-w-reader p-8 xl:col-start-2">
               <PostHeader />
               <PostContent />
