@@ -34,6 +34,16 @@ export const Markdown: FC<MarkdownProps> = (props) => {
       wrapper: null,
       overrides: {
         code: MarkdownCode,
+        p: MarkdownParagraph,
+        a: MarkdownLink,
+        img: MarkdownImage,
+        thead: TableHeader,
+        th: TableHead,
+        tr: TableRow,
+        tbody: TableBody,
+        td: TableCell,
+        table: Table,
+        blockquote: MarkdownBlockquote,
         h1: ({ children }) => (
           <MarkdownHeading level={1}>{children}</MarkdownHeading>
         ),
@@ -52,18 +62,8 @@ export const Markdown: FC<MarkdownProps> = (props) => {
         h6: ({ children }) => (
           <MarkdownHeading level={6}>{children}</MarkdownHeading>
         ),
-        p: MarkdownParagraph,
-        a: MarkdownLink,
-        img: MarkdownImage,
         ul: ({ children }) => <ul className="list-disc pl-7">{children}</ul>,
         ol: ({ children }) => <ol className="list-decimal pl-7">{children}</ol>,
-        thead: TableHeader,
-        th: TableHead,
-        tr: TableRow,
-        tbody: TableBody,
-        td: TableCell,
-        table: Table,
-        blockquote: MarkdownBlockquote,
       },
     })
     return mdContent
