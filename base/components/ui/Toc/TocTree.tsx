@@ -9,10 +9,11 @@ import { memo, useMemo, useState } from 'react'
 import { ScrollArea } from '../ScrollArea'
 
 const scrollYProgressAtom = atom(0)
+const titleOffset = 80
 
 export const TocTree = () => {
   const markdownElement = useMarkdownElement()
-  const { scrollYProgress } = useScroll()
+  const { scrollY } = useScroll()
   const setScrollYProgress = useSetAtom(scrollYProgressAtom)
   const [currentActive, setCurrentActive] = useState({
     id: '',
@@ -30,79 +31,54 @@ export const TocTree = () => {
       return []
     }
 
-    let currentElementHeight = 0
-
-    const headingElementTotalHeight =
-      markdownElement.offsetHeight - headings[0].offsetTop
-
-    const tree = headings.map((heading, index) => {
+    const tree = headings.map((heading) => {
       const level = heading.getAttribute('markdown-level')!
-      const headingOffsetTop = heading.offsetTop
-      let elementHeight = 0
-      if (index !== headings.length - 1) {
-        elementHeight = headings[index + 1].offsetTop - headingOffsetTop
-      } else {
-        elementHeight = markdownElement.offsetHeight - headingOffsetTop
-      }
-      currentElementHeight += elementHeight
+
       return {
         title: heading.textContent ?? '',
         level: +level,
         id: heading.id,
-        heightPercentage: currentElementHeight / headingElementTotalHeight,
       }
     })
 
     return tree
   }, [markdownElement])
-
+  // console.log(elementTrees);
   useMotionValueEvent(
-    scrollYProgress,
+    scrollY,
     'change',
-    throttle((latest) => {
-      let currentProgress = latest
-      if (latest > 1) {
-        currentProgress = 1
-      }
-      setScrollYProgress(currentProgress)
-      if (elementTrees.length === 0) {
+    throttle((pageScrollY) => {
+      if (!markdownElement || elementTrees.length === 0) {
         return
       }
-      const target = elementTrees.find(
-        (element) => element.heightPercentage >= currentProgress,
-      )
+      const scrollPosition = window.scrollY + titleOffset
+      const headings = [
+        ...(markdownElement?.querySelectorAll(
+          'h1,h2,h3,h4,h5,h6',
+        ) as unknown as HTMLHeadingElement[]),
+      ].filter((element) => element.getAttribute('markdown-level') !== null)
 
-      if (target && target.id !== currentActive.id) {
-        setCurrentActive({
-          id: target.id,
-        })
-      }
+      const heading = headings.findLast((heading) => {
+        return heading.offsetTop <= scrollPosition
+      })
+      setCurrentActive({
+        id: heading?.id ?? '',
+      })
+
+      const scrollProgress =
+        pageScrollY /
+        (markdownElement.offsetHeight +
+          window.pageYOffset +
+          markdownElement.getBoundingClientRect().top -
+          window.innerHeight)
+      setScrollYProgress(Math.min(scrollProgress, 1))
     }, 100),
   )
   const handleScrollIntoView = (id: string) => {
-    if (!markdownElement) {
-      return
-    }
-    const targetIndex =
-      elementTrees.findIndex((element) => element.id === id) - 1
-    if (targetIndex < 0) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      })
-      return
-    }
-    const target = elementTrees[targetIndex]
+    const target = document.querySelector(`#${id}`)
     if (target) {
-      if (target === elementTrees[0]) {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        })
-        return
-      }
-      const offsetPosition =
-        target.heightPercentage * markdownElement.offsetHeight
+      const elementPosition = target.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - titleOffset
 
       window.scrollTo({
         top: offsetPosition,
