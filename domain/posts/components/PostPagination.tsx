@@ -21,7 +21,7 @@ export const PostPaginationArea: FC<PostPaginationAreaProps> = (props) => {
 
   return (
     <div
-      className="mt-5 flex w-full items-center justify-center gap-5 pb-8"
+      className="mt-5 flex w-full items-center justify-center gap-5"
       ref={ref}
     >
       {isFetchingNextPage ? (

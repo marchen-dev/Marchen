@@ -21,8 +21,8 @@ export const NormalContainer: Component<NormalContainerProps> = ({
     >
       {title && (
         <div className="mb-3 flex items-center py-3">
-          <i className={cn('mr-2 size-7', icon)} />
-          <h2 className="text-2xl font-semibold">{title}</h2>
+          <i className={cn('mr-2 size-6', icon)} />
+          <h2 className="text-xl font-semibold">{title}</h2>
         </div>
       )}
       {children}

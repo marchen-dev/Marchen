@@ -18,6 +18,7 @@ export const HomeFriends = () => {
       title="朋友们"
       icon="icon-[mingcute--contacts-4-line]"
       href={routerBuilder(Routes.FRIENDS)}
+      className="pb-0"
     >
       <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <AnimatePresence>

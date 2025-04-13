@@ -18,7 +18,7 @@ export default function ArchivesContent() {
   const { data } = useQuery(archivesQuery())
   const archiveTransition = createFadeInOutTransition()
   return (
-    <div className="mx-auto mt-6 space-y-7">
+    <div className="mx-auto mt-3 space-y-7">
       {data?.data.map((item) => (
         <m.div key={item.year} {...archiveTransition}>
           <ArchiveYearItem {...item} />
@@ -32,10 +32,9 @@ const ArchiveYearItem: FC<PostsArchiveResponseType['data'][number]> = (
   props,
 ) => {
   const { year, posts } = props
-
   return (
     <section>
-      <h3 className="text-lg font-bold">
+      <h3 className="text-lg font-medium">
         {year}（共 {posts.length} 篇）
       </h3>
       <MarchenCard as="ul" className="mt-2 flex flex-col gap-4">

@@ -64,7 +64,7 @@ const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
       <button
         type="button"
         className={cn(
-          'flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400',
+          'flex items-center  gap-1 py-2 text-xs text-zinc-500 dark:text-zinc-400',
           !copied && 'hover:text-zinc-700 dark:hover:text-zinc-300',
           copied && 'cursor-default',
         )}

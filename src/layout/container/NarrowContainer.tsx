@@ -15,14 +15,14 @@ export const NarrowContainer: Component<NarrowContainerProps> = ({
   return (
     <div
       className={cn(
-        'mx-auto mb-5 min-w-0 max-w-narrow overflow-hidden md:p-2',
+        'mx-auto min-w-0 max-w-narrow overflow-hidden md:p-2',
         className,
       )}
     >
       {title && (
-        <div className="mb-3 flex items-center  py-3">
-          <i className={cn('mr-2 size-7', icon)} />
-          <h2 className="text-2xl font-semibold">{title}</h2>
+        <div className="mb-3 flex items-center py-3">
+          <i className={cn('mr-2 size-6', icon)} />
+          <h2 className="text-xl font-semibold">{title}</h2>
         </div>
       )}
       {children}

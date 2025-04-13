@@ -1,5 +1,6 @@
 import type { CategoryResponseType } from './category.interface'
 import type { DataWrapper } from './pagination.interface'
+import type { SummaryResponseType } from './summary.interface'
 
 interface PostResponseType {
   id: string
@@ -8,6 +9,7 @@ interface PostResponseType {
   cover: string
   slug: string
   read: number
+  summary: SummaryResponseType
   tags: string[]
   categoryId: string
   updated: Date

@@ -4,7 +4,7 @@ import { useMarkdownElement } from '@domain/posts/providers/MarkdownElementProvi
 import { useMotionValueEvent, useScroll } from 'framer-motion'
 import { atom, useAtomValue, useSetAtom } from 'jotai'
 import { throttle } from 'lodash-es'
-import { memo, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ScrollArea } from '../ScrollArea'
 
@@ -14,6 +14,8 @@ const titleOffset = 80
 export const TocTree = () => {
   const markdownElement = useMarkdownElement()
   const { scrollY } = useScroll()
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
+
   const setScrollYProgress = useSetAtom(scrollYProgressAtom)
   const [currentActive, setCurrentActive] = useState({
     id: '',
@@ -43,10 +45,18 @@ export const TocTree = () => {
 
     return tree
   }, [markdownElement])
-  // console.log(elementTrees);
+
+  useEffect(
+    () => () => {
+      setScrollYProgress(0)
+    },
+    [setScrollYProgress],
+  )
+
   useMotionValueEvent(
     scrollY,
     'change',
+    // eslint-disable-next-line react-compiler/react-compiler
     throttle((pageScrollY) => {
       if (!markdownElement || elementTrees.length === 0) {
         return
@@ -72,7 +82,32 @@ export const TocTree = () => {
           markdownElement.getBoundingClientRect().top -
           window.innerHeight)
       setScrollYProgress(Math.min(scrollProgress, 1))
-    }, 100),
+
+      // 当目录出现滚动条时候，选中的标题能够能够在视口中显示
+      const scrollArea = scrollAreaRef.current?.querySelector(
+        '[data-radix-scroll-area-viewport]',
+      )
+      const activeTocElement = scrollArea?.querySelector(
+        `li[data-id="${currentActive.id}"]`,
+      )
+
+      if (scrollArea && activeTocElement) {
+        const scrollAreaRect = scrollArea?.getBoundingClientRect()
+        const activeTocElementRect = activeTocElement?.getBoundingClientRect()
+        if (activeTocElementRect.bottom > scrollAreaRect.bottom - 40) {
+          // 滚动到当前项，使其在可视区域内更居中的位置
+          scrollArea.scrollBy({
+            top: activeTocElementRect.bottom - scrollAreaRect.bottom + 80,
+            behavior: 'smooth',
+          })
+        } else if (activeTocElementRect.top < scrollAreaRect.top + 40) {
+          scrollArea.scrollBy({
+            top: activeTocElementRect.top - scrollAreaRect.top - 40,
+            behavior: 'smooth',
+          })
+        }
+      }
+    }, 150),
   )
   const handleScrollIntoView = (id: string) => {
     const target = document.querySelector(`#${id}`)
@@ -86,23 +121,26 @@ export const TocTree = () => {
       })
     }
   }
+
   return (
-    <div className="text-sm">
+    <div className="size-full text-sm">
       <p className="flex items-center justify-between">
         <span>目录</span>
         <Progress />
       </p>
-      <ScrollArea className="mt-3 h-[500px]" type="scroll">
-        <ul className=" text-zinc-600">
+      <ScrollArea className="mt-3 h-4/5 " ref={scrollAreaRef}>
+        <ul className="pr-2 text-zinc-600 dark:text-zinc-400">
           {elementTrees.map((element) => (
             <li
               key={element.id}
+              data-id={element.id}
               style={{
-                paddingLeft: `${element.level * 10}px`,
+                paddingLeft: `${(element.level - 1) * 10}px`,
               }}
               className={cn(
-                'cursor-pointer py-1 text-left',
-                currentActive.id === element.id && 'text-blue-500',
+                'line-clamp-2 cursor-pointer py-1 text-left',
+                currentActive.id === element.id &&
+                  'font-bold text-zinc-900 dark:text-zinc-100',
               )}
               onClick={() => handleScrollIntoView(element.id)}
             >

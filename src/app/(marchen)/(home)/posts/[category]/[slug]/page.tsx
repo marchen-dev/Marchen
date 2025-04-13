@@ -36,10 +36,12 @@ export default async function PostPage(props: PostLayoutProps) {
       <PostTransitionAnimate>
         <MarkdownElementProvider>
           <div className="grid grid-cols-1 xl:grid-cols-[200px_850px_200px]">
-            <MarchenCard className="max-w-reader p-8 xl:col-start-2">
-              <PostHeader />
-              <PostContent />
-            </MarchenCard>
+            <main className="max-w-reader xl:col-start-2">
+              <MarchenCard className="p-4 md:p-8">
+                <PostHeader />
+                <PostContent />
+              </MarchenCard>
+            </main>
 
             <PostRightAside>
               <TocTree />

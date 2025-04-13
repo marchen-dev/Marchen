@@ -37,10 +37,12 @@ export const PostCategoryFilter = memo(() => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-full max-w-[120px] justify-between md:max-w-[140px]"
         >
           {value ? (
-            categories?.find((category) => category.slug === value)?.name
+            <span className="truncate">
+              {categories?.find((category) => category.slug === value)?.name}
+            </span>
           ) : (
             <span>全部类别</span>
           )}

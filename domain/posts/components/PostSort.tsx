@@ -25,7 +25,7 @@ export const PostSort = () => {
   }
   return (
     <Select defaultValue={defaultValue} onValueChange={handleSortChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full max-w-[120px]">
         <SelectValue placeholder="排序" />
       </SelectTrigger>
       <SelectContent>
