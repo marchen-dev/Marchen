@@ -7,6 +7,7 @@ export enum Routes {
   POSTS = '/posts',
   POST = '/posts/',
   FRIENDS = '/friends',
+  ABOUT = '/about',
   ARCHIVE = '/archives',
   LOGIN = '/login',
   REGISTER = '/setup',
@@ -49,7 +50,9 @@ export function routerBuilder<T extends Routes>(
     }
     case Routes.POSTS: {
       const p = mergeUrlParams(params as Record<string, string>) ?? {}
-      href += `?${new URLSearchParams(p).toString()}`
+      if (Object.keys(p).length > 0) {
+        href += `?${new URLSearchParams(p).toString()}`
+      }
       break
     }
   }

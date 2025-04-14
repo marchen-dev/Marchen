@@ -17,10 +17,19 @@ export const HeaderNavConfig = [
     icon: 'icon-[mingcute--folder-open-line]',
   },
   {
-    href: '/blog',
     label: '更多',
-    // icon: 'icon-[mingcute--more-3-line]',
-    // icon:'icon-[mingcute--tornado-2-line]'
-    icon: 'icon-[mingcute--grid-line]',
+    icon: 'icon-[mingcute--down-line]',
+    items: [
+      {
+        href: routerBuilder(Routes.FRIENDS),
+        label: '友链',
+        icon: 'icon-[mingcute--contacts-4-line]',
+      },
+      {
+        href: routerBuilder(Routes.ABOUT),
+        label: '关于',
+        icon: 'icon-[mingcute--bulb-line]',
+      },
+    ],
   },
 ]

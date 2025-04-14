@@ -49,13 +49,13 @@ export const PostCategoryFilter = memo(() => {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[220px] p-0">
         <Command>
           <CommandInput placeholder="搜索分类..." />
           <CommandList>
             <CommandEmpty>没有找到分类</CommandEmpty>
             <CommandGroup>
-              {categories?.map(({ id, name, slug }) => (
+              {categories?.map(({ id, name, slug, _count }) => (
                 <CommandItem
                   key={id}
                   value={slug}
@@ -76,7 +76,7 @@ export const PostCategoryFilter = memo(() => {
                     )
                   }}
                 >
-                  {name}
+                  {name} ({_count.posts})
                   <Check
                     className={cn(
                       'ml-auto',

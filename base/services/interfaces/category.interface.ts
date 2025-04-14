@@ -2,6 +2,9 @@ interface CategoryResponseType {
   id: string
   name: string
   slug: string
+  _count: {
+    posts: number
+  }
   created: Date
 }
 

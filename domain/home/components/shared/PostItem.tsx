@@ -16,7 +16,7 @@ interface HomePostProps {
 
 export const PostItem: FC<HomePostProps> = memo((props) => {
   const {
-    post: { cover, title, content, tags, created, category, slug },
+    post: { cover, title, content, tags, created, category, slug, summary },
     layout = 'vertical', // Default layout is vertical
   } = props
   return (
@@ -50,7 +50,7 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
       <div
         className={cn(
           `flex flex-col justify-between space-y-3 p-4`,
-          layout === 'horizontal' ? 'w-2/3' : 'h-[calc(100%-180px)]',
+          layout === 'horizontal' ? 'w-2/3' : 'h-[calc(100%-155px)]',
         )} // Change to 2/3 for text
       >
         <div>
@@ -65,7 +65,9 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
               {title}
             </span>
           </Link>
-          <p className="mt-2 line-clamp-3 text-sm ">{content}</p>
+          <p className="mt-2 line-clamp-3 text-sm ">
+            {summary?.text ?? content}
+          </p>
         </div>
         <div className="flex items-center justify-between space-x-2 text-sm">
           <div className="flex items-center gap-1.5 overflow-hidden">

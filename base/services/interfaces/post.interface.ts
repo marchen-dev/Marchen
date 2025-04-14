@@ -9,7 +9,7 @@ interface PostResponseType {
   cover: string
   slug: string
   read: number
-  summary: SummaryResponseType
+  summary?: SummaryResponseType
   tags: string[]
   categoryId: string
   updated: Date
