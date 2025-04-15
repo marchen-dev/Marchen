@@ -20,7 +20,7 @@ export const HomeLayout: FC<HomeLayoutProps> = (props) => {
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={HomeFadeInVariants}
-      className={cn('pb-8', className)}
+      className={cn('mx-auto w-full max-w-normal pb-8', className)}
       {...rest}
     >
       <div className="relative mb-5">

@@ -41,7 +41,6 @@ export function routerBuilder<T extends Routes>(
   params?: RouteParams<typeof route>,
 ) {
   let href: string = route
-
   switch (route) {
     case Routes.POST: {
       const p = params as PostParams

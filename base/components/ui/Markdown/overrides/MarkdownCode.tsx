@@ -1,5 +1,6 @@
 import { useAppTheme } from '@base/hooks/use-app-theme'
 import { cn } from '@base/lib/helper'
+import copy from 'copy-to-clipboard'
 import type { FC } from 'react'
 import { useEffect, useState } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -51,7 +52,7 @@ const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
   const [copied, setCopied] = useState(false)
   const handleCopy = (text: string) => {
     if (copied) return
-    navigator.clipboard.writeText(text.toString())
+    copy(text.toString())
     setCopied(true)
     toast.success('已复制')
     setTimeout(() => {

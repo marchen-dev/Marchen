@@ -2,25 +2,15 @@
 
 import { Button } from '@base/components/ui/Button'
 import { cn } from '@base/lib/helper'
-import { routerBuilder, Routes } from '@base/lib/route-builder'
+import { Routes } from '@base/lib/route-builder'
 import { m } from 'framer-motion'
 import Link from 'next/link'
 import type { FC } from 'react'
 
-export const HomeRightColumn = () => {
-  const handleScrollToPosts = () => {
-    const target = document.querySelector('#home-scroll-target')
-    if (target) {
-      const headerHeight = 80
-      const targetPosition =
-        target.getBoundingClientRect().top + window.pageYOffset - headerHeight
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth',
-      })
-    }
-  }
+import { useScrollToPosts } from '../hooks/use-scroll-to-posts'
 
+export const HomeRightColumn = () => {
+  const { handleScrollToPosts } = useScrollToPosts()
   return (
     <m.div
       className="flex flex-col gap-6 lg:px-4"
@@ -55,7 +45,7 @@ export const HomeRightColumn = () => {
           className="rounded-xl  bg-blue-400 px-7 py-5 text-lg font-medium text-base-100 shadow-sm hover:bg-blue-500 hover:text-base-100"
           asChild
         >
-          <Link href={routerBuilder(Routes.POSTS)}>
+          <Link href={Routes.POSTS}>
             文章列表
             <i className="icon-[mingcute--folder-open-line] ml-1 text-xl" />
           </Link>

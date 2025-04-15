@@ -1,6 +1,6 @@
 'use client'
 
-import { routerBuilder, Routes } from '@base/lib/route-builder'
+import { Routes } from '@base/lib/route-builder'
 import { m } from 'framer-motion'
 
 import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
@@ -15,7 +15,7 @@ export const HomeRecentPosts = () => {
     <HomeLayout
       title="最新文章"
       icon="icon-[mingcute--history-line]"
-      href={routerBuilder(Routes.POSTS)}
+      href={Routes.POSTS}
       id="home-scroll-target"
     >
       <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">

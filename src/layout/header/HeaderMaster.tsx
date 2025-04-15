@@ -10,7 +10,7 @@ import { useAggregationDataSelector } from '~/providers/root/AggregationDataProv
 export const HeaderMaster = () => {
   const userAvatar = useAggregationDataSelector((state) => state?.user.avatar)
   return (
-    <m.section className="flex items-center gap-3 xl:ml-6">
+    <m.section className="flex items-center justify-end  gap-3 md:justify-start xl:ml-6 ">
       <Link href={routerBuilder(Routes.HOME)}>
         <Image
           src={userAvatar ?? ''}

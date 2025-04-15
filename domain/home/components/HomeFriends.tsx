@@ -20,7 +20,7 @@ export const HomeFriends = () => {
       href={routerBuilder(Routes.FRIENDS)}
       className="pb-0"
     >
-      <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ">
         <AnimatePresence>
           {friends?.slice(0, 10).map((friend, index) => (
             <m.li

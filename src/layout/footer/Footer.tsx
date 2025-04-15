@@ -4,6 +4,8 @@ import Link from 'next/link'
 
 import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
+import { HeaderTools } from '../header/HeaderTools'
+
 export default function Footer() {
   const username = useAggregationDataSelector((state) => state?.user.name)
   const currentYear = new Date().getFullYear()
@@ -46,6 +48,7 @@ export default function Footer() {
           </p>
         </div>
       </div>
+      <HeaderTools />
     </footer>
   )
 }

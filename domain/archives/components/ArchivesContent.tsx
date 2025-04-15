@@ -18,7 +18,7 @@ export default function ArchivesContent() {
   const { data } = useQuery(archivesQuery())
   const archiveTransition = createFadeInOutTransition()
   return (
-    <div className="mx-auto mt-3 space-y-7">
+    <div className="mx-auto mt-6 space-y-7">
       {data?.data.map((item) => (
         <m.div key={item.year} {...archiveTransition}>
           <ArchiveYearItem {...item} />

@@ -12,7 +12,7 @@ export const PostsSearch = () => {
       .filter((text) => text !== '')
       .join('+')
     router.push(routerBuilder(Routes.POSTS, { search: searchValue ?? '' }))
-  }, 500)
+  }, 300)
   const searchParams = useSearchParams()
   const defaultValue = useMemo(() => {
     return searchParams.get('search')?.replaceAll('+', ' ')

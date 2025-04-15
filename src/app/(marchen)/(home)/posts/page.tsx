@@ -20,7 +20,6 @@ export default async function PostsPage() {
   const orderBy = (searchParams.get('orderBy') as 'desc' | 'asc') ?? undefined
   const category = searchParams.get('category') ?? undefined
   const search = searchParams.get('search') ?? undefined
-
   const queryClient = getServerQueryClient()
   await queryClient.prefetchInfiniteQuery(
     postsPaginationQuery({ orderBy, category, search }),
