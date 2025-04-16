@@ -1,0 +1,28 @@
+{
+  "name": "@marchen/lib",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "require": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@marchen/api-client": "workspace:*",
+    "@tanstack/react-query": "^5.62.11",
+    "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "js-cookie": "^3.0.5",
+    "next": "15.3.0",
+    "next-runtime-env": "^3.2.2",
+    "next-themes": "^0.4.4",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6"
+  }
+}
