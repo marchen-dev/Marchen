@@ -1,0 +1,26 @@
+{
+  "name": "@marchen/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "require": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./interfaces/*": {
+      "types": "./src/interfaces/*.ts",
+      "require": "./src/interfaces/*.ts",
+      "default": "./src/interfaces/*.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ofetch": "^1.4.1"
+  },
+  "devDependencies": {
+    "@marchen/typescript-config": "workspace:*"
+  }
+}

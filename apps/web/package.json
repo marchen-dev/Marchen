@@ -1,0 +1,34 @@
+{
+  "name": "@marchen/web",
+  "version": "0.0.0",
+  "private": true,
+
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --turbopack -p 23116",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@iconify-json/mingcute": "^1.1.19",
+    "@iconify/tailwind": "^1.1.2",
+    "@marchen/api-client": "workspace:*",
+    "@marchen/atom": "workspace:*",
+    "@marchen/hooks": "workspace:*",
+    "@marchen/lib": "workspace:*",
+    "@tanstack/react-query": "^5.62.11",
+    "daisyui": "^4.12.23",
+    "framer-motion": "^12.4.7",
+    "jotai": "^2.12.2",
+    "lodash-es": "^4.17.21",
+    "next": "15.3.0",
+    "next-runtime-env": "^3.2.2",
+    "next-themes": "^0.4.4",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "postcss": "^8",
+    "postcss-import": "^16.1.0",
+    "tailwindcss": "^3.4.1"
+  }
+}
