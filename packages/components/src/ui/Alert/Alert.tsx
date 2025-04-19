@@ -1,10 +1,10 @@
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import type { VariantProps } from 'class-variance-authority'
 import { cva } from 'class-variance-authority'
 import * as React from 'react'
 
 const alertVariants = cva(
-  '[&>svg]:text-foreground relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg~*]:pl-7',
+  'relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
   {
     variants: {
       variant: {

@@ -3,13 +3,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@marchen/components/ui/Dropdown'
-import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@marchen/components/ui/Sidebar'
+} from '@marchen/components/ui'
 import { ChevronDown, SquareArrowOutUpRight } from 'lucide-react'
 import Link from 'next/link'
 

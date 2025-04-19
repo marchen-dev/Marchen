@@ -1,5 +1,5 @@
-import { useAppTheme } from '@base/hooks/use-app-theme'
-import { cn } from '@base/lib/helper'
+import { useAppTheme } from '@marchen/hooks'
+import { cn } from '@marchen/lib'
 import copy from 'copy-to-clipboard'
 import type { FC } from 'react'
 import { useEffect, useState } from 'react'
@@ -91,7 +91,7 @@ const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
 
 const InlineCodeBlock: FC<{ text: string }> = ({ text }) => {
   return (
-    <code className="bg-muted mx-1 rounded-md px-1.5 py-0.5 text-sm">
+    <code className="mx-1 rounded-md bg-muted px-1.5 py-0.5 text-sm">
       {text}
     </code>
   )

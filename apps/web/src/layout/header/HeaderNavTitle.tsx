@@ -1,8 +1,9 @@
 'use client'
 
-import { Routes } from '@marchen/lib/route-builder'
-import { useAggregationDataSelector } from '@marchen/providers/root/AggregationDataProvider'
+import { Routes } from '@marchen/lib'
 import Link from 'next/link'
+
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 export const HeaderNavTitle = () => {
   const siteTitle = useAggregationDataSelector((state) => state?.site.title)

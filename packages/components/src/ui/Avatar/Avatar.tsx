@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
 import * as React from 'react'
 

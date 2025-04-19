@@ -1,4 +1,5 @@
 'use client'
+import { ExternalLink } from '@marchen/components/ui'
 import Link from 'next/link'
 
 import { useAggregationDataSelector } from '../../providers/root/AggregationDataProvider'
@@ -9,26 +10,26 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-neutral-content relative border-t py-6  text-sm">
+    <footer className="relative border-t bg-neutral-content py-6  text-sm">
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap gap-4">
             <strong>关于 &gt;</strong>
             <Link
               href="/about/me"
-              className="hover:text-secondary transition-colors"
+              className="transition-colors hover:text-secondary"
             >
               关于我
             </Link>
             <Link
               href="/about/project"
-              className="hover:text-secondary transition-colors"
+              className="transition-colors hover:text-secondary"
             >
               关于此项目
             </Link>
             <Link
               href="/about/site"
-              className="hover:text-secondary transition-colors"
+              className="transition-colors hover:text-secondary"
             >
               关于本站
             </Link>

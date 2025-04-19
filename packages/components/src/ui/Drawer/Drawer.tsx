@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import * as React from 'react'
 import { Drawer as DrawerPrimitive } from 'vaul'
 
@@ -47,7 +47,7 @@ const DrawerContent = React.forwardRef<
       )}
       {...props}
     >
-      <div className="bg-muted mx-auto mt-4 h-2 w-[100px] rounded-full" />
+      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>

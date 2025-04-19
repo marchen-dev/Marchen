@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 import * as React from 'react'
 

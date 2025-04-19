@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import type { FC } from 'react'
 import { createElement, useId } from 'react'
 

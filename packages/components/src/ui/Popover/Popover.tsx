@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import * as React from 'react'
 

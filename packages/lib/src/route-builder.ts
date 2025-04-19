@@ -1,5 +1,4 @@
-import type { PaginationRequestType } from '@marchen/api-client/interfaces/pagination.interface'
-
+import type { PaginationRequestType } from '../../api-client/src/interfaces/pagination.interface'
 import { mergeUrlParams } from './merge-url'
 
 export enum Routes {

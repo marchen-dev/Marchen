@@ -38,7 +38,7 @@ export const parseSocialIcon = (socialMedia: Record<string, string> | null) => {
         name,
         icon,
         color,
-        link: socialMedia[key],
+        link: socialMedia[key] ?? '',
       })
     }
     return acc

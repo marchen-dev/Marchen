@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
 import * as React from 'react'
 

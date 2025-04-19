@@ -1,4 +1,4 @@
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import { Slot } from '@radix-ui/react-slot'
 import { ChevronRight, MoreHorizontal } from 'lucide-react'
 import * as React from 'react'

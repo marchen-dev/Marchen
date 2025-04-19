@@ -1,4 +1,4 @@
-import { cn } from '@marchen/lib/helper'
+import { cn } from '@marchen/lib'
 import type { PropsWithChildren } from 'react'
 
 interface NormalContainerProps extends PropsWithChildren {

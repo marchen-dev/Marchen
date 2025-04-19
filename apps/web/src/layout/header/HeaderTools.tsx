@@ -5,9 +5,9 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@marchen/components/ui/Tooltip'
-import { useAppTheme } from '@marchen/hooks/use-app-theme'
-import { cn } from '@marchen/lib/helper'
+} from '@marchen/components/ui'
+import { useAppTheme } from '@marchen/hooks'
+import { cn } from '@marchen/lib'
 import { useEffect, useState } from 'react'
 
 export const HeaderTools = () => {

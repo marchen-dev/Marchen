@@ -1,5 +1,5 @@
 {
-  "extends": "@marchen/typescript-config/react-library.json",
-  "include": ["src"],
+  "extends": "@marchen/typescript-config/nextjs.json",
+  "include": ["src", "global.d.ts"],
   "exclude": ["node_modules"]
 }

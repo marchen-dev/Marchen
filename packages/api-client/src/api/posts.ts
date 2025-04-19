@@ -1,4 +1,4 @@
-import type { PostsParams } from '@marchen/lib/route-builder'
+import type { PostsParams } from '@marchen/lib'
 
 import { Get } from '../fetch'
 import type {

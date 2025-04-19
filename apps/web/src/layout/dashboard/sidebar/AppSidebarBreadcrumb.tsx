@@ -6,9 +6,9 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from '@marchen/components/ui/Breadcrumb'
-import { Separator } from '@marchen/components/ui/Separator'
-import { SidebarTrigger } from '@marchen/components/ui/Sidebar'
+  Separator,
+  SidebarTrigger,
+} from '@marchen/components/ui'
 import { usePathname } from 'next/navigation'
 import { Fragment, useMemo } from 'react'
 

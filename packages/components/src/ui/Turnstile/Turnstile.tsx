@@ -1,5 +1,5 @@
 'use client'
-import { enableTurnstile, TURNSTILE_SITE_KEY } from '@base/lib/env'
+import { enableTurnstile, TURNSTILE_SITE_KEY } from '@marchen/lib'
 import type { TurnstileCallbacks } from 'react-turnstile'
 import ReactTurnstile from 'react-turnstile'
 

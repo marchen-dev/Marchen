@@ -4,28 +4,24 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@marchen/components/ui/Avatar'
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@marchen/components/ui/Dropdown'
-import {
   SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@marchen/components/ui/Sidebar'
-import { useIsMobile } from '@marchen/hooks/use-mobile'
-import { removeToken } from '@marchen/lib/cookie'
-import { routerBuilder, Routes } from '@marchen/lib/route-builder'
-import { useMasterData } from '@marchen/providers/dashboard/MasterDataProvider'
+} from '@marchen/components/ui'
+import { useIsMobile } from '@marchen/hooks'
+import { removeToken, routerBuilder, Routes } from '@marchen/lib'
 import { ChevronsUpDown, LogOut } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+
+import { useMasterData } from '~/providers/dashboard/MasterDataProvider'
 
 export const AppSidebarFooter = () => {
   const { name, email, avatar } = useMasterData()
