@@ -83,7 +83,7 @@ const MoreNav = ({ icon, label, items }: MoreNavProps) => {
       <span>{label}</span>
       <i className={cn(icon, 'text-lg')} />
       <m.ul
-        className="bg-primary absolute left-1/2 top-8 z-10 min-w-[125px]  -translate-x-1/2 rounded-md  border shadow-sm"
+        className="absolute left-1/2 top-8 z-10 min-w-[125px] -translate-x-1/2  rounded-md border  bg-primary shadow-sm"
         variants={{
           initial: { opacity: 0, display: 'none' },
           hover: { opacity: 1, display: 'block' },

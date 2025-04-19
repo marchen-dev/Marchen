@@ -75,6 +75,9 @@ importers:
       '@marchen/components':
         specifier: workspace:*
         version: link:../../packages/components
+      '@marchen/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
       '@marchen/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
@@ -87,6 +90,12 @@ importers:
       daisyui:
         specifier: ^4.12.23
         version: 4.12.24(postcss@8.5.3)
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
+      foxact:
+        specifier: ^0.2.45
+        version: 0.2.45(react@19.1.0)
       framer-motion:
         specifier: ^12.4.7
         version: 12.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -2325,6 +2334,14 @@ packages:
   format@0.2.2:
     resolution: {integrity: sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==}
     engines: {node: '>=0.4.x'}
+
+  foxact@0.2.45:
+    resolution: {integrity: sha512-pizJ+4hlSxs+mZKjJxhcwzY1uR4/7paZGgU/NQLrzY6Q0wa8RBZvhOxzg/HzXRAcglTt2y6DlIqPn85cTNdmcg==}
+    peerDependencies:
+      react: '*'
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   framer-motion@12.7.3:
     resolution: {integrity: sha512-dNT4l5gEnUo2ytXLUBUf6AI21dZ77TMclDKE3ElaIHZ8m90nJ/NCcExW51zdSIaS0RhAS5iXcF7bEIxZe8XG2g==}
@@ -5942,6 +5959,13 @@ snapshots:
       signal-exit: 4.1.0
 
   format@0.2.2: {}
+
+  foxact@0.2.45(react@19.1.0):
+    dependencies:
+      client-only: 0.0.1
+      server-only: 0.0.1
+    optionalDependencies:
+      react: 19.1.0
 
   framer-motion@12.7.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:

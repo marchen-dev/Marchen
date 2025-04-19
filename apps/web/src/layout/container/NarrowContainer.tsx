@@ -15,7 +15,7 @@ export const NarrowContainer: Component<NarrowContainerProps> = ({
   return (
     <div
       className={cn(
-        'max-w-narrow mx-auto min-w-0 overflow-hidden md:p-2',
+        'mx-auto min-w-0 max-w-narrow overflow-hidden md:p-2',
         className,
       )}
     >

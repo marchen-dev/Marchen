@@ -73,7 +73,6 @@ export default async function RootLayout({
         <WebAppProviders>
           <AggregationDataProvider value={aggregateData}>
             <SiteLayout>
-              {children}
               <Header />
               <Content>{children}</Content>
               <Footer />

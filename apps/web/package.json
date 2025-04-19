@@ -2,7 +2,6 @@
   "name": "@marchen/web",
   "version": "0.0.0",
   "private": true,
-
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbopack -p 23116",
@@ -16,10 +15,13 @@
     "@marchen/api-client": "workspace:*",
     "@marchen/atom": "workspace:*",
     "@marchen/components": "workspace:*",
+    "@marchen/constants": "workspace:*",
     "@marchen/hooks": "workspace:*",
     "@marchen/lib": "workspace:*",
     "@tanstack/react-query": "^5.62.11",
     "daisyui": "^4.12.23",
+    "dayjs": "^1.11.13",
+    "foxact": "^0.2.45",
     "framer-motion": "^12.4.7",
     "jotai": "^2.12.2",
     "lodash-es": "^4.17.21",

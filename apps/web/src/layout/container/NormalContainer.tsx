@@ -15,7 +15,7 @@ export const NormalContainer: Component<NormalContainerProps> = ({
   return (
     <div
       className={cn(
-        'max-w-normal mx-auto min-w-0 overflow-hidden md:p-2',
+        'mx-auto min-w-0 max-w-normal overflow-hidden md:p-2',
         className,
       )}
     >

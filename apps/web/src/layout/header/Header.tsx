@@ -5,8 +5,8 @@ import { HeaderNavTitle } from './HeaderNavTitle'
 
 export default function Header() {
   return (
-    <header className="border-base-300 bg-neutral-content fixed z-10 h-[52px] w-full border-b px-4">
-      <div className="max-w-wider mx-auto grid  h-full grid-cols-3 ">
+    <header className="fixed z-10 h-[52px] w-full border-b border-base-300 bg-neutral-content px-4">
+      <div className="mx-auto grid h-full  max-w-wider grid-cols-3 ">
         <HeaderMaster />
         <HeaderNavTitle />
         <>
