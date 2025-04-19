@@ -4,8 +4,6 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@marchen/components/ui/Collapsible'
-import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
@@ -15,7 +13,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '@marchen/components/ui/Sidebar'
+} from '@marchen/components/ui'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'

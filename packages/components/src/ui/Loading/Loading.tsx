@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import type { Variants } from 'framer-motion'
 import { motion } from 'framer-motion'
 
@@ -24,15 +24,15 @@ const LoadingThreeDotsJumping: Component = ({ className }) => {
       className={cn('flex items-center justify-center gap-2.5', className)}
     >
       <motion.div
-        className="bg-cn-primary size-3 rounded-full will-change-transform"
+        className="size-3 rounded-full bg-cn-primary will-change-transform"
         variants={dotVariants}
       />
       <motion.div
-        className="bg-cn-primary size-3 rounded-full will-change-transform"
+        className="size-3 rounded-full bg-cn-primary will-change-transform"
         variants={dotVariants}
       />
       <motion.div
-        className="bg-cn-primary size-3 rounded-full will-change-transform"
+        className="size-3 rounded-full bg-cn-primary will-change-transform"
         variants={dotVariants}
       />
     </motion.div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useIsMobile } from '@base/hooks/use-mobile'
+import { useIsMobile } from '@marchen/hooks'
 import Image from 'next/image'
 import type { ComponentPropsWithoutRef, FC } from 'react'
 import { useState } from 'react'

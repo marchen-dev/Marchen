@@ -1,21 +1,19 @@
-// import { getToken } from '@marchen/lib/cookie'
-// import { getTokenOnServer } from '@marchen/lib/cookie.server'
-// import { API_URL, isServerSide } from '@marchen/lib/env'
+import { API_URL, getToken, getTokenOnServer, isServerSide } from '@marchen/lib'
 import { ofetch } from 'ofetch'
 
 const apiFetch = ofetch.create({
-  // baseURL: API_URL,
-  // onRequest: async (context) => {
-  //   let token = null
-  //   if (isServerSide) {
-  //     token = await getTokenOnServer()
-  //   } else {
-  //     token = getToken()
-  //   }
-  //   if (token) {
-  //     context.options.headers.set('Authorization', `Bearer ${token}`)
-  //   }
-  // },
+  baseURL: API_URL,
+  onRequest: async (context) => {
+    let token = null
+    if (isServerSide) {
+      token = await getTokenOnServer()
+    } else {
+      token = getToken()
+    }
+    if (token) {
+      context.options.headers.set('Authorization', `Bearer ${token}`)
+    }
+  },
 })
 
 const Get = <T = object>(url: string, params?: object): Promise<T> =>

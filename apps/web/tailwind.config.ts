@@ -6,8 +6,8 @@ export default {
   darkMode: ['class'],
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './domain/**/*.{js,ts,jsx,tsx,mdx}',
-    './base/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/**/*.{js,ts,jsx,tsx,mdx}',
+    '!../../packages/**/node_modules',
   ],
   theme: {
     extend: {
@@ -87,7 +87,7 @@ export default {
     themes: [
       {
         light: {
-          ...import('daisyui/src/theming/themes')['light'],
+          ...require('daisyui/src/theming/themes')['light'],
           primary: '#fff',
           secondary: '#60a5fa',
           accent: '#F2F2F2',
@@ -95,7 +95,7 @@ export default {
           'neutral-content': '#fff',
         },
         dark: {
-          ...import('daisyui/src/theming/themes')['dark'],
+          ...require('daisyui/src/theming/themes')['dark'],
           primary: '#000',
           secondary: '#60a5fa',
           accent: '#1A1A1A',

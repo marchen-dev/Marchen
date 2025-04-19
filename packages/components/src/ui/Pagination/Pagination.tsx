@@ -1,4 +1,4 @@
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
 import * as React from 'react'

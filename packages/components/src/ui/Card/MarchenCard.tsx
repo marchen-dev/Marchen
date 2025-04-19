@@ -1,4 +1,4 @@
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import type { ComponentPropsWithRef, ElementType, ReactNode } from 'react'
 
 // 定义多态组件的props类型，接受一个泛型参数T代表元素类型

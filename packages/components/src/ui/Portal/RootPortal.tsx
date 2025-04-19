@@ -1,4 +1,4 @@
-import { isServerSide } from '@base/lib/env'
+import { isServerSide } from '@marchen/lib'
 import type { FC, PropsWithChildren } from 'react'
 import { createPortal } from 'react-dom'
 

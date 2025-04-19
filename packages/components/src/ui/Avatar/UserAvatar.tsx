@@ -1,4 +1,4 @@
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import type { ImageProps } from 'next/image'
 import Image from 'next/image'
 import type { FC } from 'react'

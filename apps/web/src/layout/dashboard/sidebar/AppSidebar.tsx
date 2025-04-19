@@ -1,6 +1,6 @@
 'use client'
 
-import { Sidebar } from '@marchen/components/ui/Sidebar'
+import { Sidebar } from '@marchen/components/ui'
 
 import { AppSidebarContent } from './AppSidebarContent'
 import { AppSidebarFooter } from './AppSidebarFooter'

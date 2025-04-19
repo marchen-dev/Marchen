@@ -1,5 +1,5 @@
-import { Button } from '@marchen/components/ui/Button'
 import {
+  Button,
   Drawer,
   DrawerClose,
   DrawerContent,
@@ -7,7 +7,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@marchen/components/ui/Drawer'
+} from '@marchen/components/ui'
 import Link from 'next/link'
 
 import { HeaderNavConfig, HeaderNavMoreConfig } from './config'

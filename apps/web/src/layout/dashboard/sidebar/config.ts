@@ -1,4 +1,4 @@
-import { Routes } from '@marchen/lib/route-builder'
+import { Routes } from '@marchen/lib'
 import type { LucideIcon } from 'lucide-react'
 import { BookOpen, Settings2, SquareTerminal } from 'lucide-react'
 

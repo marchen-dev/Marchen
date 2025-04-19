@@ -1,6 +1,6 @@
 'use client'
 
-// import { Toaster } from '@marchen/components/ui/Sonner'
+import { Toaster } from '@marchen/components/ui'
 import { domMax, LazyMotion } from 'framer-motion'
 import { ThemeProvider } from 'next-themes'
 import type { FC, JSX, PropsWithChildren } from 'react'
@@ -23,7 +23,7 @@ const webAppContexts: JSX.Element[] = [...baseContexts]
 export const WebAppProviders: FC<PropsWithChildren> = ({ children }) => (
   <ProviderComposer contexts={webAppContexts}>
     {children}
-    {/* <Toaster /> */}
+    <Toaster />
     {/* {isDev && (
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
     )} */}

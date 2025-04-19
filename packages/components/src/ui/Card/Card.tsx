@@ -1,4 +1,4 @@
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import * as React from 'react'
 
 const Card = React.forwardRef<

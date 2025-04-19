@@ -1,3 +1,5 @@
+import path from "node:path"
+
 import { defineConfig } from 'eslint-config-hyoban'
 
 export default defineConfig(
@@ -19,6 +21,13 @@ export default defineConfig(
     rules: {
       'package-json/valid-package-def': 0,
       'package-json/valid-name': 0,
+    },
+  },
+  {
+    settings: {
+      tailwindcss: {
+        config: path.join(import.meta.dirname, "apps/web/tailwind.config.ts"),
+      },
     },
   },
 )

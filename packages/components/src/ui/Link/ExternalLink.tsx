@@ -1,4 +1,4 @@
-import { cn } from '@base/lib/helper'
+import { cn } from '@marchen/lib'
 import type { ComponentPropsWithoutRef } from 'react'
 
 export const ExternalLink: Component<ComponentPropsWithoutRef<'a'>> = (
