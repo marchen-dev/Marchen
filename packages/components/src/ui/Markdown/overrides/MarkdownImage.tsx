@@ -11,11 +11,12 @@ export const MarkdownImage: FC<ComponentPropsWithoutRef<'img'>> = ({
   src,
   alt,
 }) => {
+  const imgSrc = src as string
   const [isOpen, setIsOpen] = useState(false)
   const isMobile = useIsMobile()
   const toggleOpen = () => {
     if (isMobile) {
-      return window.open(src, '_blank')
+      return window.open(imgSrc, '_blank')
     }
     setIsOpen(!isOpen)
   }
@@ -24,7 +25,7 @@ export const MarkdownImage: FC<ComponentPropsWithoutRef<'img'>> = ({
   return (
     <span className=" my-2 flex flex-col px-2">
       <Image
-        src={src}
+        src={imgSrc}
         alt={alt ?? 'image'}
         width={800}
         height={600}
@@ -40,7 +41,7 @@ export const MarkdownImage: FC<ComponentPropsWithoutRef<'img'>> = ({
       <ZoomedImage
         isOpen={isOpen}
         onClosed={() => setIsOpen(false)}
-        src={src}
+        src={imgSrc}
         alt={alt ?? 'image'}
       />
     </span>

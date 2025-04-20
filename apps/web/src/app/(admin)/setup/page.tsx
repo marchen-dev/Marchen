@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { Error } from '@marchen/api-client'
 import { apiClient } from '@marchen/api-client'
 import type { UserRegisterRequestType } from '@marchen/api-client/interfaces/user.interface'
 import {
