@@ -28,7 +28,7 @@ export const sidebarData = {
             },
             {
               title: '编写',
-              url: '#',
+              url: Routes.DASHBOARD_POSTS_EDIT,
             },
           ],
         },

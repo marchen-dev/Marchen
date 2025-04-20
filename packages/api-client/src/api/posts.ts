@@ -1,6 +1,7 @@
 import type { PostsParams } from '@marchen/lib'
 
 import { Get } from '../fetch'
+import type { DataWrapper } from '../interfaces/pagination.interface'
 import type {
   PostPaginationResponseType,
   PostResponseType,
@@ -8,7 +9,7 @@ import type {
 } from '../interfaces/post.interface'
 
 export const posts = {
-  get(params: PostsParams) {
+  get(params?: PostsParams) {
     return Get<PostPaginationResponseType>(`/posts`, params)
   },
   getDetail(params: { category: string; slug: string }) {
@@ -16,5 +17,8 @@ export const posts = {
   },
   archives() {
     return Get<PostsArchiveResponseType>(`/posts/archives`)
+  },
+  all() {
+    return Get<DataWrapper<PostResponseType[]>>(`/posts/all`)
   },
 }

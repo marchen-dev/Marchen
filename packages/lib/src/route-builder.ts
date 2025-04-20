@@ -13,6 +13,7 @@ export enum Routes {
   DASHBOARD = '/dashboard',
   DASHBOARD_POSTS = '/dashboard/posts',
   DASHBOARD_POSTS_VIEW = '/dashboard/posts/view',
+  DASHBOARD_POSTS_EDIT = '/dashboard/posts/edit',
   DASHBOARD_SETTINGS = '/dashboard/settings',
   DASHBOARD_SETTINGS_USER = '/dashboard/settings/user',
 }
@@ -21,6 +22,11 @@ type PostParams = {
   category: string
   slug: string
 }
+
+type idParams = {
+  id: string
+}
+
 type PaginationParams = Partial<PaginationRequestType>
 
 export type PostsParams = {
@@ -33,7 +39,9 @@ export type RouteParams<T extends Routes> = T extends Routes.POST
   ? PostParams
   : T extends Routes.POSTS
     ? PostsParams
-    : object
+    : T extends Routes.DASHBOARD_POSTS_EDIT
+      ? idParams
+      : object
 
 export function routerBuilder<T extends Routes>(
   route: T,
@@ -51,6 +59,11 @@ export function routerBuilder<T extends Routes>(
       if (Object.keys(p).length > 0) {
         href += `?${new URLSearchParams(p).toString()}`
       }
+      break
+    }
+    case Routes.DASHBOARD_POSTS_EDIT: {
+      const p = params as idParams
+      href += `?${new URLSearchParams({ id: p?.id }).toString()}`
       break
     }
   }
