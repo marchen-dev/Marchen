@@ -11,13 +11,13 @@ export const user = {
   get() {
     return Get<UserGetResponseType>('/user')
   },
-  register(user: UserRegisterRequestType) {
+  postRegister(user: UserRegisterRequestType) {
     return Post('/user/register', user)
   },
-  login(user: UserLoginRequestType) {
+  postLogin(user: UserLoginRequestType) {
     return Post<UserLoginResponseType>('/user/login', user)
   },
-  master() {
+  getMaster() {
     return Get<UserMasterResponseType>('/user/master')
   },
 }

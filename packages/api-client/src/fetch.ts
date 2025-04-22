@@ -22,8 +22,11 @@ const Get = <T = object>(url: string, params?: object): Promise<T> =>
 const Post = <T = object>(url: string, data?: object): Promise<T> =>
   apiFetch(url, { method: 'POST', body: data })
 
-const Delete = <T = object>(url: string, params?: object): Promise<T> =>
-  apiFetch(url, { method: 'DELETE', query: params })
+const Delete = <T = object>(
+  url: string,
+  params?: { query?: object; body?: object },
+): Promise<T> =>
+  apiFetch(url, { method: 'DELETE', query: params?.query, body: params?.body })
 
 type Error = {
   data: {

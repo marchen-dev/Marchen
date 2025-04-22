@@ -2,16 +2,23 @@
 'use client'
 
 import type { PostResponseType } from '@marchen/api-client/interfaces/post.interface'
-import type { ColumnFiltersState, Table } from '@tanstack/react-table'
+import { useQuery } from '@tanstack/react-query'
+import type {
+  ColumnFiltersState,
+  SortingState,
+  Table,
+} from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
 import { createContext, use, useState } from 'react'
 
-import { columnsData } from '../components/table/Columns'
+import { columnsData } from '../components/table/PostsViewTableColumns'
+import { postsTableQuery } from '../queries/posts-table-query'
 
 const PostsViewTableContext = createContext<{
   table: Table<PostResponseType>
@@ -19,24 +26,28 @@ const PostsViewTableContext = createContext<{
 
 export const PostsViewTableProvider = ({
   children,
-  posts,
 }: {
   children: React.ReactNode
-  posts: PostResponseType[]
 }) => {
+  const { data } = useQuery(postsTableQuery())
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const table = useReactTable({
-    data: posts,
+    data: data!,
     columns: columnsData,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    autoResetPageIndex: false,
     state: {
+      sorting,
       columnFilters,
     },
   })
-
   return (
     <PostsViewTableContext value={{ table }}>{children}</PostsViewTableContext>
   )

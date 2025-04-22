@@ -1,17 +1,23 @@
-import { apiClient } from '@marchen/api-client'
+import { getServerQueryClient } from '@marchen/lib'
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 
 import { PostsViewTable } from '~/modules/dashboard/posts/components/table/PostsViewTable'
 import { PostsViewTableFooter } from '~/modules/dashboard/posts/components/table/PostsViewTableFooter'
 import { PostsViewTableHeader } from '~/modules/dashboard/posts/components/table/PostsViewTableHeader'
 import { PostsViewTableProvider } from '~/modules/dashboard/posts/providers/PostsViewTableProvider'
+import { postsTableQuery } from '~/modules/dashboard/posts/queries/posts-table-query'
 
 export default async function Posts() {
-  const postsData = await apiClient.posts.all()
+  const queryClient = getServerQueryClient()
+  await queryClient.prefetchQuery(postsTableQuery())
+  const dehydrateState = dehydrate(queryClient)
   return (
-    <PostsViewTableProvider posts={postsData.data}>
-      <PostsViewTableHeader />
-      <PostsViewTable />
-      <PostsViewTableFooter />
-    </PostsViewTableProvider>
+    <HydrationBoundary state={dehydrateState}>
+      <PostsViewTableProvider>
+        <PostsViewTableHeader />
+        <PostsViewTable />
+        <PostsViewTableFooter />
+      </PostsViewTableProvider>
+    </HydrationBoundary>
   )
 }

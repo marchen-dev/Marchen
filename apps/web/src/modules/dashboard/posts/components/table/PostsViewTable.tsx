@@ -11,7 +11,7 @@ import {
 import { flexRender } from '@tanstack/react-table'
 
 import { usePostsViewTable } from '../../providers/PostsViewTableProvider'
-import { columnsData } from './Columns'
+import { columnsData } from './PostsViewTableColumns'
 
 export const PostsViewTable = () => {
   const { table } = usePostsViewTable()
@@ -56,7 +56,7 @@ export const PostsViewTable = () => {
                 colSpan={columnsData.length}
                 className="h-24 text-center"
               >
-                No results.
+                没有博文
               </TableCell>
             </TableRow>
           )}

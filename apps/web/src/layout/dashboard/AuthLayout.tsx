@@ -7,7 +7,7 @@ import { MasterDataProvider } from '../../providers/dashboard/MasterDataProvider
 export const AuthenticatedLayout: React.FC<PropsWithChildren> = async (
   props,
 ) => {
-  const master = await apiClient.user.master().catch(() => {
+  const master = await apiClient.user.getMaster().catch(() => {
     return redirect('/login')
   })
 

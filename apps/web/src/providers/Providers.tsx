@@ -35,6 +35,6 @@ const marchenAdminContexts: JSX.Element[] = [...baseContexts]
 export const MarchenAdminProviders: FC<PropsWithChildren> = ({ children }) => (
   <ProviderComposer contexts={marchenAdminContexts}>
     {children}
-    {/* <Toaster /> */}
+    <Toaster />
   </ProviderComposer>
 )

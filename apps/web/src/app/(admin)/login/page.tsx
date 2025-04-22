@@ -52,7 +52,7 @@ const SetUpForm = () => {
   const captchaToken = useRef<string | null>(null)
   const turnstile = useTurnstile()
   const { isPending, mutate } = useMutation({
-    mutationFn: (user: UserLoginRequestType) => apiClient.user.login(user),
+    mutationFn: (user: UserLoginRequestType) => apiClient.user.postLogin(user),
     onSuccess: (data) => {
       setToken(data.token, data.expiresIn)
       toast.success('登录成功')

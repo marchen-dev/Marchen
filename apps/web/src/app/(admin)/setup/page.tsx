@@ -48,7 +48,7 @@ const SetUpForm = () => {
   const router = useRouter()
   const { isPending, mutate } = useMutation({
     mutationFn: (user: UserRegisterRequestType) =>
-      apiClient.user.register(user),
+      apiClient.user.postRegister(user),
     onSuccess: () => {
       toast.success('初始化成功')
       router.replace('/login')
