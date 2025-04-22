@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@codemirror/lang-markdown": "^6.3.2",
+    "@codemirror/language-data": "^6.5.1",
     "@marchen/atom": "workspace:*",
     "@marchen/hooks": "workspace:*",
     "@marchen/lib": "workspace:*",
@@ -28,10 +30,14 @@
     "@radix-ui/react-toast": "^1.2.6",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@tanstack/react-table": "^8.21.3",
+    "@types/lodash-es": "^4.17.12",
+    "@uiw/codemirror-theme-github": "^4.23.10",
+    "@uiw/react-codemirror": "^4.23.10",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
     "copy-to-clipboard": "^3.3.3",
     "framer-motion": "^12.4.7",
+    "lodash-es": "^4.17.21",
     "lucide-react": "^0.501.0",
     "markdown-to-jsx": "^7.7.4",
     "next": "15.3.1",

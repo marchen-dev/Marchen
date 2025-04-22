@@ -68,5 +68,9 @@ export const Markdown: FC<MarkdownProps> = (props) => {
     })
     return mdContent
   }, [content])
-  return <Component className={cn(styles.markdown)}>{node}</Component>
+  return (
+    <Component className={cn(styles.markdown, props.className)}>
+      {node}
+    </Component>
+  )
 }

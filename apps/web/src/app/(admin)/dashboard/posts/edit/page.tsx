@@ -1,4 +1,11 @@
+'use client'
 
-export default async function EditPostPage() {
-  return <div>edit</div>
+import { MarkdownEditor } from '@marchen/components/ui'
+
+export default function EditPostPage() {
+  return (
+    <div className="size-full">
+      <MarkdownEditor value={''} />
+    </div>
+  )
 }

@@ -11,7 +11,7 @@ export const MarkdownParagraph: FC<PropsWithChildren> = ({ children }) => {
       return children
     }
   }
-  return <p className="my-4 size-full text-base leading-7 ">{children}</p>
+  return <p className="my-4 text-base leading-7 ">{children}</p>
 }
 
 const isImage = (child: any) => {

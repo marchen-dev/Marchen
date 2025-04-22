@@ -18,7 +18,7 @@ export default async function DashboardLayout(props: PropsWithChildren) {
         <AppSidebar />
         <SidebarInset>
           <AppSidebarBreadcrumb />
-          <main className="p-4">{props.children}</main>
+          <main className="size-full p-4">{props.children}</main>
         </SidebarInset>
       </SidebarProvider>
     </AuthenticatedLayout>
