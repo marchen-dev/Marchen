@@ -1,37 +1,20 @@
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from '@marchen/components/ui'
-import { ChevronDown, SquareArrowOutUpRight } from 'lucide-react'
-import Link from 'next/link'
+
+import { ThemeToggle } from '~/layout/header/HeaderTools'
 
 export const AppSidebarHeader = () => {
   return (
     <SidebarHeader>
       <SidebarMenu>
         <SidebarMenuItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <SidebarMenuButton className="font-medium">
-                Marchen 管理面板
-                <ChevronDown className="ml-auto" />
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
-              <Link href="/" target="_blank">
-                <DropdownMenuItem className="cursor-pointer">
-                  <SquareArrowOutUpRight />
-                  前往博客
-                </DropdownMenuItem>
-              </Link>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center justify-between p-2 text-sm ">
+            <span className="font-medium">Marchen 管理面板</span>
+            <ThemeToggle />
+          </div>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarHeader>

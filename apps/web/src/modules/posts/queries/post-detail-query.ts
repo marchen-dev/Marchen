@@ -9,6 +9,6 @@ export interface PostParams {
 export const postDetailQuery = (params: PostParams) => {
   return queryOptions({
     queryKey: ['posts', params.category, params.slug],
-    queryFn: () => apiClient.posts.getDetail(params),
+    queryFn: () => apiClient.posts.getPostBySlug(params),
   })
 }

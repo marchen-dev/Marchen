@@ -4,7 +4,6 @@ import type { PropsWithChildren } from 'react'
 
 import { AuthenticatedLayout } from '~/layout/dashboard/AuthLayout'
 import { AppSidebar } from '~/layout/dashboard/sidebar/AppSidebar'
-import { AppSidebarBreadcrumb } from '~/layout/dashboard/sidebar/AppSidebarBreadcrumb'
 
 export default async function DashboardLayout(props: PropsWithChildren) {
   const cookieStore = await cookies()
@@ -16,10 +15,7 @@ export default async function DashboardLayout(props: PropsWithChildren) {
     <AuthenticatedLayout>
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
-        <SidebarInset>
-          <AppSidebarBreadcrumb />
-          <main className="size-full p-4">{props.children}</main>
-        </SidebarInset>
+        <SidebarInset>{props.children}</SidebarInset>
       </SidebarProvider>
     </AuthenticatedLayout>
   )

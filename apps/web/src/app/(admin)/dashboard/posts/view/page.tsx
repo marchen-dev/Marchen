@@ -1,6 +1,7 @@
 import { getServerQueryClient } from '@marchen/lib'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 
+import { AppSidebarToolbarLayout } from '~/layout/dashboard/sidebar/AppSidebarToolbar'
 import { PostsViewTable } from '~/modules/dashboard/posts/components/table/PostsViewTable'
 import { PostsViewTableFooter } from '~/modules/dashboard/posts/components/table/PostsViewTableFooter'
 import { PostsViewTableHeader } from '~/modules/dashboard/posts/components/table/PostsViewTableHeader'
@@ -12,12 +13,14 @@ export default async function Posts() {
   await queryClient.prefetchQuery(postsTableQuery())
   const dehydrateState = dehydrate(queryClient)
   return (
-    <HydrationBoundary state={dehydrateState}>
-      <PostsViewTableProvider>
-        <PostsViewTableHeader />
-        <PostsViewTable />
-        <PostsViewTableFooter />
-      </PostsViewTableProvider>
-    </HydrationBoundary>
+    <AppSidebarToolbarLayout>
+      <HydrationBoundary state={dehydrateState}>
+        <PostsViewTableProvider>
+          <PostsViewTableHeader />
+          <PostsViewTable />
+          <PostsViewTableFooter />
+        </PostsViewTableProvider>
+      </HydrationBoundary>
+    </AppSidebarToolbarLayout>
   )
 }

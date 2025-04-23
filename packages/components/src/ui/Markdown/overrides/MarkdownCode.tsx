@@ -10,6 +10,8 @@ import {
 } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { toast } from 'sonner'
 
+import { ScrollArea, ScrollBar } from '../..'
+
 export function MarkdownCode({
   className,
   children,
@@ -35,7 +37,12 @@ export function MarkdownCode({
         codeTagProps={{
           className: 'bg-zinc-50 dark:bg-zinc-900',
         }}
-        PreTag={({ children }) => <div className="px-4 pb-3">{children}</div>}
+        PreTag={({ children }) => (
+          <ScrollArea>
+            <div className="px-4 pb-3">{children}</div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        )}
       >
         {children}
       </SyntaxHighlighter>
@@ -91,7 +98,7 @@ const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
 
 const InlineCodeBlock: FC<{ text: string }> = ({ text }) => {
   return (
-    <code className="mx-1 rounded-md bg-muted px-1.5 py-0.5 text-sm">
+    <code className="mx-1 rounded-md bg-muted px-1.5 py-0.5 text-sm ">
       {text}
     </code>
   )

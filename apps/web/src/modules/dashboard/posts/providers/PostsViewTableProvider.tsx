@@ -32,7 +32,6 @@ export const PostsViewTableProvider = ({
   const { data } = useQuery(postsTableQuery())
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
-
   const table = useReactTable({
     data: data!,
     columns: columnsData,

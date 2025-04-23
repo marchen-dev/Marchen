@@ -3,7 +3,7 @@
 import { cn } from '@marchen/lib'
 import { compiler } from 'markdown-to-jsx'
 import type { ElementType, FC } from 'react'
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 
 import {
   Table,
@@ -27,7 +27,7 @@ export interface MarkdownProps {
   className?: string
 }
 
-export const Markdown: FC<MarkdownProps> = (props) => {
+export const Markdown: FC<MarkdownProps> = memo((props) => {
   const { content, as: Component = 'div' } = props
   const node = useMemo(() => {
     const mdContent = compiler(content, {
@@ -73,4 +73,4 @@ export const Markdown: FC<MarkdownProps> = (props) => {
       {node}
     </Component>
   )
-}
+})

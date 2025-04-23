@@ -12,8 +12,11 @@ export const posts = {
   get(params?: PostsParams) {
     return Get<PostPaginationResponseType>(`/posts`, params)
   },
-  getDetail(params: { category: string; slug: string }) {
+  getPostBySlug(params: { category: string; slug: string }) {
     return Get<PostResponseType>(`/posts/${params.category}/${params.slug}`)
+  },
+  getPostById(id: string) {
+    return Get<PostResponseType>(`/posts/${id}`)
   },
   getArchives() {
     return Get<PostsArchiveResponseType>(`/posts/archives`)
