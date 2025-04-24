@@ -1,8 +1,9 @@
 import type { PostsParams } from '@marchen/lib'
 
-import { Delete, Get } from '../fetch'
+import { Delete, Get, Patch, Post } from '../fetch'
 import type { DataWrapper } from '../interfaces/pagination.interface'
 import type {
+  PostCreateRequestType,
   PostPaginationResponseType,
   PostResponseType,
   PostsArchiveResponseType,
@@ -32,5 +33,11 @@ export const posts = {
   },
   deleteMultiplePosts(ids: string[]) {
     return Delete(`/posts`, { body: ids })
+  },
+  post(params: PostCreateRequestType) {
+    return Post('/posts', params)
+  },
+  patch(id: string, params: PostCreateRequestType) {
+    return Patch(`/posts/${id}`, params)
   },
 }

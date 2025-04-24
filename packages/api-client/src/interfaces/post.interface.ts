@@ -20,7 +20,7 @@ interface PostResponseType {
 interface PostCreateRequestType {
   title: string
   content: string
-  cover: string
+  cover?: string
   slug: string
   tags: string[]
   categoryId: string

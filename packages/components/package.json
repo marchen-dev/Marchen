@@ -15,6 +15,7 @@
     "@marchen/atom": "workspace:*",
     "@marchen/hooks": "workspace:*",
     "@marchen/lib": "workspace:*",
+    "@radix-ui/react-accordion": "^1.2.8",
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-checkbox": "^1.2.2",
     "@radix-ui/react-collapsible": "^1.1.3",

@@ -1,18 +1,20 @@
 'use client'
 
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Button,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@marchen/components/ui'
+
+import { AdvancedSetting } from './sheet/AdvancedSetting'
+import { BasicSetting } from './sheet/BasicSetting'
 
 export const EditorToolsArea = () => {
   return (
@@ -39,28 +41,36 @@ const SettingsSheet = () => {
         <SheetHeader>
           <SheetTitle>设置</SheetTitle>
         </SheetHeader>
-        <div className="mt-4">
-          <HorizontalSelect />
-        </div>
+        <Accordion
+          type="multiple"
+          className="w-full"
+          defaultValue={['basic', 'advanced']}
+        >
+          {settingSheetList.map((item) => (
+            <AccordionItem key={item.value} value={item.value}>
+              <AccordionTrigger className="font-semibold">
+                {item.title}
+              </AccordionTrigger>
+              <AccordionContent className="px-1 pt-1">
+                <item.component />
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </SheetContent>
     </Sheet>
   )
 }
 
-const HorizontalSelect = () => {
-  return (
-    <div className="flex items-center justify-between gap-2">
-      <span className="text-sm font-medium">分类</span>
-      <Select>
-        <SelectTrigger className="h-9 w-[150px]">
-          <SelectValue placeholder="Theme" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
-  )
-}
+const settingSheetList = [
+  {
+    title: '基本设置',
+    value: 'basic',
+    component: BasicSetting,
+  },
+  {
+    title: '高级设置',
+    value: 'advanced',
+    component: AdvancedSetting,
+  },
+]

@@ -28,6 +28,9 @@ const Delete = <T = object>(
 ): Promise<T> =>
   apiFetch(url, { method: 'DELETE', query: params?.query, body: params?.body })
 
+const Patch = <T = object>(url: string, data?: object): Promise<T> =>
+  apiFetch(url, { method: 'PATCH', body: data })
+
 type Error = {
   data: {
     status: number
@@ -35,5 +38,5 @@ type Error = {
   }
 }
 
-export { Delete, Get, Post }
+export { Delete, Get, Patch, Post }
 export type { Error }
