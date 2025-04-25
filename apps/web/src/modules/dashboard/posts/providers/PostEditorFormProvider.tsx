@@ -35,6 +35,7 @@ const formSchema = z.object({
   categoryId: z.string().nonempty('分类不能为空'),
   tags: z.array(z.string()),
   cover: z.string().optional(),
+  summary: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -61,6 +62,7 @@ export const PostEditorFormProvider: FC<PostEditorFormProps> = ({
       categoryId: postData?.categoryId ?? '',
       tags: postData?.tags ?? [],
       cover: postData?.cover,
+      summary: postData?.summary?.text ?? '',
     },
   })
 
