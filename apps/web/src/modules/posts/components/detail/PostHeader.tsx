@@ -1,6 +1,5 @@
 'use client'
 
-import type { SummaryResponseType } from '@marchen/api-client/interfaces/summary.interface'
 import { cn } from '@marchen/lib'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
@@ -47,7 +46,7 @@ export const PostHeader = () => {
           </IconWrapper>
         )}
       </span>
-      <AISummary summary={post?.summary} />
+      <AISummary summary={post?.summary} summaryModel={post?.summaryModel} />
     </div>
   )
 }
@@ -84,11 +83,12 @@ const IconWrapper = ({
   )
 }
 
-interface AISummaryProps {
-  summary?: SummaryResponseType
+export interface AISummaryProps {
+  summary?: string
+  summaryModel?: string
 }
 
-const AISummary = ({ summary }: AISummaryProps) => {
+const AISummary = ({ summary, summaryModel }: AISummaryProps) => {
   if (!summary) {
     return null
   }
@@ -97,14 +97,14 @@ const AISummary = ({ summary }: AISummaryProps) => {
       <p className="flex justify-between text-sm font-medium">
         <span className="flex items-center gap-1">
           <i className="icon-[mingcute--ai-line]" />
-          <span> AI 总结</span>
+          <span>AI 总结</span>
         </span>
         <span className="text-xs text-zinc-500 dark:text-zinc-400">
-          {summary.model}
+          {summaryModel}
         </span>
       </p>
       <p className="mt-2 text-sm leading-6 text-zinc-700 dark:text-zinc-400">
-        {summary.text}
+        {summary}
       </p>
     </div>
   )

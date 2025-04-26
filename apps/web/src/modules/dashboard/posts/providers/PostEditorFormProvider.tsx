@@ -19,6 +19,7 @@ const getFieldDisplayName = (field: string) => {
     slug: '文章路径',
     categoryId: '分类',
     cover: '封面',
+    summary: 'AI 摘要',
   }
   return displayNames[field] || field
 }
@@ -52,7 +53,6 @@ export const PostEditorFormProvider: FC<PostEditorFormProps> = ({
   const id = useSearchParams().get('id') as string
   const router = useRouter()
   const isUpdate = !!id
-
   const methods = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,22 +62,17 @@ export const PostEditorFormProvider: FC<PostEditorFormProps> = ({
       categoryId: postData?.categoryId ?? '',
       tags: postData?.tags ?? [],
       cover: postData?.cover,
-      summary: postData?.summary?.text ?? '',
+      summary: postData?.summary ?? '',
     },
   })
 
   const onSubmit = methods.handleSubmit(
     async (data) => {
       try {
-        const postData = { ...data }
-        if (postData.cover === '' || postData.cover === undefined) {
-          delete postData.cover
-        }
-
         if (isUpdate) {
-          await apiClient.posts.patch(id, postData)
+          await apiClient.posts.patch(id, data)
         } else {
-          await apiClient.posts.post(postData)
+          await apiClient.posts.post(data)
         }
         toast.success(isUpdate ? '更新成功' : '发布成功')
         router.push(Routes.DASHBOARD_POSTS_VIEW)

@@ -60,15 +60,19 @@ const DynamicList: FC<DynamicListProps> = ({
       <PopoverContent className="mx-2 w-80 ">
         <PopoverContentLayout title={title}>
           <form onSubmit={handleSubmit} className="flex items-center gap-2">
-            <Input placeholder="请输入" ref={inputRef} />
-            <Button type="submit" className="shrink-0">
+            <Input placeholder="请输入" ref={inputRef} className="h-8" />
+            <Button type="submit" className="shrink-0" size="sm">
               添加
             </Button>
           </form>
           <ul className="flex flex-wrap gap-2">
             {value.map((item) => (
               <li key={item}>
-                <Button variant="outline" onClick={() => handleDelete(item)}>
+                <Button
+                  variant="outline"
+                  onClick={() => handleDelete(item)}
+                  size="sm"
+                >
                   <i className="icon-[mingcute--delete-2-line] text-base" />
                   {item}
                 </Button>
@@ -91,7 +95,7 @@ export const PopoverContentLayout: FC<PopoverContentLayoutProps> = ({
   return (
     <div className="grid gap-4">
       <h4 className="font-medium leading-none">{title}</h4>
-      <div className="grid gap-4">{children}</div>
+      <div className="grid gap-4 ">{children}</div>
     </div>
   )
 }
