@@ -17,7 +17,7 @@ const AISummary = () => {
   const { handleSubmit, completion, isLoading } = useAICompletion({
     initialInput: promptTools({
       type: 'summary',
-      content: getValues('content'),
+      args: [getValues('content')],
     }),
     initialCompletion: getValues('summary'),
   })

@@ -1,7 +1,7 @@
 'use client'
 
 import type { FC, PropsWithChildren } from 'react'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 
 import { Button } from '../Button'
@@ -10,20 +10,20 @@ import { Popover, PopoverContent, PopoverTrigger } from '../Popover'
 
 interface DynamicListProps {
   title: string
-  defaultValue: string[]
+  disabled?: boolean
+  value: string[]
   onChange: (value: string[]) => void
 }
 
 const DynamicList: FC<DynamicListProps> = ({
   title,
-  defaultValue,
+  value,
   onChange,
+  disabled,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
-  const [value, setValue] = useState<string[]>(defaultValue)
   const handleDelete = useCallback(
     (item: string) => {
-      setValue(value.filter((v) => v !== item))
       onChange(value.filter((v) => v !== item))
     },
     [onChange, value],
@@ -41,7 +41,6 @@ const DynamicList: FC<DynamicListProps> = ({
         toast.error('已存在')
         return
       }
-      setValue([...value, inputValue])
       onChange([...value, inputValue])
       if (inputRef.current) {
         inputRef.current.value = ''
@@ -53,7 +52,7 @@ const DynamicList: FC<DynamicListProps> = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="truncate">
+        <Button variant="outline" className="truncate" disabled={disabled}>
           {value.length > 0 ? `共 ${value.length} 个` : '点击添加'}
         </Button>
       </PopoverTrigger>

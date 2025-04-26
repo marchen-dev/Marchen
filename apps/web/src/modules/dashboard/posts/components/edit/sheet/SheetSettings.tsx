@@ -1,4 +1,5 @@
 import {
+  AIIcon,
   Select,
   SelectContent,
   SelectGroup,
@@ -13,6 +14,8 @@ import { forwardRef } from 'react'
 interface FieldLayoutProps extends PropsWithChildren {
   title?: ReactNode
   className?: string
+  onRefresh?: () => void
+  disabled?: boolean
 }
 
 const SheetSettingRoot = ({ children }: PropsWithChildren) => {
@@ -24,13 +27,25 @@ const SheetSettingItem = ({
   children,
   title,
   className,
+  onRefresh,
+  disabled,
 }: FieldLayoutProps & { ref?: React.RefObject<HTMLDivElement> }) => {
   return (
     <div
       className={cn('flex items-center justify-between gap-10', className)}
       ref={ref}
     >
-      <span className="shrink-0 font-medium">{title}</span>
+      <div className="flex items-center gap-1 font-medium">
+        <span>{title}</span>
+        {onRefresh && (
+          <AIIcon
+            disabled={disabled}
+            onClick={() => {
+              onRefresh()
+            }}
+          />
+        )}
+      </div>
       {children}
     </div>
   )
@@ -44,17 +59,18 @@ interface SelectGroup {
 interface SheetSelectProps {
   placeholder?: string
   groups: SelectGroup[]
-  defaultValue: string
+  value: string
   onValueChange: (value: string) => void
   ref?: React.RefObject<HTMLSelectElement>
+  disabled?: boolean
 }
 
 const SheetSettingSelect = forwardRef<HTMLButtonElement, SheetSelectProps>(
   (props, ref) => {
-    const { placeholder, groups, defaultValue, onValueChange } = props
+    const { placeholder, groups, value, onValueChange, disabled } = props
 
     return (
-      <Select defaultValue={defaultValue} onValueChange={onValueChange}>
+      <Select value={value} onValueChange={onValueChange} disabled={disabled}>
         <SelectTrigger className="h-9 w-[160px]" ref={ref}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

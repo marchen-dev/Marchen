@@ -1,4 +1,5 @@
 import { aggregate } from './api/aggregate'
+import { ai } from './api/ai'
 import { category } from './api/category'
 import { posts } from './api/posts'
 import { site } from './api/site'
@@ -10,6 +11,7 @@ export const apiClient = {
   posts,
   category,
   site,
+  ai,
 }
 
 export * from './fetch'
