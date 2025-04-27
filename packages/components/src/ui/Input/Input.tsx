@@ -1,6 +1,8 @@
 import { cn } from '@marchen/lib'
 import * as React from 'react'
 
+import { Label } from '../Label'
+
 type InputProps = React.ComponentProps<'input'> & {
   icon?: React.ReactNode
 }
@@ -28,6 +30,27 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   },
 )
 
-Input.displayName = 'Input'
+type InputWithLabelProps = InputProps & {
+  label: string
+  description?: string
+  error?: string
+}
 
-export { Input }
+const InputWithLabel = React.forwardRef<HTMLInputElement, InputWithLabelProps>(
+  ({ className, type, icon, label, description, error, ...props }, ref) => {
+    return (
+      <div className="grid w-full max-w-sm items-center gap-1.5">
+        <Label className={cn('mb-1', error && 'text-red-500')}>{label}</Label>
+        <Input {...props} ref={ref} />
+        {description && (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        )}
+        {error && <p className="text-xs text-red-500">{error}</p>}
+      </div>
+    )
+  },
+)
+
+Input.displayName = 'Input'
+InputWithLabel.displayName = 'InputWithLabel'
+export { Input, InputWithLabel }

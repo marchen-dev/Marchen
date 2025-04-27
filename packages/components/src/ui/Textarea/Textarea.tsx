@@ -3,6 +3,8 @@ import * as React from 'react'
 import type { TextareaAutosizeProps } from 'react-textarea-autosize'
 import TextareaAutosize from 'react-textarea-autosize'
 
+import { Label } from '../Label'
+
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaAutosizeProps>(
   ({ className, ...props }, ref) => {
     return (
@@ -19,4 +21,26 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaAutosizeProps>(
 )
 Textarea.displayName = 'Textarea'
 
-export { Textarea }
+type TextAreaWithLabelProps = TextareaAutosizeProps & {
+  label: string
+  description?: string
+  error?: string
+}
+
+const TextAreaWithLabel = React.forwardRef<
+  HTMLTextAreaElement,
+  TextAreaWithLabelProps
+>(({ className, label, description, error, ...props }, ref) => {
+  return (
+    <div className="grid w-full max-w-sm items-center gap-1.5">
+      <Label className={cn('mb-1', error && 'text-red-500 ')}>{label}</Label>
+      <Textarea {...props} ref={ref} />
+      {description && (
+        <p className="text-sm text-muted-foreground">{description}</p>
+      )}
+      {error && <p className="text-xs text-red-500">{error}</p>}
+    </div>
+  )
+})
+
+export { Textarea, TextAreaWithLabel }
