@@ -18,7 +18,10 @@ export default async function EditPostPage(params: {
 
   return (
     <PostEditorFormProvider postData={post}>
-      <AppSidebarToolbarLayout toolsArea={<EditorToolsArea />}>
+      <AppSidebarToolbarLayout
+        toolsArea={<EditorToolsArea />}
+        className="flex flex-col "
+      >
         <MarkdownEditorHeader />
         <MarkdownEditorContent />
       </AppSidebarToolbarLayout>

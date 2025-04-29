@@ -39,7 +39,7 @@ export const WebSiteSettingsProvider: FC<WebSiteSettingsProviderProps> = ({
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit((data) => updateWebsite(data))}>
+      <form className="" onSubmit={handleSubmit((data) => updateWebsite(data))}>
         {children}
       </form>
     </FormProvider>
