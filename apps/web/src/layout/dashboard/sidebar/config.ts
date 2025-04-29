@@ -42,8 +42,8 @@ export const sidebarData = {
               url: Routes.DASHBOARD_SETTINGS_USER,
             },
             {
-              title: '系统',
-              url: '#',
+              title: '网页',
+              url: Routes.DASHBOARD_SETTINGS_WEBSITE,
             },
           ],
         },

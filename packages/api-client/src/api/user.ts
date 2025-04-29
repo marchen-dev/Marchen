@@ -1,9 +1,10 @@
-import { Get, Post } from '../fetch'
+import { Get, Patch, Post } from '../fetch'
 import type {
   UserGetResponseType,
   UserLoginRequestType,
   UserLoginResponseType,
   UserMasterResponseType,
+  UserPatchMasterRequestType,
   UserRegisterRequestType,
 } from '../interfaces/user.interface'
 
@@ -19,5 +20,8 @@ export const user = {
   },
   getMaster() {
     return Get<UserMasterResponseType>('/user/master')
+  },
+  patchMaster(user: UserPatchMasterRequestType) {
+    return Patch('/user/master', user)
   },
 }

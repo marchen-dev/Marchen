@@ -32,6 +32,15 @@ interface UserLoginRequestType {
   captchaToken: string
 }
 
+interface UserPatchMasterRequestType {
+  name?: string
+  nickname?: string
+  email?: string
+  avatar?: string
+  introduce?: string | null
+  social?: Record<string, string>
+}
+
 interface UserLoginResponseType {
   token: string
   expiresIn: number
@@ -42,5 +51,6 @@ export type {
   UserLoginRequestType,
   UserLoginResponseType,
   UserMasterResponseType,
+  UserPatchMasterRequestType,
   UserRegisterRequestType,
 }

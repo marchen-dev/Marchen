@@ -1,6 +1,6 @@
 'use client'
 
-import { Separator, SidebarTrigger } from '@marchen/components/ui'
+import { Button, Separator, SidebarTrigger } from '@marchen/components/ui'
 import { usePathname } from 'next/navigation'
 import type { FC } from 'react'
 import { useMemo } from 'react'
@@ -56,5 +56,14 @@ export const AppSidebarToolbarLayout: FC<AppSidebarToolbarLayoutProps> = ({
       </header>
       <main className="size-full p-4">{children}</main>
     </>
+  )
+}
+
+export const ToolsBar: FC<{ title: string }> = ({ title }) => {
+  return (
+    <Button type="submit" variant="outline">
+      <i className="icon-[mingcute--check-circle-line] size-4" />
+      {title}
+    </Button>
   )
 }

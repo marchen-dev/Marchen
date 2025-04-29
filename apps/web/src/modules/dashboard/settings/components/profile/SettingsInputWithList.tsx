@@ -116,6 +116,7 @@ const InputWithListItem: React.FC<{
                 }}
               />
             }
+            defaultValue={item.value}
             onChange={(e) => {
               const currentSelectedItem = selectedItems.map((_item) => {
                 if (_item.key === item.key) {

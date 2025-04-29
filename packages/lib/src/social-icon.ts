@@ -28,9 +28,9 @@ export const parseSocialIcon = (socialMedia: Record<string, string> | null) => {
   }
   return Object.keys(socialMedia)?.reduce<SocialMediaItem[]>((acc, key) => {
     // 最多显示5个
-    if (acc.length >= 5) {
-      return acc
-    }
+    // if (acc.length >= 5) {
+    //   return acc
+    // }
     const mapSocialIcon = socialMediaIcon[key]
     if (mapSocialIcon) {
       const [name, icon, color] = mapSocialIcon

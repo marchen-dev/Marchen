@@ -12,7 +12,7 @@ import type { ControllerRenderProps } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import type { z } from 'zod'
 
-import type { profileSchema } from '../../lib/schema'
+import type { profileSchema } from '../../lib/settings-schema'
 import { InputWithList } from './SettingsInputWithList'
 
 export const SettingsProfileEditArea = memo(() => {
@@ -57,6 +57,7 @@ export const SettingsProfileEditArea = memo(() => {
   )
 })
 
+// FIXME: 需要优化
 const SocialMediaList = memo(
   ({
     field,

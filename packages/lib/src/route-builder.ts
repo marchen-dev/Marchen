@@ -16,6 +16,7 @@ export enum Routes {
   DASHBOARD_POSTS_EDIT = '/dashboard/posts/edit',
   DASHBOARD_SETTINGS = '/dashboard/settings',
   DASHBOARD_SETTINGS_USER = '/dashboard/settings/user',
+  DASHBOARD_SETTINGS_WEBSITE = '/dashboard/settings/website',
 }
 
 type PostParams = {

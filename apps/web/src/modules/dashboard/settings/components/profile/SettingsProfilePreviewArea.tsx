@@ -7,7 +7,7 @@ import type { z } from 'zod'
 
 import { MasterInfo } from '~/modules/home/components/shared/MasterInfo'
 
-import type { profileSchema } from '../../lib/schema'
+import type { profileSchema } from '../../lib/settings-schema'
 
 export const SettingsProfilePreviewArea = memo(() => {
   const { watch } = useFormContext<z.infer<typeof profileSchema>>()
@@ -17,16 +17,16 @@ export const SettingsProfilePreviewArea = memo(() => {
     () => parseSocialIcon(deferredSocial ?? {}),
     [deferredSocial],
   )
+  const deferredMasterInfo = useDeferredValue({
+    avatar: watch('avatar'),
+    name: watch('name'),
+    introduce: watch('introduce') ?? '',
+    siteTitle: watch('nickname') ?? '',
+    socials: socialMedias,
+  })
   return (
-    <div className="mt-10 flex flex-col items-center gap-5">
-      <MasterInfo
-        avatar={watch('avatar')}
-        name={watch('name')}
-        introduce={watch('introduce') ?? ''}
-        siteTitle={watch('nickname') ?? ''}
-        socials={socialMedias}
-        isPreview
-      />
+    <div className="mt-10 flex w-full flex-col items-center gap-5 overflow-hidden">
+      <MasterInfo {...deferredMasterInfo} isPreview />
     </div>
   )
 })
