@@ -1,4 +1,4 @@
-const socialMediaIcon: Record<string, [string, string, string]> = {
+export const socialMediaIcon: Record<string, [string, string, string]> = {
   github: ['Github', 'icon-[mingcute--github-line]', '#333333'],
   twitter: ['Twitter', 'icon-[mingcute--twitter-line]', '#55ACEE'],
   facebook: ['Facebook', 'icon-[mingcute--facebook-line]', '#4267B2'],
@@ -15,7 +15,7 @@ const socialMediaIcon: Record<string, [string, string, string]> = {
   rss: ['RSS', 'icon-[mingcute--rss-line]', '#FFC04D'],
 }
 
-type SocialMediaItem = {
+export type SocialMediaItem = {
   name: string
   icon: string
   link: string

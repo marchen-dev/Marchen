@@ -14,7 +14,6 @@ export const PostsViewTableHeader = () => {
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
   const { deletePosts } = useDeletePosts()
-
   const handleDeletePosts = useCallback(() => {
     deletePosts(selectedRows.map((row) => row.original.id))
   }, [deletePosts, selectedRows])

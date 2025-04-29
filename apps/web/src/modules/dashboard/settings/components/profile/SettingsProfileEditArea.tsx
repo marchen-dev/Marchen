@@ -1,16 +1,25 @@
 'use client'
 
-import { InputWithLabel, TextAreaWithLabel } from '@marchen/components/ui'
+import {
+  FormField,
+  InputWithLabel,
+  Label,
+  TextAreaWithLabel,
+} from '@marchen/components/ui'
+import { socialMediaIcon } from '@marchen/lib'
+import { memo, useDeferredValue } from 'react'
+import type { ControllerRenderProps } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import type { z } from 'zod'
 
-import type { profileSchema } from '~/app/(admin)/dashboard/settings/user/page'
+import type { profileSchema } from '../../lib/schema'
+import { InputWithList } from './SettingsInputWithList'
 
-export const SettingsProfileEditArea = () => {
+export const SettingsProfileEditArea = memo(() => {
   const form = useFormContext<z.infer<typeof profileSchema>>()
   const { register, formState } = form
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex w-full max-w-md shrink-0 flex-col gap-6">
       <InputWithLabel
         label="邮箱"
         {...register('email')}
@@ -36,6 +45,31 @@ export const SettingsProfileEditArea = () => {
         {...register('introduce')}
         error={formState.errors.introduce?.message}
       />
+      <div className="flex flex-col gap-2">
+        <Label>社交媒体</Label>
+        <FormField
+          control={form.control}
+          name="social"
+          render={({ field }) => <SocialMediaList field={field} />}
+        />
+      </div>
     </div>
   )
-}
+})
+
+const SocialMediaList = memo(
+  ({
+    field,
+  }: {
+    field: ControllerRenderProps<z.infer<typeof profileSchema>, 'social'>
+  }) => {
+    const deferredField = useDeferredValue(field)
+    return (
+      <InputWithList
+        values={deferredField.value}
+        onChange={deferredField.onChange}
+        list={Object.keys(socialMediaIcon)}
+      />
+    )
+  },
+)

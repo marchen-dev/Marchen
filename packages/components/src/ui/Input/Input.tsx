@@ -39,8 +39,8 @@ type InputWithLabelProps = InputProps & {
 const InputWithLabel = React.forwardRef<HTMLInputElement, InputWithLabelProps>(
   ({ className, type, icon, label, description, error, ...props }, ref) => {
     return (
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label className={cn('mb-1', error && 'text-red-500')}>{label}</Label>
+      <div className="grid w-full  items-center gap-2">
+        <Label className={cn(error && 'text-red-500')}>{label}</Label>
         <Input {...props} ref={ref} />
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>

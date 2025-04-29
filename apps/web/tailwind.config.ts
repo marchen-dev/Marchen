@@ -19,8 +19,8 @@ export default {
       },
       maxWidth: {
         screen: '100vw',
-        reader: '850px',
         narrow: '768px',
+        reader: '850px',
         normal: '1200px',
         wider: '1400px',
       },

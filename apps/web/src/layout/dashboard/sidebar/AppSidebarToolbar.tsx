@@ -1,17 +1,9 @@
 'use client'
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-  Separator,
-  SidebarTrigger,
-} from '@marchen/components/ui'
+import { Separator, SidebarTrigger } from '@marchen/components/ui'
 import { usePathname } from 'next/navigation'
 import type { FC } from 'react'
-import { Fragment, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import type { SidebarContentType } from './config'
 import { sidebarData } from './config'
@@ -58,18 +50,7 @@ export const AppSidebarToolbarLayout: FC<AppSidebarToolbarLayoutProps> = ({
         <div className="flex items-center gap-2 ">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb>
-            <BreadcrumbList>
-              {breadcrumbList.map((item, index) => (
-                <Fragment key={item}>
-                  <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink>{item}</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  {index < breadcrumbList.length - 1 && <BreadcrumbSeparator />}
-                </Fragment>
-              ))}
-            </BreadcrumbList>
-          </Breadcrumb>
+          <h3 className="text-lg font-semibold">{breadcrumbList.at(-1)}</h3>
         </div>
         {toolsArea}
       </header>
