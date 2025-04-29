@@ -133,6 +133,7 @@ const InputWithListItem: React.FC<{
       <Button
         variant="outline"
         size="sm"
+        type="button"
         onClick={() => {
           const currentSelectedKeys = new Set(
             selectedItems.map((item) => item.key),

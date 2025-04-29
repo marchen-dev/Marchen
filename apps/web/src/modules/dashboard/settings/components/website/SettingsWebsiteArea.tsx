@@ -1,10 +1,11 @@
 'use client'
 
-import { InputWithLabel } from '@marchen/components/ui'
+import { DynamicTags, FormField, InputWithLabel } from '@marchen/components/ui'
 import { useFormContext } from 'react-hook-form'
 import type { z } from 'zod'
 
 import type { websiteSchema } from '../../lib/settings-schema'
+import { WrapperWithLabel } from '../shared/WrapperWithLabel'
 
 export const SettingsWebsiteArea = () => {
   const form = useFormContext<z.infer<typeof websiteSchema>>()
@@ -22,15 +23,27 @@ export const SettingsWebsiteArea = () => {
         error={formState.errors.description?.message}
       />
       <InputWithLabel
-        label="关键词"
-        {...register('keywords')}
-        error={formState.errors.keywords?.message}
-      />
-      <InputWithLabel
-        label="favicon"
+        label="图标"
         {...register('favicon')}
         error={formState.errors.favicon?.message}
       />
+      <WrapperWithLabel
+        label="关键词"
+        error={formState.errors.keywords?.message}
+      >
+        <FormField
+          control={form.control}
+          name="keywords"
+          render={({ field }) => (
+            <DynamicTags
+              value={field.value}
+              onChange={field.onChange}
+              title="标签"
+              classNames={{ trigger: 'max-w-24 w-full' }}
+            />
+          )}
+        />
+      </WrapperWithLabel>
     </div>
   )
 }

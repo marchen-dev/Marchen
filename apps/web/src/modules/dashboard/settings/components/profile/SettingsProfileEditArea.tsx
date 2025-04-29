@@ -19,39 +19,41 @@ export const SettingsProfileEditArea = memo(() => {
   const form = useFormContext<z.infer<typeof profileSchema>>()
   const { register, formState } = form
   return (
-    <div className="flex w-full max-w-md shrink-0 flex-col gap-6">
-      <InputWithLabel
-        label="邮箱"
-        {...register('email')}
-        error={formState.errors.email?.message}
-      />
-      <InputWithLabel
-        label="名称"
-        {...register('name')}
-        error={formState.errors.name?.message}
-      />
-      <InputWithLabel
-        label="昵称"
-        {...register('nickname')}
-        error={formState.errors.nickname?.message}
-      />
-      <InputWithLabel
-        label="头像"
-        {...register('avatar')}
-        error={formState.errors.avatar?.message}
-      />
-      <TextAreaWithLabel
-        label="自我介绍"
-        {...register('introduce')}
-        error={formState.errors.introduce?.message}
-      />
-      <div className="flex flex-col gap-2">
-        <Label>社交媒体</Label>
-        <FormField
-          control={form.control}
-          name="social"
-          render={({ field }) => <SocialMediaList field={field} />}
+    <div className="flex size-full justify-between">
+      <div className="flex w-full max-w-md shrink-0 flex-col gap-6">
+        <InputWithLabel
+          label="邮箱"
+          {...register('email')}
+          error={formState.errors.email?.message}
         />
+        <InputWithLabel
+          label="名称"
+          {...register('name')}
+          error={formState.errors.name?.message}
+        />
+        <InputWithLabel
+          label="昵称"
+          {...register('nickname')}
+          error={formState.errors.nickname?.message}
+        />
+        <InputWithLabel
+          label="头像"
+          {...register('avatar')}
+          error={formState.errors.avatar?.message}
+        />
+        <TextAreaWithLabel
+          label="自我介绍"
+          {...register('introduce')}
+          error={formState.errors.introduce?.message}
+        />
+        <div className="flex flex-col gap-2">
+          <Label>社交媒体</Label>
+          <FormField
+            control={form.control}
+            name="social"
+            render={({ field }) => <SocialMediaList field={field} />}
+          />
+        </div>
       </div>
     </div>
   )

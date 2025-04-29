@@ -5,4 +5,11 @@ interface SiteResponseType {
   favicon: string
 }
 
-export type { SiteResponseType }
+interface SitePatchRequestType {
+  title?: string
+  description?: string
+  keywords?: string[]
+  favicon?: string
+}
+
+export type { SitePatchRequestType, SiteResponseType }

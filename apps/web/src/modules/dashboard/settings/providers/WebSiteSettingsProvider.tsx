@@ -1,8 +1,11 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { apiClient } from '@marchen/api-client'
+import { useMutation } from '@tanstack/react-query'
 import type { FC } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import type { z } from 'zod'
 
 import { websiteSchema } from '../lib/settings-schema'
@@ -22,12 +25,21 @@ export const WebSiteSettingsProvider: FC<WebSiteSettingsProviderProps> = ({
   })
   const { handleSubmit } = form
 
-  const onSubmit = (data: z.infer<typeof websiteSchema>) => {
-    console.info(data)
-  }
+  const { mutate: updateWebsite } = useMutation({
+    mutationFn: (data: z.infer<typeof websiteSchema>) => {
+      return apiClient.site.patch(data)
+    },
+    onSuccess: () => {
+      toast.success('更新成功')
+    },
+    onError: () => {
+      toast.error('更新失败')
+    },
+  })
+
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="size-full">
+      <form onSubmit={handleSubmit((data) => updateWebsite(data))}>
         {children}
       </form>
     </FormProvider>

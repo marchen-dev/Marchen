@@ -25,7 +25,7 @@ export const SettingsProfilePreviewArea = memo(() => {
     socials: socialMedias,
   })
   return (
-    <div className="mt-10 flex w-full flex-col items-center gap-5 overflow-hidden">
+    <div className="mt-10  hidden w-full flex-col items-center gap-5 overflow-hidden md:flex">
       <MasterInfo {...deferredMasterInfo} isPreview />
     </div>
   )

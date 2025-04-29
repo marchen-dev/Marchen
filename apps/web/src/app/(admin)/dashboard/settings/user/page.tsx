@@ -2,6 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { apiClient } from '@marchen/api-client'
 import type { UserPatchMasterRequestType } from '@marchen/api-client/interfaces/user.interface'
+import { Separator } from '@marchen/components/ui'
 import { useMutation } from '@tanstack/react-query'
 import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -50,8 +51,12 @@ export default function SettingsUserPage() {
     <FormProvider {...form}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <AppSidebarToolbarLayout toolsArea={<ToolsBar title="更新" />}>
-          <div className="ml-2 grid max-w-normal grid-cols-2  justify-items-start gap-6">
+          <div className="relative ml-2 grid  max-w-normal grid-cols-1 justify-items-start gap-6 rounded-md md:grid-cols-2 md:border md:p-5">
             <SettingsProfileEditArea />
+            <Separator
+              orientation="vertical"
+              className="absolute left-1/2 top-0 hidden h-full -translate-x-1/2 md:block"
+            />
             <SettingsProfilePreviewArea />
           </div>
         </AppSidebarToolbarLayout>

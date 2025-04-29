@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@marchen/lib'
 import type { FC, PropsWithChildren } from 'react'
 import { useCallback, useRef } from 'react'
 import { toast } from 'sonner'
@@ -8,18 +9,22 @@ import { Button } from '../Button'
 import { Input } from '../Input'
 import { Popover, PopoverContent, PopoverTrigger } from '../Popover'
 
-interface DynamicListProps {
+interface DynamicTagsProps {
   title: string
   disabled?: boolean
   value: string[]
   onChange: (value: string[]) => void
+  classNames?: {
+    trigger?: string
+  }
 }
 
-const DynamicList: FC<DynamicListProps> = ({
+const DynamicTags: FC<DynamicTagsProps> = ({
   title,
   value,
   onChange,
   disabled,
+  classNames,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const handleDelete = useCallback(
@@ -52,7 +57,11 @@ const DynamicList: FC<DynamicListProps> = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="truncate" disabled={disabled}>
+        <Button
+          variant="outline"
+          className={cn('truncate', classNames?.trigger)}
+          disabled={disabled}
+        >
           {value.length > 0 ? `共 ${value.length} 个` : '点击添加'}
         </Button>
       </PopoverTrigger>
@@ -99,4 +108,4 @@ export const PopoverContentLayout: FC<PopoverContentLayoutProps> = ({
   )
 }
 
-export { DynamicList }
+export { DynamicTags }

@@ -1,6 +1,6 @@
 import { apiClient } from '@marchen/api-client'
 import type { PostCreateRequestType } from '@marchen/api-client/interfaces/post.interface'
-import { DynamicList, FormField, Input } from '@marchen/components/ui'
+import { DynamicTags, FormField, Input } from '@marchen/components/ui'
 import { promptTools } from '@marchen/lib'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useFormContext } from 'react-hook-form'
@@ -108,7 +108,7 @@ export const BasicSetting = () => {
           control={control}
           name="tags"
           render={({ field }) => (
-            <DynamicList
+            <DynamicTags
               value={field.value}
               onChange={field.onChange}
               disabled={isGeneratingTags}
@@ -128,7 +128,7 @@ export const BasicSetting = () => {
         <Input
           {...register('slug')}
           placeholder="例如: learn-react"
-          className="w-[160px]"
+          classNames={{ wrapper: 'w-[160px]' }}
           disabled={isGeneratingSlug}
         />
       </SheetSettings.Item>
@@ -137,7 +137,7 @@ export const BasicSetting = () => {
         <Input
           {...register('cover')}
           placeholder="请输入封面图片链接"
-          className="w-[160px]"
+          classNames={{ wrapper: 'w-[160px]' }}
         />
       </SheetSettings.Item>
     </SheetSettings.Root>
