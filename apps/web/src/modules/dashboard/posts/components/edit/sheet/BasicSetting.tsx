@@ -1,6 +1,6 @@
 import { apiClient } from '@marchen/api-client'
 import type { PostCreateRequestType } from '@marchen/api-client/interfaces/post.interface'
-import { DynamicTags, FormField, Input } from '@marchen/components/ui'
+import { DynamicTags, FormField, InputWithIcon } from '@marchen/components/ui'
 import { promptTools } from '@marchen/lib'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useFormContext } from 'react-hook-form'
@@ -125,7 +125,7 @@ export const BasicSetting = () => {
         }}
         disabled={isGeneratingSlug}
       >
-        <Input
+        <InputWithIcon
           {...register('slug')}
           placeholder="例如: learn-react"
           classNames={{ wrapper: 'w-[160px]' }}
@@ -134,7 +134,7 @@ export const BasicSetting = () => {
       </SheetSettings.Item>
 
       <SheetSettings.Item title="封面">
-        <Input
+        <InputWithIcon
           {...register('cover')}
           placeholder="请输入封面图片链接"
           classNames={{ wrapper: 'w-[160px]' }}

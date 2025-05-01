@@ -1,6 +1,6 @@
 import { Routes } from '@marchen/lib'
 import type { LucideIcon } from 'lucide-react'
-import { BookOpen, Settings2, SquareTerminal } from 'lucide-react'
+import { BookOpen, Settings2, SquareTerminal, Users } from 'lucide-react'
 
 export const sidebarData = {
   content: [
@@ -30,7 +30,16 @@ export const sidebarData = {
               title: '编写',
               url: Routes.DASHBOARD_POSTS_EDIT,
             },
+            {
+              title: '分类',
+              url: Routes.DASHBOARD_POSTS_CATEGORIES,
+            },
           ],
+        },
+        {
+          title: '朋友',
+          url: Routes.DASHBOARD_FRIENDS,
+          icon: Users,
         },
         {
           title: '设定',

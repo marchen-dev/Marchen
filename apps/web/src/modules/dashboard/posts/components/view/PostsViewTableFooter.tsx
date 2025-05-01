@@ -1,6 +1,6 @@
 'use client'
 
-import { usePostsViewTable } from '../../providers/PostsViewTableProvider'
+import { usePostsViewTable } from '../../hooks/use-posts-view-table'
 import { PostViewTablePagination } from './PostViewTablePagination'
 
 export const PostsViewTableFooter = () => {

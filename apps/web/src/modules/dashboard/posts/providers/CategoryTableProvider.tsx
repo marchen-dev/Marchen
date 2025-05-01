@@ -12,21 +12,23 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { postColumnsData } from '../components/view/PostsViewTableColumns'
-import { PostsViewTableContext } from '../hooks/use-posts-view-table'
-import { postsTableQuery } from '../queries/posts-table-query'
+import { categoryColumnsData } from '../components/category/CategoryViewTableColumns'
+import { CategoryTableContext } from '../hooks/use-category'
+import { categoryTableQuery } from '../queries/category-table-query'
 
-export const PostsViewTableProvider = ({
-  children,
-}: {
+interface CategoryTableProviderProps {
   children: React.ReactNode
+}
+
+export const CategoryTableProvider: React.FC<CategoryTableProviderProps> = ({
+  children,
 }) => {
-  const { data } = useQuery(postsTableQuery())
+  const { data } = useQuery(categoryTableQuery())
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const table = useReactTable({
     data: data ?? [],
-    columns: postColumnsData,
+    columns: categoryColumnsData,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
@@ -40,6 +42,6 @@ export const PostsViewTableProvider = ({
     },
   })
   return (
-    <PostsViewTableContext value={{ table }}>{children}</PostsViewTableContext>
+    <CategoryTableContext value={{ table }}>{children}</CategoryTableContext>
   )
 }

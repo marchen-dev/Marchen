@@ -14,7 +14,9 @@ export enum Routes {
   DASHBOARD_POSTS = '/dashboard/posts',
   DASHBOARD_POSTS_VIEW = '/dashboard/posts/view',
   DASHBOARD_POSTS_EDIT = '/dashboard/posts/edit',
+  DASHBOARD_POSTS_CATEGORIES = '/dashboard/posts/category',
   DASHBOARD_SETTINGS = '/dashboard/settings',
+  DASHBOARD_FRIENDS = '/dashboard/friends',
   DASHBOARD_SETTINGS_USER = '/dashboard/settings/user',
   DASHBOARD_SETTINGS_WEBSITE = '/dashboard/settings/website',
 }

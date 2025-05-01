@@ -10,13 +10,13 @@ import {
 } from '@marchen/components/ui'
 import { flexRender } from '@tanstack/react-table'
 
-import { usePostsViewTable } from '../../providers/PostsViewTableProvider'
-import { columnsData } from './PostsViewTableColumns'
+import { usePostsViewTable } from '../../hooks/use-posts-view-table'
+import { postColumnsData } from './PostsViewTableColumns'
 
 export const PostsViewTable = () => {
   const { table } = usePostsViewTable()
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border ">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -44,7 +44,7 @@ export const PostsViewTable = () => {
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className="truncate">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -53,7 +53,7 @@ export const PostsViewTable = () => {
           ) : (
             <TableRow>
               <TableCell
-                colSpan={columnsData.length}
+                colSpan={postColumnsData.length}
                 className="h-24 text-center"
               >
                 没有博文

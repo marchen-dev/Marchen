@@ -16,7 +16,7 @@ import { useCallback } from 'react'
 
 import { useDeletePosts } from '../../hooks/use-delete-posts'
 
-export const columnsData: Array<ColumnDef<PostResponseType>> = [
+export const postColumnsData: Array<ColumnDef<PostResponseType>> = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -48,7 +48,7 @@ export const columnsData: Array<ColumnDef<PostResponseType>> = [
           href={routerBuilder(Routes.DASHBOARD_POSTS_EDIT, {
             id: row.original.id,
           })}
-          className="transition-colors hover:text-sky-600"
+          className=" transition-colors hover:text-sky-600"
         >
           {row.original.title}
         </Link>
@@ -89,17 +89,18 @@ export const columnsData: Array<ColumnDef<PostResponseType>> = [
   },
   {
     id: 'actions',
+    header: '操作',
     cell: ({ row }) => {
       return <ActionCell row={row} />
     },
   },
 ]
 
-const SortableHeader = ({
+export const SortableHeader = ({
   column,
   title,
 }: {
-  column: Column<PostResponseType>
+  column: Column<any, unknown>
   title: string
 }) => {
   return (

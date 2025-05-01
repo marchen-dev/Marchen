@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useCallback } from 'react'
 
 import { useDeletePosts } from '../../hooks/use-delete-posts'
-import { usePostsViewTable } from '../../providers/PostsViewTableProvider'
+import { usePostsViewTable } from '../../hooks/use-posts-view-table'
 
 export const PostsViewTableHeader = () => {
   const { table } = usePostsViewTable()

@@ -2,7 +2,7 @@
 
 import { apiClient } from '@marchen/api-client'
 import type { PostCreateRequestType } from '@marchen/api-client/interfaces/post.interface'
-import { AIIcon, Input } from '@marchen/components/ui'
+import { AIIcon, InputWithIcon } from '@marchen/components/ui'
 import { promptTools } from '@marchen/lib'
 import { useMutation } from '@tanstack/react-query'
 import { useFormContext } from 'react-hook-form'
@@ -29,7 +29,7 @@ export const MarkdownEditorHeader = () => {
 
   return (
     <div className="mb-3 flex items-center justify-between">
-      <Input
+      <InputWithIcon
         type="text"
         placeholder="标题"
         disabled={isGeneratingTitle}
