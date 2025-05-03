@@ -2,7 +2,7 @@
 
 import {
   Button,
-  Input,
+  InputWithIcon,
   Select,
   SelectContent,
   SelectItem,
@@ -103,7 +103,7 @@ const InputWithListItem: React.FC<{
             </SelectContent>
           </Select>
 
-          <Input
+          <InputWithIcon
             icon={
               <i
                 className="icon-[mingcute--delete-2-line] cursor-pointer"
