@@ -42,6 +42,7 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
               alt={`Cover image for ${title}`}
               priority
             />
+            <div className="absolute inset-x-0 -bottom-1 top-0 bg-gradient-to-t from-zinc-300/40 to-transparent dark:from-zinc-900/50 " />
           </m.div>
         </Link>
       </div>

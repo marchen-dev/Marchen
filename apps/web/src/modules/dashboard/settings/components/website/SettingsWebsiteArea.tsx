@@ -27,6 +27,11 @@ export const SettingsWebsiteArea = () => {
         {...register('favicon')}
         error={formState.errors.favicon?.message}
       />
+      <InputWithLabel
+        label="前端地址"
+        {...register('url')}
+        error={formState.errors.url?.message}
+      />
       <WrapperWithLabel
         label="关键词"
         error={formState.errors.keywords?.message}

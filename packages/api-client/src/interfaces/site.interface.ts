@@ -3,6 +3,7 @@ interface SiteResponseType {
   description: string
   keywords: string[]
   favicon: string
+  url: string
 }
 
 interface SitePatchRequestType {
@@ -10,6 +11,7 @@ interface SitePatchRequestType {
   description?: string
   keywords?: string[]
   favicon?: string
+  url?: string
 }
 
 export type { SitePatchRequestType, SiteResponseType }

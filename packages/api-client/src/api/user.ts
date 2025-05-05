@@ -13,7 +13,10 @@ export const user = {
     return Get<UserGetResponseType>('/user')
   },
   postRegister(user: UserRegisterRequestType) {
-    return Post('/user/register', user)
+    return Post('/user/register', {
+      ...user,
+      url: window.location.origin,
+    })
   },
   postLogin(user: UserLoginRequestType) {
     return Post<UserLoginResponseType>('/user/login', user)

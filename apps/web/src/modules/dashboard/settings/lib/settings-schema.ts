@@ -14,4 +14,5 @@ export const websiteSchema = z.object({
   description: z.string().min(1, '描述不能为空'),
   keywords: z.array(z.string()).min(1, '关键词不能为空'),
   favicon: z.string().url('favicon格式不正确'),
+  url: z.string().url('url格式不正确'),
 })

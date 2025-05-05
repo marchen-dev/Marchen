@@ -1,6 +1,5 @@
-import { useAppTheme } from '@marchen/hooks'
+import { useAppTheme, useClipboard } from '@marchen/hooks'
 import { cn } from '@marchen/lib'
-import copy from 'copy-to-clipboard'
 import type { FC } from 'react'
 import { useEffect, useState } from 'react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -56,16 +55,7 @@ interface PreTagProps {
 }
 
 const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
-  const [copied, setCopied] = useState(false)
-  const handleCopy = (text: string) => {
-    if (copied) return
-    copy(text.toString())
-    setCopied(true)
-    toast.success('已复制')
-    setTimeout(() => {
-      setCopied(false)
-    }, 5000)
-  }
+  const { copy, copied } = useClipboard({ restoreTime: 5000 })
   return (
     <div className="mb-3 flex h-9 items-center justify-between bg-zinc-100 px-4 text-xs dark:bg-zinc-800">
       <span className=" text-zinc-600 dark:text-zinc-300">{language}</span>
@@ -77,7 +67,9 @@ const CodeBlockHeader: FC<PreTagProps> = ({ content, language }) => {
           copied && 'cursor-default',
         )}
         onClick={() => {
-          handleCopy(content)
+          if (copied) return
+          copy(content)
+          toast.success('已复制')
         }}
       >
         {copied ? (

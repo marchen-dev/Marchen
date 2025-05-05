@@ -5,14 +5,17 @@ import { m } from 'framer-motion'
 import Image from 'next/image'
 
 import { NarrowContainer } from '~/layout/container/NarrowContainer'
+import { AddFriend } from '~/modules/friends/AddFriend'
 import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 export default function FriendsPage() {
   const friends = useAggregationDataSelector((state) => state?.friend)
-
   return (
-    <NarrowContainer title="朋友们" icon="icon-[mingcute--group-2-line]">
-      <ul className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+    <NarrowContainer
+      title={`朋友们（共 ${friends?.length} 位）`}
+      icon="icon-[mingcute--group-2-line]"
+    >
+      <ul className="mt-2 grid grid-cols-2 gap-4 lg:grid-cols-3">
         {friends?.map((friend) => (
           <m.li
             key={friend.id}
@@ -38,9 +41,9 @@ export default function FriendsPage() {
               <Image
                 src={friend.avatar}
                 alt={friend.name}
-                width={65}
-                height={65}
-                className="rounded-lg border border-base-300 "
+                width={70}
+                height={70}
+                className="rounded-full border border-base-300 "
               />
               <p className="mt-2 line-clamp-1 text-center font-semibold">
                 {friend.name}
@@ -52,6 +55,7 @@ export default function FriendsPage() {
           </m.li>
         ))}
       </ul>
+      <AddFriend />
     </NarrowContainer>
   )
 }
