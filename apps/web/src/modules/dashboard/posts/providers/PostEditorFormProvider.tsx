@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import type { Error } from '@marchen/api-client'
 import { apiClient } from '@marchen/api-client'
 import type { PostResponseType } from '@marchen/api-client/interfaces/post.interface'
+import { useLeaveSitePrompt } from '@marchen/hooks'
 import { Routes } from '@marchen/lib'
 import { useRouter, useSearchParams } from 'next/navigation'
 import type { FC } from 'react'
@@ -65,7 +66,14 @@ export const PostEditorFormProvider: FC<PostEditorFormProps> = ({
       summary: postData?.summary ?? '',
     },
   })
+  useLeaveSitePrompt(() => {
+    const isChange =
+      methods.getValues('content') !== (postData?.content ?? '') ||
+      methods.getValues('title') !== (postData?.title ?? '') ||
+      methods.formState.isDirty
 
+    return isChange
+  })
   const onSubmit = methods.handleSubmit(
     async (data) => {
       try {

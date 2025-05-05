@@ -22,7 +22,6 @@ export const usePostsData = () => {
     }
     jotaiStore.set(postsAtom, data)
   })
-
   return {
     data,
     isFetchingNextPage,

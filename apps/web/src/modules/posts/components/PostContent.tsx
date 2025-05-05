@@ -28,7 +28,7 @@ export default function PostsContent() {
     return () => {
       resetPostsAtom()
     }
-  }, [data])
+  }, [data, resetPostsAtom])
   return (
     <div className="flex w-full flex-col items-center gap-2">
       <FilterArea />
@@ -61,7 +61,7 @@ const PostListArea = memo(() => {
 
   return (
     <m.ul
-      className="mt-3 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
+      className="mt-3 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
       {...postListTransition}
       key={`${search}-${category}-${orderBy}`}
     >

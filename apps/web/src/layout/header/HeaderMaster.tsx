@@ -16,6 +16,7 @@ export const HeaderMaster = () => {
           src={userAvatar ?? ''}
           alt="avatar"
           className="rounded-full"
+          priority
           height={35}
           width={35}
         />

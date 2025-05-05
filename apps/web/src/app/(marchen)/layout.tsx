@@ -35,7 +35,6 @@ export const generateMetadata = async () => {
     },
   }
 }
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -46,7 +45,6 @@ export default async function RootLayout({
       return redirect('/setup')
     }
   })
-
   if (!aggregateData) {
     return (
       <html lang="zh-CN" data-theme="light" suppressHydrationWarning>

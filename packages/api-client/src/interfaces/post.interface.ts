@@ -60,6 +60,7 @@ interface PostArchiveItemType {
   slug: string
   category: {
     name: string
+    slug: string
   }
 }
 

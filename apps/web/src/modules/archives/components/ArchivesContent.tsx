@@ -64,7 +64,7 @@ const ArchivePostItem: FC<PostArchiveItemType> = (props) => {
           <Link
             href={routerBuilder(Routes.POST, {
               slug,
-              category: category.name,
+              category: category.slug,
             })}
             className="line-clamp-1 font-medium transition-colors hover:text-secondary "
           >

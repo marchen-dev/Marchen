@@ -27,7 +27,7 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
       <div
         className={cn(
           `relative  overflow-hidden`,
-          layout === 'horizontal' ? 'w-1/3' : 'h-[155px]',
+          layout === 'horizontal' ? 'w-1/3' : 'h-[190px]',
         )}
       >
         <Link
@@ -48,7 +48,7 @@ export const PostItem: FC<HomePostProps> = memo((props) => {
       <div
         className={cn(
           `flex flex-col justify-between space-y-3 p-4`,
-          layout === 'horizontal' ? 'w-2/3' : 'h-[calc(100%-155px)]',
+          layout === 'horizontal' ? 'w-2/3' : 'h-[calc(100%-200px)]',
         )} // Change to 2/3 for text
       >
         <div>

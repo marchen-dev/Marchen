@@ -8,6 +8,7 @@ export const UserAvatar: FC<ImageProps> = (props) => {
   return (
     <Image
       className={cn('rounded-full border-2 border-neutral-content', className)}
+      priority
       {...props}
     />
   )
