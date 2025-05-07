@@ -23,6 +23,7 @@ interface FriendUpdateRequestType {
   url?: string
   avatar?: string
   introduce?: string
+  email?: string
 }
 
 export type FriendStatus = 'PENDING' | 'ACCEPTED' | 'ARCHIVED'

@@ -11,11 +11,15 @@ import {
   DropdownMenuTrigger,
   UserAvatar,
 } from '@marchen/components/ui'
+import { relativeTimeToNow } from '@marchen/lib'
 import type { ColumnDef, Row } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import { toast } from 'sonner'
 
-import { useFriendTableMutation } from '../hooks/use-friend-table'
+import {
+  useEditFriendDialog,
+  useFriendTableMutation,
+} from '../hooks/use-friend-table'
 
 export const friendColumnsData = (
   type: FriendStatus,
@@ -68,8 +72,9 @@ const basicColumnsData = [
         <UserAvatar
           src={row.original.avatar}
           alt={row.original.name}
-          width={30}
-          height={30}
+          width={35}
+          height={35}
+          className="min-h-[35px] min-w-[35px]"
         />
       )
     },
@@ -102,14 +107,19 @@ const basicColumnsData = [
     accessorKey: 'email',
     header: '邮箱',
   },
+  {
+    accessorKey: 'createdAt',
+    header: '申请日期',
+    cell: ({ row }: { row: Row<FriendResponseType> }) => {
+      return <span>{relativeTimeToNow(row.original.created)}</span>
+    },
+  },
 ]
 
 const AcceptedActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
   const { deleteFriend, updateStatus } = useFriendTableMutation()
+  const { onChange } = useEditFriendDialog()
 
-  const onChange = (isEdit: boolean, row: FriendResponseType) => {
-    console.info(isEdit, row)
-  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -126,7 +136,7 @@ const AcceptedActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
         <DropdownMenuItem
           className="!text-destructive"
           onClick={() => {
-            updateStatus({ id: row.original.id, status: 'ARCHIVED' })
+            updateStatus.mutate({ id: row.original.id, status: 'ARCHIVED' })
             toast.success('已归档')
           }}
         >
@@ -134,7 +144,10 @@ const AcceptedActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
         </DropdownMenuItem>
         <DropdownMenuItem
           className="!text-destructive"
-          onClick={() => deleteFriend(row.original.id)}
+          onClick={() => {
+            deleteFriend.mutate(row.original.id)
+            toast.success('已删除')
+          }}
         >
           删除
         </DropdownMenuItem>
@@ -158,7 +171,7 @@ const PendingActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
         <DropdownMenuItem asChild>
           <span
             onClick={() => {
-              updateStatus({ id: row.original.id, status: 'ACCEPTED' })
+              updateStatus.mutate({ id: row.original.id, status: 'ACCEPTED' })
               toast.success('已同意')
             }}
           >
@@ -169,7 +182,7 @@ const PendingActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
         <DropdownMenuItem
           className="!text-destructive"
           onClick={() => {
-            deleteFriend(row.original.id)
+            deleteFriend.mutate(row.original.id)
             toast.success('已拒绝')
           }}
         >
@@ -195,7 +208,7 @@ const ArchivedActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
         <DropdownMenuItem asChild>
           <span
             onClick={() => {
-              updateStatus({ id: row.original.id, status: 'ACCEPTED' })
+              updateStatus.mutate({ id: row.original.id, status: 'ACCEPTED' })
               toast.success('已恢复')
             }}
           >
@@ -206,7 +219,7 @@ const ArchivedActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
         <DropdownMenuItem
           className="!text-destructive"
           onClick={() => {
-            deleteFriend(row.original.id)
+            deleteFriend.mutate(row.original.id)
             toast.success('已删除')
           }}
         >

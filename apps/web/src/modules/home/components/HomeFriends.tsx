@@ -51,13 +51,13 @@ export const HomeFriendItem: FC<FriendResponseType> = (props) => {
         className="flex items-center gap-4"
       >
         <Image
-          className="rounded-lg"
+          className="rounded-full"
           src={avatar}
-          height={50}
-          width={50}
+          height={45}
+          width={45}
           alt="avatar"
         />
-        <p className="line-clamp-2 text-[1.05rem] font-semibold">{name}</p>
+        <p className="line-clamp-2  font-medium">{name}</p>
       </a>
     </MarchenCard>
   )

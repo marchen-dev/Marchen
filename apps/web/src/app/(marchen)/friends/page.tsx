@@ -21,8 +21,7 @@ export default function FriendsPage() {
             key={friend.id}
             {...createFadeInOutTransition()}
             whileHover={{
-              scale: 1.03,
-              y: -4,
+              scale: 1.02,
               transition: {
                 type: 'spring',
                 stiffness: 300,

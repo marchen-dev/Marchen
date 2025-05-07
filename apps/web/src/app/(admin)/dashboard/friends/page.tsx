@@ -6,13 +6,15 @@ import {
 } from '@marchen/components/ui'
 
 import { AppSidebarToolbarLayout } from '~/layout/dashboard/sidebar/AppSidebarToolbar'
+import { EditFriendDialog } from '~/modules/dashboard/friends/components/EditFriendDialog'
 import FriendTab from '~/modules/dashboard/friends/components/FriendTab'
+import { FriendToolsArea } from '~/modules/dashboard/friends/components/FriendToolsArea'
 
 const Status = ['ACCEPTED', 'PENDING', 'ARCHIVED'] as const
 
 export default function FriendsPage() {
   return (
-    <AppSidebarToolbarLayout>
+    <AppSidebarToolbarLayout toolsArea={<FriendToolsArea />}>
       <Tabs defaultValue="ACCEPTED" className="w-full">
         <TabsList>
           <TabsTrigger value="ACCEPTED">已通过</TabsTrigger>
@@ -25,6 +27,7 @@ export default function FriendsPage() {
           </TabsContent>
         ))}
       </Tabs>
+      <EditFriendDialog />
     </AppSidebarToolbarLayout>
   )
 }
