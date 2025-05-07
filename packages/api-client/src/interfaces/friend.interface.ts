@@ -4,6 +4,8 @@ interface FriendResponseType {
   url: string
   avatar: string
   introduce: string
+  status: FriendStatus
+  email: string
   created: Date
 }
 
@@ -12,6 +14,8 @@ interface FriendCreateRequestType {
   url: string
   avatar: string
   introduce: string
+  email: string
+  captchaToken?: string
 }
 
 interface FriendUpdateRequestType {
@@ -20,6 +24,8 @@ interface FriendUpdateRequestType {
   avatar?: string
   introduce?: string
 }
+
+export type FriendStatus = 'PENDING' | 'ACCEPTED' | 'ARCHIVED'
 
 export type {
   FriendCreateRequestType,

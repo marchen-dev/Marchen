@@ -5,7 +5,7 @@ import { m } from 'framer-motion'
 import Image from 'next/image'
 
 import { NarrowContainer } from '~/layout/container/NarrowContainer'
-import { AddFriend } from '~/modules/friends/AddFriend'
+import { AddFriend } from '~/modules/friends/components/AddFriend'
 import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 export default function FriendsPage() {
@@ -33,7 +33,7 @@ export default function FriendsPage() {
           >
             <MarchenCard
               as="a"
-              className="flex h-full flex-col items-center gap-1 px-1 py-4"
+              className="flex h-full flex-col items-center gap-1 px-1 py-2.5"
               href={friend.url}
               target="_blank"
               rel="noreferrer"
@@ -41,14 +41,14 @@ export default function FriendsPage() {
               <Image
                 src={friend.avatar}
                 alt={friend.name}
-                width={70}
-                height={70}
+                width={65}
+                height={65}
                 className="rounded-full border border-base-300 "
               />
-              <p className="mt-2 line-clamp-1 text-center font-semibold">
+              <p className="mt-1 line-clamp-1 text-center font-semibold">
                 {friend.name}
               </p>
-              <p className="line-clamp-2 text-center text-sm">
+              <p className="line-clamp-2 text-center text-xs">
                 {friend.introduce}
               </p>
             </MarchenCard>
