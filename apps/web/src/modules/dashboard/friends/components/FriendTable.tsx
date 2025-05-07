@@ -1,67 +1,10 @@
 'use client'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@marchen/components/ui'
-import { flexRender } from '@tanstack/react-table'
-
+import { DataTable } from '../../posts/components/shared/DataTable'
 import { useFriendTable } from '../hooks/use-friend-table'
 import { friendColumnsData } from './FriendTableColumns'
 
 export const FriendTable = () => {
   const { table, type } = useFriendTable()
-  return (
-    <div className="rounded-md border ">
-      <Table>
-        <TableHeader className="">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="truncate">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={friendColumnsData(type).length}
-                className="h-24 text-center"
-              >
-                没有数据
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  )
+  return <DataTable table={table} columnsData={friendColumnsData(type)} />
 }

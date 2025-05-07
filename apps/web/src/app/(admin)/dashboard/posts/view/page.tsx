@@ -2,7 +2,7 @@ import { getServerQueryClient } from '@marchen/lib'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 
 import { AppSidebarToolbarLayout } from '~/layout/dashboard/sidebar/AppSidebarToolbar'
-import { PostsViewTable } from '~/modules/dashboard/posts/components/view/PostsViewTable'
+import { PostsViewTableContent } from '~/modules/dashboard/posts/components/view/PostsViewTable'
 import { PostsViewTableFooter } from '~/modules/dashboard/posts/components/view/PostsViewTableFooter'
 import { PostsViewTableHeader } from '~/modules/dashboard/posts/components/view/PostsViewTableHeader'
 import { PostsViewTableProvider } from '~/modules/dashboard/posts/providers/PostsViewTableProvider'
@@ -17,7 +17,7 @@ export default async function Posts() {
       <HydrationBoundary state={dehydrateState}>
         <PostsViewTableProvider>
           <PostsViewTableHeader />
-          <PostsViewTable />
+          <PostsViewTableContent />
           <PostsViewTableFooter />
         </PostsViewTableProvider>
       </HydrationBoundary>

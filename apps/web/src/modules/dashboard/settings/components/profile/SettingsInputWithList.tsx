@@ -13,7 +13,7 @@ import { debounce } from 'lodash-es'
 import * as React from 'react'
 
 interface InputWithListProps {
-  values: Record<string, string>
+  values?: Record<string, string> | null
   onChange: (values: Record<string, string>) => void
   list: string[]
 }
@@ -21,10 +21,12 @@ interface InputWithListProps {
 const InputWithList = React.memo(
   ({ values, onChange, list }: InputWithListProps) => {
     const [selectedItems, setSelectedItems] = React.useState(
-      Object.keys(values).map((key) => ({
-        key,
-        value: values[key],
-      })),
+      values
+        ? Object.keys(values).map((key) => ({
+            key,
+            value: values[key],
+          }))
+        : [],
     )
     const deferredSelectedItems = React.useDeferredValue(selectedItems)
 

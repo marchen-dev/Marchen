@@ -1,11 +1,3 @@
-import { createOpenAI } from '@ai-sdk/openai'
-
-import { API_URL } from './env'
-
-export const ai = createOpenAI({
-  baseURL: `${API_URL}/ai/stream`,
-})
-
 export type PromptType = 'summary' | 'category' | 'tags' | 'slug' | 'title'
 
 export const promptTools = (params: { type: PromptType; args: string[] }) => {

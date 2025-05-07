@@ -85,7 +85,7 @@ export const useFriendTableMutation = () => {
       data: FriendUpdateRequestType
     }) => {
       if (id) {
-        return apiClient.friends.patch(id, data)
+        return apiClient.friends.put(id, data)
       }
       return apiClient.friends.postByMaster(data)
     },

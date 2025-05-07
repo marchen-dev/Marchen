@@ -1,6 +1,12 @@
 import { Routes } from '@marchen/lib'
 import type { LucideIcon } from 'lucide-react'
-import { BookOpen, Settings2, SquareTerminal, Users } from 'lucide-react'
+import {
+  BookOpen,
+  LayoutTemplate,
+  Settings2,
+  SquareTerminal,
+  Users,
+} from 'lucide-react'
 
 export const sidebarData = {
   content: [
@@ -20,10 +26,9 @@ export const sidebarData = {
         {
           title: '博文',
           icon: BookOpen,
-          url: Routes.DASHBOARD_POSTS,
           items: [
             {
-              title: '列表',
+              title: '管理',
               url: Routes.DASHBOARD_POSTS_VIEW,
             },
             {
@@ -33,6 +38,20 @@ export const sidebarData = {
             {
               title: '分类',
               url: Routes.DASHBOARD_POSTS_CATEGORIES,
+            },
+          ],
+        },
+        {
+          title: '页面',
+          icon: LayoutTemplate,
+          items: [
+            {
+              title: '管理',
+              url: Routes.DASHBOARD_PAGES_VIEW,
+            },
+            {
+              title: '编辑',
+              url: Routes.DASHBOARD_PAGES_EDIT,
             },
           ],
         },
@@ -55,6 +74,16 @@ export const sidebarData = {
               url: Routes.DASHBOARD_SETTINGS_WEBSITE,
             },
           ],
+        },
+      ],
+    },
+    {
+      title: '高级',
+      items: [
+        {
+          title: 'AI',
+          url: Routes.DASHBOARD_AI,
+          icon: () => <i className="icon-[mingcute--ai-line] size-[16px]" />,
         },
       ],
     },

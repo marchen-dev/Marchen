@@ -1,10 +1,21 @@
 import type { PromptType } from '@marchen/lib'
 
-import { Post } from '../fetch'
-import type { AiResponseType } from '../interfaces/ai.interface'
+import { Get, Post } from '../fetch'
+import type {
+  AiGenerateResponseType,
+  AiRequestType,
+  AiResponseType,
+} from '../interfaces/ai.interface'
+import type { DataWrapper } from '../interfaces/pagination.interface'
 
 export const ai = {
-  post(params: { type?: PromptType; prompt: string }) {
+  postGenerate(params: { type?: PromptType; prompt: string }) {
+    return Post<AiGenerateResponseType>(`/ai/generate`, params)
+  },
+  getAll() {
+    return Get<DataWrapper<AiResponseType[]>>(`/ai`)
+  },
+  post(params: AiRequestType) {
     return Post<AiResponseType>(`/ai`, params)
   },
 }

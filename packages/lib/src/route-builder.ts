@@ -11,14 +11,16 @@ export enum Routes {
   LOGIN = '/login',
   REGISTER = '/setup',
   DASHBOARD = '/dashboard',
-  DASHBOARD_POSTS = '/dashboard/posts',
   DASHBOARD_POSTS_VIEW = '/dashboard/posts/view',
   DASHBOARD_POSTS_EDIT = '/dashboard/posts/edit',
   DASHBOARD_POSTS_CATEGORIES = '/dashboard/posts/category',
+  DASHBOARD_PAGES_VIEW = '/dashboard/pages/view',
+  DASHBOARD_PAGES_EDIT = '/dashboard/pages/edit',
   DASHBOARD_SETTINGS = '/dashboard/settings',
   DASHBOARD_FRIENDS = '/dashboard/friends',
   DASHBOARD_SETTINGS_USER = '/dashboard/settings/user',
   DASHBOARD_SETTINGS_WEBSITE = '/dashboard/settings/website',
+  DASHBOARD_AI = '/dashboard/ai',
 }
 
 type PostParams = {

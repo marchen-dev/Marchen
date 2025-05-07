@@ -13,7 +13,7 @@ export const MarkdownEditorHeader = () => {
 
   const { mutate: generateTitle, isPending: isGeneratingTitle } = useMutation({
     mutationFn: () =>
-      apiClient.ai.post({
+      apiClient.ai.postGenerate({
         prompt: promptTools({
           type: 'title',
           args: [getValues('content')],

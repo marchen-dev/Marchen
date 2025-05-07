@@ -19,7 +19,7 @@ export const BasicSetting = () => {
   const { mutate: generateCategory, isPending: isGeneratingCategory } =
     useMutation({
       mutationFn: () =>
-        apiClient.ai.post({
+        apiClient.ai.postGenerate({
           prompt: promptTools({
             type: 'category',
             args: [
@@ -38,7 +38,7 @@ export const BasicSetting = () => {
 
   const { mutate: generateTags, isPending: isGeneratingTags } = useMutation({
     mutationFn: () =>
-      apiClient.ai.post({
+      apiClient.ai.postGenerate({
         prompt: promptTools({
           type: 'tags',
           args: [getValues('content')],
@@ -54,7 +54,7 @@ export const BasicSetting = () => {
 
   const { mutate: generateSlug, isPending: isGeneratingSlug } = useMutation({
     mutationFn: () =>
-      apiClient.ai.post({
+      apiClient.ai.postGenerate({
         prompt: promptTools({
           type: 'slug',
           args: [getValues('title') || getValues('content')],

@@ -6,7 +6,7 @@ export const profileSchema = z.object({
   introduce: z.string().nullish(),
   email: z.string().email('邮箱格式不正确'),
   avatar: z.string().url('头像格式不正确'),
-  social: z.record(z.string(), z.string()),
+  social: z.record(z.string(), z.string()).nullish(),
 })
 
 export const websiteSchema = z.object({

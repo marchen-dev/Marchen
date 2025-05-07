@@ -1,4 +1,4 @@
-import { Delete, Get, Patch, Post } from '../fetch'
+import { Delete, Get, Post, Put } from '../fetch'
 import type {
   FriendCreateRequestType,
   FriendResponseType,
@@ -26,7 +26,7 @@ export const friends = {
   postStatus(id: string, params: { status: FriendStatus }) {
     return Post(`/friend/status/${id}`, params)
   },
-  patch(id: string, params: FriendUpdateRequestType) {
-    return Patch(`/friend/${id}`, params)
+  put(id: string, params: FriendUpdateRequestType) {
+    return Put(`/friend/${id}`, params)
   },
 }
