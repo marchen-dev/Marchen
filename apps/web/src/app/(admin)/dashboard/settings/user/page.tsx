@@ -44,7 +44,10 @@ export default function SettingsUserPage() {
   })
 
   const onSubmit = (data: z.infer<typeof profileSchema>) => {
-    patchMaster(data)
+    patchMaster({
+      ...data,
+      social: data.social ?? undefined,
+    })
   }
 
   return (
