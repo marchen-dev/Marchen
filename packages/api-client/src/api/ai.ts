@@ -1,6 +1,6 @@
 import type { PromptType } from '@marchen/lib'
 
-import { Get, Post } from '../fetch'
+import { Delete, Get, Post, Put } from '../fetch'
 import type {
   AiGenerateResponseType,
   AiRequestType,
@@ -13,9 +13,15 @@ export const ai = {
     return Post<AiGenerateResponseType>(`/ai/generate`, params)
   },
   getAll() {
-    return Get<DataWrapper<AiResponseType[]>>(`/ai`)
+    return Get<DataWrapper<AiResponseType[]>>(`/ai/all`)
   },
   post(params: AiRequestType) {
     return Post<AiResponseType>(`/ai`, params)
+  },
+  put(id: string, params: AiRequestType) {
+    return Put<AiResponseType>(`/ai/${id}`, params)
+  },
+  delete(id: string) {
+    return Delete(`/ai/${id}`)
   },
 }

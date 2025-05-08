@@ -1,19 +1,11 @@
 import type { CategoryResponseType } from '@marchen/api-client/interfaces/category.interface'
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@marchen/components/ui'
 import type { ColumnDef, Row } from '@tanstack/react-table'
-import { MoreHorizontal } from 'lucide-react'
 
 import {
   useCategoryMutation,
   useEditCategoryDialog,
 } from '../../hooks/use-category'
+import { TableAction } from '../shared/TableAction'
 import { SortableHeader } from '../view/PostsViewTableColumns'
 
 export const categoryColumnsData: Array<ColumnDef<CategoryResponseType>> = [
@@ -46,25 +38,16 @@ const ActionCell = ({ row }: { row: Row<CategoryResponseType> }) => {
   const { deleteCategory } = useCategoryMutation()
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <span onClick={() => onChange(true, row.original)}>编辑</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="!text-destructive "
-          onClick={() => deleteCategory(row.original.slug)}
-        >
-          删除
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <TableAction.Root>
+      <TableAction.NormalItem onClick={() => onChange(true, row.original)}>
+        编辑
+      </TableAction.NormalItem>
+      <TableAction.Separator />
+      <TableAction.DestructiveItem
+        onClick={() => deleteCategory(row.original.slug)}
+      >
+        删除
+      </TableAction.DestructiveItem>
+    </TableAction.Root>
   )
 }

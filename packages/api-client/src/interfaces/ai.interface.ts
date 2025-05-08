@@ -12,12 +12,15 @@ export interface AiResponseType {
   provider: AiProvider
   model: string
   active: boolean
+  system: boolean
   created: string
 }
 
 export interface AiRequestType {
+  id?: string
   apiUrl: string
   apiKey: string
   provider: AiProvider
   model: string
+  active: boolean
 }

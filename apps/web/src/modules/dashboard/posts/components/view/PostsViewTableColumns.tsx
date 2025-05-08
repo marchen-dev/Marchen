@@ -1,20 +1,13 @@
 import type { PostResponseType } from '@marchen/api-client/interfaces/post.interface'
-import {
-  Button,
-  Checkbox,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@marchen/components/ui'
+import { Button, Checkbox } from '@marchen/components/ui'
 import { relativeTimeToNow, routerBuilder, Routes } from '@marchen/lib'
 import type { Column, ColumnDef, Row } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
+import { ArrowUpDown } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback } from 'react'
 
 import { useDeletePosts } from '../../hooks/use-delete-posts'
+import { TableAction } from '../shared/TableAction'
 
 export const postColumnsData: Array<ColumnDef<PostResponseType>> = [
   {
@@ -123,31 +116,20 @@ const ActionCell = ({ row }: { row: Row<PostResponseType> }) => {
   }, [deletePosts, row.original.id])
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <Link
-            href={routerBuilder(Routes.DASHBOARD_POSTS_EDIT, {
-              id: row.original.id,
-            })}
-          >
-            编辑博文
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="!text-destructive "
-          onClick={handleDeletePost}
+    <TableAction.Root>
+      <TableAction.NormalItem>
+        <Link
+          href={routerBuilder(Routes.DASHBOARD_POSTS_EDIT, {
+            id: row.original.id,
+          })}
         >
-          删除
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          编辑博文
+        </Link>
+      </TableAction.NormalItem>
+      <TableAction.Separator />
+      <TableAction.DestructiveItem onClick={handleDeletePost}>
+        删除
+      </TableAction.DestructiveItem>
+    </TableAction.Root>
   )
 }

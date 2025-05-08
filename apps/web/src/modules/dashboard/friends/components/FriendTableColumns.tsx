@@ -2,20 +2,11 @@ import type {
   FriendResponseType,
   FriendStatus,
 } from '@marchen/api-client/interfaces/friend.interface'
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  UserAvatar,
-} from '@marchen/components/ui'
+import { UserAvatar } from '@marchen/components/ui'
 import { relativeTimeToNow } from '@marchen/lib'
 import type { ColumnDef, Row } from '@tanstack/react-table'
-import { MoreHorizontal } from 'lucide-react'
-import { toast } from 'sonner'
 
+import { TableAction } from '../../posts/components/shared/TableAction'
 import {
   useEditFriendDialog,
   useFriendTableMutation,
@@ -121,75 +112,50 @@ const AcceptedActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
   const { onChange } = useEditFriendDialog()
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <span onClick={() => onChange(true, row.original)}>编辑</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="!text-destructive"
-          onClick={() => {
-            updateStatus.mutate({ id: row.original.id, status: 'ARCHIVED' })
-            toast.success('已归档')
-          }}
-        >
-          归档
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="!text-destructive"
-          onClick={() => {
-            deleteFriend.mutate(row.original.id)
-            toast.success('已删除')
-          }}
-        >
-          删除
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <TableAction.Root>
+      <TableAction.NormalItem onClick={() => onChange(true, row.original)}>
+        编辑
+      </TableAction.NormalItem>
+      <TableAction.Separator />
+      <TableAction.DestructiveItem
+        onClick={() => {
+          updateStatus.mutate({ id: row.original.id, status: 'ARCHIVED' })
+        }}
+      >
+        归档
+      </TableAction.DestructiveItem>
+      <TableAction.DestructiveItem
+        onClick={() => {
+          deleteFriend.mutate(row.original.id)
+        }}
+      >
+        删除
+      </TableAction.DestructiveItem>
+    </TableAction.Root>
   )
 }
 
 const PendingActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
-  // const { deleteCategory } = useCategoryMutation()
   const { deleteFriend, updateStatus } = useFriendTableMutation()
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <span
-            onClick={() => {
-              updateStatus.mutate({ id: row.original.id, status: 'ACCEPTED' })
-              toast.success('已同意')
-            }}
-          >
-            同意
-          </span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="!text-destructive"
-          onClick={() => {
-            deleteFriend.mutate(row.original.id)
-            toast.success('已拒绝')
-          }}
-        >
-          拒绝
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <TableAction.Root>
+      <TableAction.NormalItem
+        onClick={() => {
+          updateStatus.mutate({ id: row.original.id, status: 'ACCEPTED' })
+        }}
+      >
+        同意
+      </TableAction.NormalItem>
+      <TableAction.Separator />
+      <TableAction.DestructiveItem
+        onClick={() => {
+          deleteFriend.mutate(row.original.id)
+        }}
+      >
+        拒绝
+      </TableAction.DestructiveItem>
+    </TableAction.Root>
   )
 }
 
@@ -197,35 +163,22 @@ const ArchivedActionCell = ({ row }: { row: Row<FriendResponseType> }) => {
   const { deleteFriend, updateStatus } = useFriendTableMutation()
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 p-0">
-          <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <span
-            onClick={() => {
-              updateStatus.mutate({ id: row.original.id, status: 'ACCEPTED' })
-              toast.success('已恢复')
-            }}
-          >
-            恢复
-          </span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="!text-destructive"
-          onClick={() => {
-            deleteFriend.mutate(row.original.id)
-            toast.success('已删除')
-          }}
-        >
-          删除
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <TableAction.Root>
+      <TableAction.NormalItem
+        onClick={() => {
+          updateStatus.mutate({ id: row.original.id, status: 'ACCEPTED' })
+        }}
+      >
+        恢复
+      </TableAction.NormalItem>
+      <TableAction.Separator />
+      <TableAction.DestructiveItem
+        onClick={() => {
+          deleteFriend.mutate(row.original.id)
+        }}
+      >
+        删除
+      </TableAction.DestructiveItem>
+    </TableAction.Root>
   )
 }

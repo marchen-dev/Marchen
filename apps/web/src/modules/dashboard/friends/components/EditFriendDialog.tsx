@@ -13,7 +13,6 @@ import {
 } from '@marchen/components/ui'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import {
   useEditFriendDialog,
@@ -56,7 +55,6 @@ export const EditFriendDialog = () => {
         <form
           onSubmit={form.handleSubmit((data) => {
             mutate({ id: friend?.id, data })
-            toast.success(isEdit ? '朋友信息修改成功' : '朋友信息添加成功')
           })}
         >
           <div className="flex flex-col gap-4 py-4">

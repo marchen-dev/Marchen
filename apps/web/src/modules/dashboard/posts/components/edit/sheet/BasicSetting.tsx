@@ -1,9 +1,11 @@
+import type { Error } from '@marchen/api-client'
 import { apiClient } from '@marchen/api-client'
 import type { PostCreateRequestType } from '@marchen/api-client/interfaces/post.interface'
 import { DynamicTags, FormField, InputWithIcon } from '@marchen/components/ui'
 import { promptTools } from '@marchen/lib'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useFormContext } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { SheetSettings } from './SheetSettings'
 
@@ -34,6 +36,9 @@ export const BasicSetting = () => {
           setValue('categoryId', data.content)
         }
       },
+      onError: (error: Error) => {
+        toast.error(error.data.message)
+      },
     })
 
   const { mutate: generateTags, isPending: isGeneratingTags } = useMutation({
@@ -50,6 +55,9 @@ export const BasicSetting = () => {
         setValue('tags', data.content)
       }
     },
+    onError: (error: Error) => {
+      toast.error(error.data.message)
+    },
   })
 
   const { mutate: generateSlug, isPending: isGeneratingSlug } = useMutation({
@@ -65,6 +73,9 @@ export const BasicSetting = () => {
       if (typeof data.content === 'string') {
         setValue('slug', data.content)
       }
+    },
+    onError: (error: Error) => {
+      toast.error(error.data.message)
     },
   })
 

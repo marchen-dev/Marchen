@@ -8,16 +8,26 @@ import {
   TableHeader,
   TableRow,
 } from '@marchen/components/ui'
-import type { ColumnDef, Table as ReactTableType } from '@tanstack/react-table'
+import { cn } from '@marchen/lib'
+import type {
+  ColumnDef,
+  Row,
+  Table as ReactTableType,
+} from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import type { FC } from 'react'
 
 interface DataTableProps {
   table: ReactTableType<any>
   columnsData: Array<ColumnDef<any>>
+  highlightRow?: Row<any>
 }
 
-export const DataTable: FC<DataTableProps> = ({ table, columnsData }) => {
+export const DataTable: FC<DataTableProps> = ({
+  table,
+  columnsData,
+  highlightRow,
+}) => {
   return (
     <div className="rounded-md border ">
       <Table>
@@ -45,6 +55,7 @@ export const DataTable: FC<DataTableProps> = ({ table, columnsData }) => {
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
+                className={cn(highlightRow?.id === row.id && 'bg-zinc-100')}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="truncate">

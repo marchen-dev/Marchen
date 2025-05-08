@@ -1,6 +1,7 @@
 import { cn } from '@marchen/lib'
 import * as React from 'react'
 
+import type { LabelProps } from '../Label'
 import { Label } from '../Label'
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
@@ -19,22 +20,15 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
   },
 )
 
-type InputWithLabelProps = React.ComponentProps<'input'> & {
-  label: string
-  description?: string
-  error?: string
-  required?: boolean
-}
-
-const InputWithLabel = React.forwardRef<HTMLInputElement, InputWithLabelProps>(
-  ({ className, type, label, description, error, required, ...props }, ref) => {
+const InputWithLabel = React.forwardRef<HTMLInputElement, LabelProps<'input'>>(
+  ({ label, description, error, required, ...props }, ref) => {
     return (
       <div className="grid w-full items-center gap-2">
         <Label className={cn(error && 'text-red-500')}>
           {label}
           {required && <span className="text-red-500">*</span>}
         </Label>
-        <Input {...props} ref={ref} className={className} />
+        <Input {...props} ref={ref} />
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>
         )}

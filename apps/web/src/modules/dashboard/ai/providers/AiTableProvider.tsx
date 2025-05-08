@@ -12,23 +12,23 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 
-import { categoryColumnsData } from '../components/category/CategoryTableColumns'
-import { CategoryTableContext } from '../hooks/use-category'
-import { categoryTableQuery } from '../queries/category-table-query'
+import { aiColumnsData } from '../components/AiTableColumns'
+import { AiTableContext } from '../hooks/use-ai-table'
+import { aiTableQuery } from '../queries/ai-table-query'
 
-interface CategoryTableProviderProps {
+interface AiTableProviderProps {
   children: React.ReactNode
 }
 
-export const CategoryTableProvider: React.FC<CategoryTableProviderProps> = ({
+export const AiTableProvider: React.FC<AiTableProviderProps> = ({
   children,
 }) => {
-  const { data } = useQuery(categoryTableQuery())
+  const { data } = useQuery(aiTableQuery())
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
   const table = useReactTable({
     data: data ?? [],
-    columns: categoryColumnsData,
+    columns: aiColumnsData,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
@@ -41,7 +41,5 @@ export const CategoryTableProvider: React.FC<CategoryTableProviderProps> = ({
       columnFilters,
     },
   })
-  return (
-    <CategoryTableContext value={{ table }}>{children}</CategoryTableContext>
-  )
+  return <AiTableContext value={{ table }}>{children}</AiTableContext>
 }

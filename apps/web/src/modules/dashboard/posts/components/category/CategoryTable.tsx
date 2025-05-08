@@ -2,7 +2,7 @@
 
 import { useCategoryViewTable } from '../../hooks/use-category'
 import { DataTable } from '../shared/DataTable'
-import { categoryColumnsData } from './CategoryViewTableColumns'
+import { categoryColumnsData } from './CategoryTableColumns'
 
 export const CategoryTableContent = () => {
   const { table } = useCategoryViewTable()

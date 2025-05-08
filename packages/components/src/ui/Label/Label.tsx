@@ -9,6 +9,12 @@ import * as React from 'react'
 const labelVariants = cva(
   'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
 )
+type LabelProps<T extends React.ElementType> = React.ComponentProps<T> & {
+  label: string
+  description?: string
+  error?: string
+  required?: boolean
+}
 
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
@@ -24,3 +30,4 @@ const Label = React.forwardRef<
 Label.displayName = LabelPrimitive.Root.displayName
 
 export { Label }
+export type { LabelProps }

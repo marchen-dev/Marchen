@@ -58,6 +58,7 @@ export const useFriendTableMutation = () => {
       queryClient.invalidateQueries({
         queryKey: [Routes.DASHBOARD_FRIENDS],
       })
+      toast.success('删除成功')
     },
     onError: (error: ApiError) => {
       toast.error(error.data.message)
@@ -70,6 +71,7 @@ export const useFriendTableMutation = () => {
       queryClient.invalidateQueries({
         queryKey: [Routes.DASHBOARD_FRIENDS],
       })
+      toast.success('操作成功')
     },
     onError: (error: ApiError) => {
       toast.error(error.data.message)
@@ -89,10 +91,11 @@ export const useFriendTableMutation = () => {
       }
       return apiClient.friends.postByMaster(data)
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: [Routes.DASHBOARD_FRIENDS],
       })
+      toast.success(variables.id ? '朋友信息修改成功' : '朋友信息添加成功')
     },
     onError: (error: ApiError) => {
       toast.error(error.data.message)
