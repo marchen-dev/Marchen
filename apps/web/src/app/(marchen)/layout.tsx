@@ -22,6 +22,18 @@ export const generateMetadata = async () => {
     },
     description: site.description,
     keywords: site.keywords?.join(',') || '',
+    icons: {
+      icon: '/favicon.ico',
+      shortcut: '/favicon.ico',
+      apple: '/apple-touch-icon.png',
+      other: [
+        {
+          url: site.favicon,
+          type: 'image/svg+xml',
+          sizes: 'any',
+        },
+      ],
+    },
     robots: {
       index: true,
       follow: true,
