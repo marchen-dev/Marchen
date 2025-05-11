@@ -1,20 +1,44 @@
 'use client'
 
-import { cn } from '@marchen/lib'
+import { apiClient } from '@marchen/api-client'
+import { cn, getQueryClient } from '@marchen/lib'
+import { useMutation } from '@tanstack/react-query'
 import dayjs from 'dayjs'
+import { useParams } from 'next/navigation'
 import { useMemo } from 'react'
+import { toast } from 'sonner'
 
 import { usePostSelector } from '../../atom/selectors/post-selector'
 
 export const PostHeader = () => {
+  const params = useParams<{ category?: string; slug: string }>()
+  const { category, slug } = params
+  const isPost = !!category
   const post = usePostSelector((state) => state)
-
+  const queryClient = getQueryClient()
   const hiddenTags = useMemo(() => {
     if (!post?.tags || post?.tags.length === 0) {
       return true
     }
     return false
   }, [post?.tags])
+
+  //Fixed: 点赞后，需要重新获取文章详情
+  const { mutate: likePost } = useMutation({
+    mutationFn: () => {
+      return apiClient.posts.postLike(post?.id ?? '')
+    },
+    onSuccess: () => {
+      toast.success('点赞成功')
+      queryClient.invalidateQueries({
+        queryKey: isPost ? ['posts', category, slug] : ['pages', slug],
+      })
+    },
+
+    onError: () => {
+      toast.error('点赞失败')
+    },
+  })
 
   return (
     <div>
@@ -27,12 +51,22 @@ export const PostHeader = () => {
           {post?.read}
         </IconWrapper>
         <IconWrapper
-          line={!hiddenTags}
-          classNames={{ line: 'hidden md:block' }}
-          icon="icon-[mingcute--filter-line]"
+          line={isPost}
+          icon="icon-[mingcute--love-line]"
+          onClick={() => likePost()}
+          // classNames={{ wrapper: 'cursor-pointer' }}
         >
-          {post?.category?.name}
+          {post?.likes}
         </IconWrapper>
+        {post?.category && (
+          <IconWrapper
+            line={!hiddenTags}
+            classNames={{ line: 'hidden md:block' }}
+            icon="icon-[mingcute--filter-line]"
+          >
+            {post?.category?.name}
+          </IconWrapper>
+        )}
         {!hiddenTags && (
           <IconWrapper
             icon="icon-[mingcute--tag-line]"
@@ -60,6 +94,7 @@ interface IconWrapperProps {
     wrapper?: string
     line?: string
   }
+  onClick?: () => void
 }
 
 const IconWrapper = ({
@@ -68,10 +103,14 @@ const IconWrapper = ({
   as,
   line,
   classNames,
+  onClick,
 }: IconWrapperProps) => {
   const Icon = as || 'span'
   return (
-    <div className={cn('flex items-center', classNames?.wrapper)}>
+    <div
+      className={cn('flex items-center', classNames?.wrapper)}
+      onClick={onClick}
+    >
       <Icon className={cn('flex items-center gap-1')}>
         <i className={icon} />
         {children}

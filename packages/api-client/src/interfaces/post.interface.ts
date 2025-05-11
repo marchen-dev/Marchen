@@ -8,6 +8,7 @@ interface PostResponseType {
   cover: string
   slug: string
   read: number
+  likes: number
   summary?: string
   summaryModel?: string
   tags: string[]

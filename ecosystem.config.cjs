@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'Marchen',
-      script: 'npx next start -p 23116',
+      script: 'cd apps/web && npx next start -p 23116',
       instances: 1,
       autorestart: true,
       watch: false,

@@ -114,7 +114,13 @@ const MoreNav = ({ icon, title, items }: MoreNavProps) => {
               href={item.slug}
               className="flex w-full items-center justify-between "
             >
-              <i className={cn(item.icon)} />
+              <i
+                className={cn(
+                  item.slug === 'about'
+                    ? 'icon-[mingcute--bulb-line]'
+                    : item.icon,
+                )}
+              />
               <span>{item.title}</span>
             </Link>
           </li>
@@ -123,3 +129,4 @@ const MoreNav = ({ icon, title, items }: MoreNavProps) => {
     </m.li>
   )
 }
+//FIXME

@@ -13,6 +13,9 @@ export const pages = {
   getById(id: string) {
     return Get<PageResponseType>(`/pages/${id}`)
   },
+  getBySlug(slug: string) {
+    return Get<PageResponseType>(`/pages/slug/${slug}`)
+  },
   post(params: PageCreateRequestType) {
     return Post<PageResponseType>(`/pages`, params)
   },

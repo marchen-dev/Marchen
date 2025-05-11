@@ -40,4 +40,7 @@ export const posts = {
   patch(id: string, params: PostCreateRequestType) {
     return Patch(`/posts/${id}`, params)
   },
+  postLike(id: string) {
+    return Post(`/posts/like/${id}`)
+  },
 }

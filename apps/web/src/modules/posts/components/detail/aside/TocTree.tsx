@@ -124,7 +124,7 @@ export const TocTree = () => {
   }
 
   return (
-    <div className="size-full text-sm">
+    <div className="text-sm">
       <p className="flex items-center justify-between">
         <span>目录</span>
         <Progress />

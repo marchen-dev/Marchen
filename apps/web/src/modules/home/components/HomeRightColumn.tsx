@@ -5,11 +5,55 @@ import { cn, Routes } from '@marchen/lib'
 import { m } from 'framer-motion'
 import Link from 'next/link'
 import type { FC } from 'react'
+import { useMemo } from 'react'
+
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 import { useScrollToPosts } from '../hooks/use-scroll-to-posts'
 
 export const HomeRightColumn = () => {
   const { handleScrollToPosts } = useScrollToPosts()
+  const categoryCount = useAggregationDataSelector(
+    (state) => state?.category.length,
+  )
+  const postCount = useAggregationDataSelector((state) => state?.post.length)
+  const likeCount = useAggregationDataSelector((state) =>
+    state?.post.reduce((acc, post) => acc + post.likes, 0),
+  )
+  const friendCount = useAggregationDataSelector(
+    (state) => state?.friend.length,
+  )
+
+  const homeSiteDataConfig = useMemo(() => {
+    return [
+      {
+        title: '文章',
+        value: postCount,
+        icon: 'icon-[mingcute--book-6-line]',
+        color: '#60a5fa',
+        href: Routes.POSTS,
+      },
+      {
+        title: '分类',
+        value: categoryCount,
+        icon: 'icon-[mingcute--filter-line]',
+        color: '#34d399',
+      },
+      {
+        title: '点赞数',
+        value: likeCount,
+        icon: 'icon-[mingcute--thumb-up-line]',
+        color: '#f87171',
+      },
+      {
+        title: '友链',
+        value: friendCount,
+        icon: 'icon-[mingcute--contacts-4-line]',
+        color: '#fbbf24',
+        href: Routes.FRIENDS,
+      },
+    ] as HomeSiteAnalysisItemProps[]
+  }, [categoryCount, postCount, likeCount, friendCount])
   return (
     <m.div
       className="flex flex-col gap-6 lg:px-4"
@@ -60,6 +104,7 @@ interface HomeSiteAnalysisItemProps {
   icon: string
   position?: number
   color: string
+  href?: string
 }
 
 const HomeSiteAnalysisItem: FC<HomeSiteAnalysisItemProps> = ({
@@ -68,6 +113,7 @@ const HomeSiteAnalysisItem: FC<HomeSiteAnalysisItemProps> = ({
   icon,
   color,
   position = 0,
+  href,
 }) => {
   // 根据位置决定边框样式：
   // 0(左上): 右边和下边有边框
@@ -98,7 +144,8 @@ const HomeSiteAnalysisItem: FC<HomeSiteAnalysisItemProps> = ({
     }
   }
 
-  return (
+  //FIXME: 需要优化
+  const ContentComponent = (
     <m.div
       className={cn('flex justify-between p-4 py-6', getBorderClass())}
       variants={itemVariants}
@@ -127,34 +174,13 @@ const HomeSiteAnalysisItem: FC<HomeSiteAnalysisItemProps> = ({
       </div>
     </m.div>
   )
-}
 
-const homeSiteDataConfig = [
-  {
-    title: '文章',
-    value: 100,
-    icon: 'icon-[mingcute--book-6-line]',
-    color: '#60a5fa',
-  },
-  {
-    title: '在线访客',
-    value: 3,
-    icon: 'icon-[mingcute--user-4-line]',
-    color: '#34d399',
-  },
-  {
-    title: '点赞数',
-    value: 521,
-    icon: 'icon-[mingcute--thumb-up-line]',
-    color: '#f87171',
-  },
-  {
-    title: '评论数',
-    value: 100,
-    icon: 'icon-[mingcute--chat-3-line]',
-    color: '#fbbf24',
-  },
-] satisfies HomeSiteAnalysisItemProps[]
+  return href ? (
+    <Link href={href}>{ContentComponent}</Link>
+  ) : (
+    <div>{ContentComponent}</div>
+  )
+}
 
 // 定义统一的动画变量
 const containerVariants = {
