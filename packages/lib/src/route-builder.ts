@@ -71,6 +71,11 @@ export function routerBuilder<T extends Routes>(
       href += `?${new URLSearchParams({ id: p?.id }).toString()}`
       break
     }
+    case Routes.DASHBOARD_PAGES_EDIT: {
+      const p = params as idParams
+      href += `?${new URLSearchParams({ id: p?.id }).toString()}`
+      break
+    }
   }
   return href
 }

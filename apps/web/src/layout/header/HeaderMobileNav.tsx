@@ -1,3 +1,4 @@
+'use client'
 import {
   Button,
   Drawer,
@@ -9,11 +10,26 @@ import {
   DrawerTrigger,
 } from '@marchen/components/ui'
 import Link from 'next/link'
+import { useMemo } from 'react'
+
+import { useAggregationDataSelector } from '~/providers/root/AggregationDataProvider'
 
 import { HeaderNavConfig, HeaderNavMoreConfig } from './config'
 import type { NormalNavProps } from './HeaderDesktopNav'
 
 export const HeaderMobileNav = () => {
+  const pages = useAggregationDataSelector((state) => state?.page)
+  const mergeConfig = useMemo(() => {
+    const moreConfigs = [
+      ...HeaderNavMoreConfig.items,
+      ...(pages?.map((page) => ({
+        ...page,
+        slug: page.slug,
+        icon: page.icon || 'icon-[mingcute--file-line]',
+      })) || []),
+    ]
+    return moreConfigs
+  }, [pages])
   return (
     <nav className="-order-2 flex justify-start md:hidden">
       <Drawer>
@@ -30,18 +46,18 @@ export const HeaderMobileNav = () => {
             <NavContentLayout title="主要">
               {HeaderNavConfig.map(
                 (item) =>
-                  item.href && (
+                  item.slug && (
                     <NavItem
                       key={item.icon}
                       icon={item.icon}
-                      label={item.label}
-                      href={item.href}
+                      title={item.title}
+                      slug={item.slug}
                     />
                   ),
               )}
             </NavContentLayout>
             <NavContentLayout title="更多">
-              {HeaderNavMoreConfig.items.map((item) => (
+              {mergeConfig.map((item) => (
                 <NavItem key={item.icon} {...item} />
               ))}
             </NavContentLayout>
@@ -66,14 +82,14 @@ const NavContentLayout = ({ title, children }: NavContentLayoutProps) => {
   )
 }
 
-const NavItem = ({ icon, label, href }: NormalNavProps) => {
+const NavItem = ({ icon, title, slug }: NormalNavProps) => {
   return (
     <li key={icon}>
       <DrawerClose asChild>
         <Button variant="outline" asChild size="lg">
-          <Link href={href}>
+          <Link href={slug}>
             <i className={icon} />
-            <span> {label}</span>
+            <span> {title}</span>
           </Link>
         </Button>
       </DrawerClose>
