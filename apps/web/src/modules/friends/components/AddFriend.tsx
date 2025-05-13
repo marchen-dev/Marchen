@@ -162,7 +162,7 @@ const ApplyFriendLink = () => {
           className="bg-white"
         />
       </div>
-      <div className="mt-5 flex flex-col items-end gap-5">
+      <div className="mt-5 flex flex-col items-center gap-5 md:items-end">
         {enableTurnstile && (
           <Turnstile
             onVerify={(token) => {
@@ -170,7 +170,7 @@ const ApplyFriendLink = () => {
             }}
           />
         )}
-        <Button type="submit" disabled={isPending}>
+        <Button className="w-4/5 md:w-auto" type="submit" disabled={isPending}>
           提交
         </Button>
       </div>

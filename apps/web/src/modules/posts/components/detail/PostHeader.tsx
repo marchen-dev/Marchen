@@ -72,7 +72,7 @@ export const PostHeader = () => {
             icon="icon-[mingcute--tag-line]"
             classNames={{ wrapper: 'hidden md:inline' }}
           >
-            {post?.tags.map((tag) => (
+            {post?.tags?.map((tag) => (
               <span className="mr-0.5" key={tag}>
                 {tag}
               </span>

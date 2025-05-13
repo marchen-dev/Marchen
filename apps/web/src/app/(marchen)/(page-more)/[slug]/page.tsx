@@ -1,6 +1,8 @@
+import type { Error } from '@marchen/api-client'
 import { MarchenCard } from '@marchen/components/ui'
 import { getServerQueryClient } from '@marchen/lib'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
+import { notFound } from 'next/navigation'
 
 import { InjectPageData } from '~/modules/pages/components/InjectPostData'
 import { pageDetailQuery } from '~/modules/pages/components/post-detail-query'
@@ -27,8 +29,16 @@ export const generateMetadata = async ({ params }: PostLayoutProps) => {
 export default async function PostPage(props: PostLayoutProps) {
   const { params } = props
   const { slug } = await params
+
   const queryClient = getServerQueryClient()
-  await queryClient.prefetchQuery(pageDetailQuery({ slug }))
+  await queryClient
+    .fetchQuery(pageDetailQuery({ slug }))
+    .catch((error: Error) => {
+      if (error.data.status === 404) {
+        return notFound()
+      }
+    })
+
   const dehydrateState = dehydrate(queryClient)
   return (
     <HydrationBoundary state={dehydrateState}>

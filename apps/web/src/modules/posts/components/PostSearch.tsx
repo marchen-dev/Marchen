@@ -20,7 +20,7 @@ export const PostsSearch = () => {
   return (
     <Input
       placeholder="搜索文章"
-      className="bg-white"
+      className="bg-white dark:bg-black"
       onChange={handleSearch}
       defaultValue={defaultValue ?? ''}
     />

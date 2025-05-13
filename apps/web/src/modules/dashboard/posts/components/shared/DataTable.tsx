@@ -55,7 +55,9 @@ export const DataTable: FC<DataTableProps> = ({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
-                className={cn(highlightRow?.id === row.id && 'bg-zinc-100')}
+                className={cn(
+                  highlightRow?.id === row.id && 'bg-zinc-100 dark:bg-zinc-900',
+                )}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="truncate">

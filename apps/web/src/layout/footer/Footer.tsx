@@ -12,10 +12,10 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="relative border-t bg-neutral-content py-6 text-sm">
+    <footer className="relative border-t bg-neutral-content px-2 py-6 text-sm md:px-0">
       <div className="mx-auto max-w-5xl">
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-center justify-center md:flex-row md:justify-between">
+          <div className="flex flex-col items-center gap-2 md:items-start">
             <div className="flex flex-wrap gap-4">
               <strong>关于 &gt;</strong>
               {pages?.map((page) => (
@@ -39,16 +39,20 @@ export default function Footer() {
             <p>
               @2025 - {currentYear} {username}
             </p>
-            <p className="flex flex-wrap items-center gap-1">
-              <span>Powered by</span>
-              <ExternalLink href="https://github.com/marchen-dev/marchen">
-                Marchen
-              </ExternalLink>
-              <span className="mx-1">|</span>
+            <div className="flex flex-col flex-wrap items-center gap-2.5 md:flex-row md:gap-1">
+              <div>
+                <span>Powered by </span>
+                <ExternalLink href="https://github.com/marchen-dev/marchen">
+                  Marchen
+                </ExternalLink>
+              </div>
+              <span className="mx-1 hidden md:inline">|</span>
               <span>{site?.description}</span>
-            </p>
+            </div>
           </div>
-          <HeaderTools />
+          <div className="mt-4 md:mt-0">
+            <HeaderTools />
+          </div>
         </div>
       </div>
     </footer>
