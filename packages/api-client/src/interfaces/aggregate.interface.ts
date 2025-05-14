@@ -14,4 +14,13 @@ interface GetAggregateResponseType {
   page: PageResponseType[]
 }
 
-export type { GetAggregateResponseType }
+interface GetDashboardResponseType {
+  count: {
+    post: number
+    category: number
+    friend: number
+    page: number
+  }
+}
+
+export type { GetAggregateResponseType, GetDashboardResponseType }

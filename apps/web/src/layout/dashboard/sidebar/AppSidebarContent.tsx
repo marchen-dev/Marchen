@@ -14,6 +14,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@marchen/components/ui'
+import { cn } from '@marchen/lib'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -48,13 +49,13 @@ export const SidebarContentMenu: FC<{
   sidebarMenuData: SidebarItemType
 }> = (props) => {
   const pathname = usePathname()
-  const { title, items, icon: Icon, url } = props.sidebarMenuData
+  const { title, items, icon, url } = props.sidebarMenuData
   if (!items) {
     return (
       <SidebarMenuItem key={title}>
         <SidebarMenuButton asChild isActive={pathname === url}>
           <Link href={url!}>
-            {Icon && <Icon />}
+            {icon && <i className={cn(icon, 'size-[16px]')} />}
             <span>{title}</span>
           </Link>
         </SidebarMenuButton>
@@ -71,7 +72,7 @@ export const SidebarContentMenu: FC<{
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton tooltip={title}>
-            {Icon && <Icon />}
+            {icon && <i className={cn(icon, 'size-[16px]')} />}
             <span>{title}</span>
             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
