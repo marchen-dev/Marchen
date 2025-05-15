@@ -1,5 +1,5 @@
 {
-  "name": "@marchen/monorepo",
+  "name": "@marchen/blog",
   "version": "0.0.0",
   "private": false,
   "packageManager": "pnpm@10.10.0",

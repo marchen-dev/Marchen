@@ -1,4 +1,4 @@
 {
   "extends": "@marchen/typescript-config/nextjs.json",
-  "include": ["src"]
+  "include": ["src", "src/attach-fetch.ts"]
 }

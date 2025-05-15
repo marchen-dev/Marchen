@@ -1,3 +1,4 @@
+import type { AnalyzeResponseType } from './analyze.inteface'
 import type { CategoryResponseType } from './category.interface'
 import type { FriendResponseType } from './friend.interface'
 import type { PageResponseType } from './page.interface'
@@ -20,7 +21,12 @@ interface GetDashboardResponseType {
     category: number
     friend: number
     page: number
+    ai: number
+    character: number
+    read: number
+    like: number
   }
+  analyze: AnalyzeResponseType[]
 }
 
 export type { GetAggregateResponseType, GetDashboardResponseType }

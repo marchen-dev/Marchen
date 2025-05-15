@@ -5,9 +5,9 @@ import { cn } from '@marchen/lib'
 import Link from 'next/link'
 import { useMemo } from 'react'
 
-import { sidebarData } from '~/layout/dashboard/sidebar/config'
+import { getNavigationItems } from '~/layout/dashboard/sidebar/config'
 
-import { useDashboard } from '../hooks/use-dashboard'
+import { useDashboardData } from '../hooks/use-dashboard'
 
 export const DashboardNavigation = () => {
   const navigationItems = useNavigationData()
@@ -17,7 +17,7 @@ export const DashboardNavigation = () => {
       <div className="mt-2 grid  grid-cols-[repeat(auto-fill,minmax(240px,1fr))]  gap-4">
         {navigationItems.map((item) => (
           <NavigationItem
-            key={item.title}
+            key={item.id || item.title}
             title={item.title}
             icon={item.icon}
             count={item.count}
@@ -71,45 +71,13 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
 }
 
 const useNavigationData = () => {
-  const dashboardData = useDashboard()
-
+  const dashboardData = useDashboardData()
   return useMemo(() => {
-    // 获取所有带有 countKey 和 navigationActions 的项目
-    const navigationItems = sidebarData.content
-      .flatMap((section) => section.items)
-      .filter((item) => item.countKey && item.navigationActions)
-      .map((item) => {
-        // 构建导航操作
-        const actions = item.navigationActions!.map((action) => {
-          let url = ''
-          if (action.url) {
-            url = action.url
-          } else if (action.urlIndex !== undefined) {
-            if (action.urlIndex === -1 && item.url) {
-              url = item.url
-            } else if (
-              item.items &&
-              action.urlIndex >= 0 &&
-              action.urlIndex < item.items.length
-            ) {
-              url = item.items[action.urlIndex].url || ''
-            }
-          }
+    const navItems = getNavigationItems()
 
-          return {
-            label: action.label,
-            url,
-          }
-        })
-
-        return {
-          title: item.title,
-          icon: item.icon || '',
-          count: dashboardData.count[item.countKey!],
-          action: actions,
-        }
-      })
-
-    return navigationItems
+    return navItems.map((item) => ({
+      ...item,
+      count: item.countKey ? dashboardData.count[item.countKey] : 0,
+    }))
   }, [dashboardData])
 }
