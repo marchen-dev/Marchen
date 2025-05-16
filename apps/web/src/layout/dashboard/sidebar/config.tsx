@@ -14,7 +14,8 @@ export interface MenuItem {
     | 'page'
     | 'character'
     | 'read'
-    | 'like' // 对应的计数键名
+    | 'like'
+    | 'ai' // 对应的计数键名
   pin?: boolean // 是否在快捷导航中显示
   isHidden?: boolean // 是否在侧边栏中隐藏
 }
@@ -135,7 +136,10 @@ const menuItems: MenuItem[] = [
   {
     id: 'ai',
     title: 'AI',
+    countKey: 'ai',
+    pin: true,
     url: Routes.DASHBOARD_AI,
+
     icon: 'icon-[mingcute--ai-line]',
   },
   {
@@ -348,6 +352,7 @@ export interface SidebarItemType {
     | 'character'
     | 'read'
     | 'like'
+    | 'ai'
 }
 
 export interface SidebarContentType {

@@ -35,7 +35,7 @@ export const RequestChart = () => {
   const chartData = useMemo(() => {
     const dayVisits: Record<string, number> = {}
 
-    dashboardData.analyze.forEach((item) => {
+    dashboardData.analyze?.forEach((item) => {
       const day = item.created.split('T')[0]
 
       if (!dayVisits[day]) {
@@ -102,7 +102,6 @@ export const RequestChart = () => {
 
     return ticks
   }, [maxVisits])
-
   return (
     <div className="w-full ">
       <h2 className="font-medium">API 调用统计</h2>

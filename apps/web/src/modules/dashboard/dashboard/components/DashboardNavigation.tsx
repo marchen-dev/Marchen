@@ -74,7 +74,6 @@ const useNavigationData = () => {
   const dashboardData = useDashboardData()
   return useMemo(() => {
     const navItems = getNavigationItems()
-
     return navItems.map((item) => ({
       ...item,
       count: item.countKey ? dashboardData.count[item.countKey] : 0,
