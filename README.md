@@ -19,3 +19,9 @@ Marchen 是一个基于 Next.js 构建的现代化博客平台，集成 AI 辅�
 ![](https://fastly.jsdelivr.net/gh/suemor233/static@main/img/202505120044061.png)
 
 ![](https://fastly.jsdelivr.net/gh/suemor233/static@main/img/202505120044060.png)
+
+## 博客后端
+
+- [Core](https://github.com/marchen-dev/Core)
+
+

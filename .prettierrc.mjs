@@ -1,5 +1,6 @@
-import { factory } from '@innei/prettier'
+import { defineConfig } from '@suemor/prettier-config';
 
-export default factory({
+export default defineConfig({
   importSort: false,
-})
+  tailwindcss: true,
+});

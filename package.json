@@ -20,8 +20,8 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@innei/prettier": "^0.15.0",
     "@marchen/typescript-config": "workspace:*",
+    "@suemor/prettier-config": "0.0.3",
     "@types/node": "^22.14.0",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.3",
