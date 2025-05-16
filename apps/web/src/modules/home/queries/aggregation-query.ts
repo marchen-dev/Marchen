@@ -7,5 +7,6 @@ export const fetchAggregation = cache(async () => {
   return queryClient.fetchQuery({
     queryKey: ['aggregate'],
     queryFn: () => apiClient.aggregate.get(),
+    staleTime: 1000 * 60,
   })
 })
