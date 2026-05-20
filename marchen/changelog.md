@@ -46,3 +46,4 @@
 - 2026-05-03: [fix-resolve-local-models-fallback](./archive/2026-05-03-fix-resolve-local-models-fallback/) — resolveLocalModels 在本地 manifest 缺失时 fallback 到 ensureModels 自动生成
 - 2026-05-03: [fix-update-missing-providers](./archive/2026-05-03-fix-update-missing-providers/) — update 在 providers 缺失时 fallback 到默认值，修复老项目升级不生成 skill 的问题
 - 2026-05-05: [add-spec-template](./archive/2026-05-05-add-spec-template/) — 为 specs artifact 添加 markdown template 骨架并增强 instruction 规范
+- 2026-05-20: [enhance-review-with-ui-check](./archive/2026-05-20-enhance-review-with-ui-check/) — review skill 新增 chrome-devtools MCP UI 验证模式，用户三选一切换代码/UI/双 review，sub-agent 乐观执行场景并阻塞即停
