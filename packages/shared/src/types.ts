@@ -266,4 +266,9 @@ export interface WorkspaceConfig {
   readonly search?: {
     readonly enabled: boolean
   }
+  /** 模型下载配置 */
+  readonly models?: {
+    /** HuggingFace 端点，覆盖默认的 hf-mirror.com */
+    readonly endpoint?: string
+  }
 }

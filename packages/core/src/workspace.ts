@@ -22,7 +22,7 @@ import {
   writeFile,
   writeYaml,
 } from '@marchen-spec/fs'
-import { CONFIG_FILE_NAME } from '@marchen-spec/shared'
+import { CONFIG_FILE_NAME, DEFAULT_HF_ENDPOINT } from '@marchen-spec/shared'
 
 /** 初始化选项 */
 export interface InitializeOptions {
@@ -133,6 +133,7 @@ export class Workspace {
       configData.version = options.version
     }
     configData.search = { enabled: options?.searchEnabled ?? false }
+    configData.models = { endpoint: DEFAULT_HF_ENDPOINT }
     await writeYaml(configPath, configData)
 
     // 创建 .gitkeep 占位文件
@@ -227,6 +228,13 @@ export class Workspace {
     }
     if (!config.search) {
       config.search = { enabled: false }
+    }
+    // 补全 models.endpoint 默认值（老 config 不覆盖已有值）
+    const rawModels = config.models as Record<string, unknown> | undefined
+    if (!rawModels) {
+      config.models = { endpoint: DEFAULT_HF_ENDPOINT }
+    } else if (rawModels.endpoint == null) {
+      config.models = { ...rawModels, endpoint: DEFAULT_HF_ENDPOINT }
     }
     await writeYaml(configPath, config)
 

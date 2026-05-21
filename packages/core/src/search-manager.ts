@@ -1,8 +1,14 @@
 import type { HybridQueryResult, QMDStore } from '@tobilu/qmd'
+import type {
+  ModelDownloadProgress,
+  ModelDownloadStage,
+  QmdModelKind,
+} from './qmd-models.js'
 import type { Workspace } from './workspace.js'
 import { mkdir } from 'node:fs/promises'
 import { dirname } from 'node:path'
-import { StateError } from '@marchen-spec/shared'
+import { DEFAULT_HF_ENDPOINT } from '@marchen-spec/shared'
+import { QMD_MODEL_CACHE_DIR, QMD_MODEL_URIS } from './qmd-models.js'
 
 /** 搜索结果项 */
 export interface SearchResult {
@@ -19,10 +25,15 @@ export interface SearchOptions {
   readonly minScore?: number
 }
 
+/** ensureModels 选项 */
+export interface EnsureModelsOptions {
+  readonly onProgress?: (progress: ModelDownloadProgress) => void
+}
+
 /**
  * 搜索管理器
  *
- * 封装 qmd SDK，提供 Hybrid Search 和索引管理接口。
+ * 封装 qmd SDK，提供 Hybrid Search、模型下载和索引管理接口。
  * 调用方在 search.enabled: true 时才应使用此类。
  */
 export class SearchManager {
@@ -45,24 +56,58 @@ export class SearchManager {
   }
 
   /**
+   * 下载三个 QMD 模型到 qmd 默认缓存目录。
+   *
+   * 通过 node-llama-cpp 的 `resolveModelFile` 完成下载，下载源由
+   * `HF_ENDPOINT` 环境变量决定，缓存目录强制对齐 qmd 默认值
+   * （见 qmd-models.ts 的 QMD_MODEL_CACHE_DIR 注释）。
+   *
+   * 进度通过 onProgress 回调上报，封装为现有 ModelDownloadProgress 格式。
+   */
+  async ensureModels(options?: EnsureModelsOptions): Promise<void> {
+    await this.applyHfEndpoint()
+
+    const { resolveModelFile } = await import('node-llama-cpp')
+
+    const kinds: QmdModelKind[] = ['embed', 'generate', 'rerank']
+    for (const model of kinds) {
+      const uri = QMD_MODEL_URIS[model]
+      const file = uri.split('/').pop() ?? uri
+      const emit = (
+        stage: ModelDownloadStage,
+        downloadedBytes?: number,
+        totalBytes?: number | null,
+      ): void => {
+        options?.onProgress?.({
+          model,
+          file,
+          stage,
+          downloadedBytes,
+          totalBytes,
+        })
+      }
+
+      emit('checking')
+      await resolveModelFile(uri, {
+        directory: QMD_MODEL_CACHE_DIR,
+        cli: false,
+        onProgress: ({ totalSize, downloadedSize }) => {
+          emit('downloading', downloadedSize, totalSize)
+        },
+      })
+      emit('ready')
+    }
+  }
+
+  /**
    * 准备搜索引擎。
    *
-   * 从本地缓存的 manifest 解析模型路径并初始化 store。
-   * 模型未安装时抛出 StateError。幂等，重复调用立即返回。
+   * 设置 HF_ENDPOINT 环境变量并初始化 qmd store，不再下载模型。
+   * 幂等，重复调用立即返回。
    */
   async prepare(): Promise<void> {
     if (this.prepared) return
-
-    const { ModelManager } = await import('./model-manager.js')
-    const modelManager = new ModelManager()
-
-    try {
-      const paths = await modelManager.resolveLocalModels()
-      modelManager.applyEnv(paths)
-    } catch {
-      throw new StateError('搜索模型未安装', '请运行 marchen update 下载模型')
-    }
-
+    await this.applyHfEndpoint()
     await this.initStore()
     this.prepared = true
   }
@@ -158,5 +203,27 @@ export class SearchManager {
       '/',
       'MarchenSpec 变更历史归档，包含 proposal（动机）、design（设计决策）、specs（规格）、tasks（任务清单）',
     )
+  }
+
+  /**
+   * 解析并应用 HF 端点到 process.env.HF_ENDPOINT。
+   *
+   * 优先级：已设置的 env > config.models.endpoint > DEFAULT_HF_ENDPOINT。
+   * 不覆盖已存在的 env 值，保证用户能临时覆盖配置。
+   */
+  private async applyHfEndpoint(): Promise<void> {
+    if (process.env.HF_ENDPOINT) return
+    const endpoint = await this.resolveHfEndpoint()
+    process.env.HF_ENDPOINT = endpoint
+  }
+
+  /** 从 workspace config 读取 endpoint，缺失时返回默认值 */
+  private async resolveHfEndpoint(): Promise<string> {
+    try {
+      const config = await this.workspace.readConfig()
+      return config.models?.endpoint ?? DEFAULT_HF_ENDPOINT
+    } catch {
+      return DEFAULT_HF_ENDPOINT
+    }
   }
 }

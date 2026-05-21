@@ -27,6 +27,7 @@
     "@marchen-spec/config": "workspace:*",
     "@marchen-spec/fs": "workspace:*",
     "@marchen-spec/shared": "workspace:*",
-    "@tobilu/qmd": "^2.1.0"
+    "@tobilu/qmd": "^2.1.0",
+    "node-llama-cpp": "^3.18.1"
   }
 }

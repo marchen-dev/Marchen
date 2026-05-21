@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
-import { ModelManager } from '@marchen-spec/core'
+import { SearchManager } from '@marchen-spec/core'
 import { StateError } from '@marchen-spec/shared'
 import { createContext } from '../utils/context.js'
 import { handleError } from '../utils/error.js'
@@ -51,21 +51,19 @@ export function registerUpdateCommand(program: Command): void {
         const searchEnabled = config.search?.enabled ?? false
 
         if (searchEnabled) {
-          const modelManager = new ModelManager()
-          const hasModels = await modelManager.hasLocalModels()
-
-          if (hasModels) {
-            p.log.info('Hybrid Search 已就绪')
-          } else {
-            const spinner = p.spinner()
-            spinner.start('下载搜索模型...')
-            await modelManager.ensureModels({
-              onProgress: (prog) => {
-                spinner.message(formatModelProgress(prog))
-              },
-            })
-            spinner.stop('Hybrid Search 已启用')
-          }
+          const searchManager = new SearchManager(workspace)
+          let downloaded = false
+          const spinner = p.spinner()
+          spinner.start('检查搜索模型...')
+          await searchManager.ensureModels({
+            onProgress: (prog) => {
+              if (prog.stage === 'downloading') downloaded = true
+              spinner.message(formatModelProgress(prog))
+            },
+          })
+          spinner.stop(
+            downloaded ? 'Hybrid Search 已启用' : 'Hybrid Search 已就绪',
+          )
         }
 
         p.outro('更新完成！')

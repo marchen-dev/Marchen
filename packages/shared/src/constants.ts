@@ -12,3 +12,6 @@ export const METADATA_FILE_NAME = '.metadata.yaml'
 
 /** 工作区配置文件名 */
 export const CONFIG_FILE_NAME = 'config.yaml'
+
+/** HuggingFace 下载源默认值（国内镜像） */
+export const DEFAULT_HF_ENDPOINT = 'https://hf-mirror.com'

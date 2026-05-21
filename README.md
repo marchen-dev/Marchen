@@ -94,6 +94,11 @@ marchen search "认证" --rebuild        # 重建索引后搜索
 
 首次初始化时可选择启用搜索，启用后会下载所需模型（约 2GB）。未启用搜索时，AI skill 会自动回退到读取 changelog.md 获取历史上下文。
 
+模型默认从国内镜像 `https://hf-mirror.com` 下载，缓存于 `~/.cache/qmd/models/`。需要切换下载源时有两种方式：
+
+- 临时切换：`HF_ENDPOINT=https://huggingface.co marchen update`
+- 持久化：编辑 `marchen/config.yaml`，修改 `models.endpoint` 字段
+
 explore 和 apply skill 也会利用搜索能力，在工作流中自动检索相关历史作为上下文。
 
 ## 更新

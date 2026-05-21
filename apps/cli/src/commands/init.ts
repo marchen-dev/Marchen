@@ -1,7 +1,7 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
 import { AGENT_PROVIDERS } from '@marchen-spec/config'
-import { ModelManager } from '@marchen-spec/core'
+import { SearchManager } from '@marchen-spec/core'
 import { createContext } from '../utils/context.js'
 import { formatModelProgress } from '../utils/model-progress.js'
 
@@ -82,10 +82,10 @@ export function registerInitCommand(program: Command): void {
 
       // 启用搜索时下载模型
       if (searchEnabled) {
-        const modelManager = new ModelManager()
+        const searchManager = new SearchManager(workspace)
         const spinner = p.spinner()
         spinner.start('下载搜索模型...')
-        await modelManager.ensureModels({
+        await searchManager.ensureModels({
           onProgress: (prog) => {
             spinner.message(formatModelProgress(prog))
           },

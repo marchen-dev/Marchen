@@ -48,3 +48,4 @@
 - 2026-05-05: [add-spec-template](./archive/2026-05-05-add-spec-template/) — 为 specs artifact 添加 markdown template 骨架并增强 instruction 规范
 - 2026-05-20: [enhance-review-with-ui-check](./archive/2026-05-20-enhance-review-with-ui-check/) — review skill 新增 chrome-devtools MCP UI 验证模式，用户三选一切换代码/UI/双 review，sub-agent 乐观执行场景并阻塞即停
 - 2026-05-21: [add-propose-preview-skill](./archive/2026-05-21-add-propose-preview-skill/) — 新增 propose-preview skill 把 propose 产物压成终端卡片，并修复 codegen 含连字符 key 缺引号 bug
+- 2026-05-21: [delegate-model-download-to-qmd](./archive/2026-05-21-delegate-model-download-to-qmd/) — 委托 qmd 生态下载 GGUF 模型，默认 hf-mirror 镜像，删除 ModelManager 和自建 CDN 链路（老模型 ~/.marchen/models/qmd/ 可手动删除）
