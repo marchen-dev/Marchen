@@ -32,6 +32,11 @@ function toKey(fileName: string): string {
   return basename(fileName, '.md')
 }
 
+/** 对象 key 不是合法 JS 标识符时需要加引号 */
+function quoteIfNeeded(key: string): string {
+  return /^[a-z_$][\w$]*$/i.test(key) ? key : `'${key}'`
+}
+
 /** 文件名转 skill 目录名（propose.md → marchen-propose） */
 function toSkillDirName(fileName: string): string {
   return `marchen-${basename(fileName, '.md')}`
@@ -82,7 +87,7 @@ skillLines.push(
   'export const SKILL_TEMPLATES: Record<string, SkillTemplate> = {',
 )
 for (const { fileName } of skills) {
-  const key = toKey(fileName)
+  const key = quoteIfNeeded(toKey(fileName))
   const constName = `SKILL_${toConstName(fileName)}`
   const dirName = toSkillDirName(fileName)
   skillLines.push(`  ${key}: { dirName: '${dirName}', content: ${constName} },`)
@@ -118,7 +123,7 @@ cmdLines.push(
   'export const COMMAND_TEMPLATES: Record<string, CommandTemplate> = {',
 )
 for (const { fileName } of commands) {
-  const key = toKey(fileName)
+  const key = quoteIfNeeded(toKey(fileName))
   const constName = `COMMAND_${toConstName(fileName)}`
   cmdLines.push(`  ${key}: { fileName: '${fileName}', content: ${constName} },`)
 }
