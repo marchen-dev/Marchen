@@ -42,7 +42,7 @@ marchen:archive                       # 完成后归档留痕
 
 | 支柱 | 角色 | 核心能力 |
 |---|---|---|
-| **工作流工装** | 让 AI 的每一步都有结构 | explore / propose / lite / apply / review / archive |
+| **工作流工装** | 让 AI 的每一步都有结构 | explore / propose / preview / lite / apply / review / archive |
 | **长期记忆** | 让 AI 跨会话不失忆 | archive 自动留痕 · changelog 索引 · search 语义检索 |
 
 两根支柱协同工作：工作流工装产出结构化 artifact，归档后进入长期记忆；下次启动新变更时，explore / apply 等 skill 自动从记忆中检索相关历史作为上下文。
@@ -53,6 +53,7 @@ marchen:archive                       # 完成后归档留痕
 
 - **`marchen:explore`** — 探索模式。在动手前理清想法、调查问题、比较方案。不写代码，只思考。
 - **`marchen:propose`** — 提出新变更。引导 AI 产出一套结构化文档：动机（proposal）、需求规格（specs）、技术方案（design）、任务清单（tasks）。适合复杂功能、架构变更。
+- **`marchen:propose-preview`** — 把 propose 产出的 4~7 个 artifact 浓缩成一张终端卡片，便于人快速 review，决定下一步是 apply 还是回头改 propose。
 - **`marchen:lite`** — 轻量一气呵成。创建 lite 变更 → 实现任务 → 询问归档，全程一条命令。适合 bug 修复、小改动、快速迭代。
 - **`marchen:apply`** — 按生成的任务清单逐个实现，完成后勾选 checkbox。
 - **`marchen:review`** — 对照变更意图检查代码实现的完整性和一致性，支持基于 chrome-devtools MCP 的 UI 场景验证。

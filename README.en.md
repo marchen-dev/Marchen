@@ -42,7 +42,7 @@ marchen:archive                           # Archive when done
 
 | Pillar | Role | Core capabilities |
 |---|---|---|
-| **Workflow harness** | Give every AI step structure | explore / propose / lite / apply / review / archive |
+| **Workflow harness** | Give every AI step structure | explore / propose / preview / lite / apply / review / archive |
 | **Long-term memory** | Survive cross-session amnesia | archive auto-trail · changelog index · search retrieval |
 
 The two pillars work together: the workflow harness produces structured artifacts, archiving moves them into long-term memory, and on the next change skills like explore / apply automatically pull relevant history back in as context.
@@ -53,6 +53,7 @@ Each skill addresses one step in the workflow. After `marchen init`, invoke them
 
 - **`marchen:explore`** — Exploration mode. Clarify ideas, investigate problems, compare approaches before writing any code. Thinks, doesn't implement.
 - **`marchen:propose`** — Propose a new change. Guides AI to produce a structured document set: motivation (proposal), requirements (specs), technical approach (design), task list (tasks). For complex features and architecture changes.
+- **`marchen:propose-preview`** — Condense the 4–7 artifacts produced by propose into a single terminal card, so a human can review quickly and decide whether to apply or go back and revise the proposal.
 - **`marchen:lite`** — Lightweight end-to-end. Create a lite change → implement tasks → ask to archive, all in one command. For bug fixes, small changes, quick iterations.
 - **`marchen:apply`** — Implement the generated task list one by one, checking off each as you go.
 - **`marchen:review`** — Check that the implementation matches the change's intent for completeness and consistency, with chrome-devtools MCP support for UI scenarios.
