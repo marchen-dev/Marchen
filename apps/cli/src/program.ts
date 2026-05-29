@@ -22,7 +22,7 @@ export function buildCliProgram(): Command {
 
   program
     .name('marchen')
-    .description('Spec-driven development CLI')
+    .description('Workflow harness for AI coding agents')
     .version(version, '-v, --version')
 
   registerArchiveCommand(program)

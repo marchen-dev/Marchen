@@ -2,7 +2,7 @@
   "name": "marchen",
   "version": "0.8.0",
   "private": true,
-  "description": "Spec-driven workflow CLI for AI coding agents",
+  "description": "A harness for AI coding agents — structured workflows and long-term memory",
   "type": "module",
   "packageManager": "pnpm@10.17.1",
   "engines": {

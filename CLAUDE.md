@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Marchen 是一个规范驱动工作流 CLI 工具（受 OpenSpec 启发），使用 pnpm + Turborepo 构建的 monorepo。
+Marchen 是一个 AI 编码工作流工装（harness engineering）CLI 工具（受 OpenSpec 启发），使用 pnpm + Turborepo 构建的 monorepo。
 
 **CLI 命令**: `marchen`（已实现 init, new, list, archive, status, instructions, update, search 命令）
 

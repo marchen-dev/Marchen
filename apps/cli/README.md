@@ -1,6 +1,6 @@
 # marchen
 
-规范驱动开发 CLI — 让 AI 先想清楚再写代码。
+AI 编码工作流工装 — 给编码代理一层工程化外壳。
 
 完整文档请查看 [GitHub](https://github.com/marchen-dev/Marchen)。
 
