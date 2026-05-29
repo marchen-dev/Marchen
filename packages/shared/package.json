@@ -1,8 +1,8 @@
 {
-  "name": "@marchen-spec/shared",
+  "name": "@marchen/shared",
   "version": "0.8.0",
   "private": true,
-  "description": "Shared primitives for MarchenSpec",
+  "description": "Shared primitives for Marchen",
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",

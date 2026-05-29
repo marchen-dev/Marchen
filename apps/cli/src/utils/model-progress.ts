@@ -1,4 +1,4 @@
-import type { ModelDownloadProgress } from '@marchen-spec/core'
+import type { ModelDownloadProgress } from '@marchen/core'
 
 /** 模型类型显示名称 */
 export const MODEL_LABELS: Record<string, string> = {

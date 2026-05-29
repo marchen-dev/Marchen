@@ -1,4 +1,4 @@
-# @marchen-spec/config
+# @marchen/config
 
 ## 包职责
 
@@ -7,12 +7,12 @@
 ## 依赖关系
 
 ```
-@marchen-spec/shared
+@marchen/shared
     ↑
-@marchen-spec/config
+@marchen/config
 ```
 
-只依赖 `@marchen-spec/shared`，被 `@marchen-spec/core` 依赖。
+只依赖 `@marchen/shared`，被 `@marchen/core` 依赖。
 
 ## 源码结构
 
@@ -46,9 +46,9 @@ scripts/
 
 ## 核心导出
 
-- `MarchenSpecConfig` - 配置接口 `{ specDirectory: string }`
+- `MarchenConfig` - 配置接口 `{ specDirectory: string }`
 - `defaultConfig` - 默认配置 `{ specDirectory: 'marchen' }`
-- `defineMarchenSpecConfig(partial?)` - 合并用户配置与默认值
+- `defineMarchenConfig(partial?)` - 合并用户配置与默认值
 - `SCHEMAS` - 内置 schema 映射（full, lite）
 - `DEFAULT_SCHEMA_NAME` - 默认 schema 名称 `'full'`
 - `getSchema(name)` - 按名称查找 schema，不存在时抛 ValidationError

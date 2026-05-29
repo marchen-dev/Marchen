@@ -30,7 +30,7 @@ export function registerArchiveCommand(program: Command): void {
             return
           }
 
-          p.intro('MarchenSpec CLI')
+          p.intro('Marchen CLI')
           p.log.success(`变更 "${name}" 归档成功`)
           p.outro(`运行 marchen list 查看剩余变更`)
         } catch (error) {

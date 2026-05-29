@@ -12,4 +12,4 @@ export type {
 export { SearchManager } from './search-manager.js'
 export type { InitializeOptions, UpdateOptions } from './workspace.js'
 export { Workspace } from './workspace.js'
-export type { WorkspaceConfig } from '@marchen-spec/shared'
+export type { WorkspaceConfig } from '@marchen/shared'

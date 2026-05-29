@@ -7,7 +7,7 @@ describe('buildCliProgram', () => {
     const initCommand = program.commands.find((cmd) => cmd.name() === 'init')
 
     expect(initCommand).toBeDefined()
-    expect(initCommand?.description()).toBe('初始化 MarchenSpec 目录结构')
+    expect(initCommand?.description()).toBe('初始化 Marchen 目录结构')
   })
 
   it('registers the new command', () => {

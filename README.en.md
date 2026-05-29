@@ -1,10 +1,10 @@
 [中文](./README.md)
 
-# MarchenSpec
+# Marchen
 
 Workflow harness for AI coding agents — an engineering shell for your agent.
 
-[![npm version](https://img.shields.io/npm/v/marchen-spec)](https://www.npmjs.com/package/marchen-spec)
+[![npm version](https://img.shields.io/npm/v/marchen)](https://www.npmjs.com/package/marchen)
 
 ## Why
 
@@ -14,7 +14,7 @@ AI coding tools (Claude Code, Codex, Cursor, etc.) have largely solved "how AI w
 
 Without this layer, AI tends to jump straight into implementation, loses context the moment a session ends, and leaves no trace of past decisions. This gap is called **harness engineering** — building an engineering shell around AI coding agents.
 
-That's what MarchenSpec does, organized as two pillars:
+That's what Marchen does, organized as two pillars:
 
 - **Workflow harness**: every step from idea to implementation has a matching skill — explore, propose, apply, review, archive
 - **Long-term memory**: every change is automatically archived and made semantically searchable, so AI can pull relevant context into the next session
@@ -22,7 +22,7 @@ That's what MarchenSpec does, organized as two pillars:
 ## Quick Start
 
 ```bash
-npm install -g marchen-spec
+npm install -g marchen
 
 # Initialize in your project root, pick your AI coding tools
 marchen init
@@ -131,10 +131,10 @@ Archiving a change automatically appends an entry to `changelog.md`, providing a
 
 ## Updating
 
-After upgrading marchen-spec, run update to sync skill files:
+After upgrading marchen, run update to sync skill files:
 
 ```bash
-npm install -g marchen-spec@latest
+npm install -g marchen@latest
 marchen update
 ```
 

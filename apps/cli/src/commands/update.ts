@@ -1,7 +1,7 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
-import { SearchManager } from '@marchen-spec/core'
-import { StateError } from '@marchen-spec/shared'
+import { SearchManager } from '@marchen/core'
+import { StateError } from '@marchen/shared'
 import { createContext } from '../utils/context.js'
 import { handleError } from '../utils/error.js'
 import { formatModelProgress } from '../utils/model-progress.js'
@@ -18,17 +18,14 @@ export function registerUpdateCommand(program: Command): void {
     .command('update')
     .description('更新 skill/command 文件到最新版本')
     .action(async () => {
-      p.intro('MarchenSpec CLI')
+      p.intro('Marchen CLI')
 
       try {
         const { workspace } = createContext()
         const version = program.version() as string
 
         if (!(await workspace.isInitialized())) {
-          throw new StateError(
-            'MarchenSpec 尚未初始化',
-            '请先运行 marchen init',
-          )
+          throw new StateError('Marchen 尚未初始化', '请先运行 marchen init')
         }
 
         const result = await workspace.update({ version })

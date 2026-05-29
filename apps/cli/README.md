@@ -1,16 +1,16 @@
-# marchen-spec
+# marchen
 
 规范驱动开发 CLI — 让 AI 先想清楚再写代码。
 
-完整文档请查看 [GitHub](https://github.com/marchen-dev/MarchenSpec)。
+完整文档请查看 [GitHub](https://github.com/marchen-dev/Marchen)。
 
 ## 安装
 
 ```bash
-npx marchen-spec init
+npx marchen init
 
 # 或全局安装
-npm i -g marchen-spec
+npm i -g marchen
 marchen init
 ```
 

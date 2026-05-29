@@ -8,7 +8,7 @@ export {
 } from './constants.js'
 export {
   FileSystemError,
-  MarchenSpecError,
+  MarchenError,
   StateError,
   ValidationError,
 } from './errors.js'

@@ -4,7 +4,7 @@ import {
   ARCHIVE_DIRECTORY_NAME,
   CHANGE_DIRECTORY_NAME,
   SPEC_DIRECTORY_NAME,
-} from '@marchen-spec/shared'
+} from '@marchen/shared'
 
 // ============================================================
 // 路径解析

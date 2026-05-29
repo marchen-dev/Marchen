@@ -1,4 +1,4 @@
-import type { AgentProvider } from '@marchen-spec/shared'
+import type { AgentProvider } from '@marchen/shared'
 
 export const AGENT_PROVIDERS: Record<string, AgentProvider> = {
   antigravity: {

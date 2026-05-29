@@ -1,6 +1,6 @@
 import { promises as nodeFs } from 'node:fs'
 import { dirname } from 'node:path'
-import { FileSystemError } from '@marchen-spec/shared'
+import { FileSystemError } from '@marchen/shared'
 import { ensureDir } from './directory.js'
 
 // ============================================================

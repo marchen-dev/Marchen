@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
-import { SearchManager, Workspace } from '@marchen-spec/core'
+import { SearchManager, Workspace } from '@marchen/core'
 import pc from 'picocolors'
 import { handleError } from '../utils/error.js'
 

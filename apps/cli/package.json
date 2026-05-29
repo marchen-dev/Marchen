@@ -1,5 +1,5 @@
 {
-  "name": "marchen-spec",
+  "name": "marchen",
   "version": "0.8.0",
   "description": "Spec-driven workflow CLI for AI coding agents",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
-    "@marchen-spec/core": "workspace:*",
-    "@marchen-spec/shared": "workspace:*"
+    "@marchen/core": "workspace:*",
+    "@marchen/shared": "workspace:*"
   }
 }

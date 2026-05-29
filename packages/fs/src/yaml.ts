@@ -1,4 +1,4 @@
-import { FileSystemError } from '@marchen-spec/shared'
+import { FileSystemError } from '@marchen/shared'
 import yaml from 'js-yaml'
 import { readFile, writeFile } from './file.js'
 

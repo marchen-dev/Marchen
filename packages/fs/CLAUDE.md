@@ -1,4 +1,4 @@
-# @marchen-spec/fs
+# @marchen/fs
 
 ## 包职责
 
@@ -7,12 +7,12 @@
 ## 依赖关系
 
 ```
-@marchen-spec/shared
+@marchen/shared
     ↑
-@marchen-spec/fs
+@marchen/fs
 ```
 
-只依赖 `@marchen-spec/shared`（+ 外部依赖 `js-yaml`），被 `@marchen-spec/core` 依赖。
+只依赖 `@marchen/shared`（+ 外部依赖 `js-yaml`），被 `@marchen/core` 依赖。
 
 ## 源码结构
 
@@ -70,4 +70,4 @@ pnpm typecheck  # 类型检查
 
 1. **统一入口**: 其他包不应直接使用 Node.js fs 模块，必须通过此包
 2. **异步优先**: 所有操作使用 async API
-3. **错误封装**: 文件系统错误转换为 `MarchenSpecError`
+3. **错误封装**: 文件系统错误转换为 `MarchenError`

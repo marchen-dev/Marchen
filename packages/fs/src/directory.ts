@@ -1,5 +1,5 @@
 import { promises as nodeFs } from 'node:fs'
-import { FileSystemError } from '@marchen-spec/shared'
+import { FileSystemError } from '@marchen/shared'
 
 // ============================================================
 // 目录操作
@@ -35,7 +35,7 @@ export async function exists(path: string): Promise<boolean> {
  *
  * @param src - 源目录路径
  * @param dest - 目标目录路径
- * @throws {MarchenSpecError} 源目录不存在时抛出
+ * @throws {MarchenError} 源目录不存在时抛出
  */
 export async function moveDir(src: string, dest: string): Promise<void> {
   try {

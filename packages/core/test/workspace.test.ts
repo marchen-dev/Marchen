@@ -1,10 +1,10 @@
-import * as fs from '@marchen-spec/fs'
+import * as fs from '@marchen/fs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Workspace } from '../src/index.js'
 
 // Mock fs 层，避免真实文件操作
-vi.mock('@marchen-spec/fs', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@marchen-spec/fs')>()
+vi.mock('@marchen/fs', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@marchen/fs')>()
   return {
     ...actual,
     ensureDir: vi.fn().mockResolvedValue(undefined),
@@ -30,7 +30,7 @@ describe('workspace', () => {
   it('提供包边界信息', () => {
     const workspace = new Workspace('/test/root')
     expect(workspace.packageBoundaries).toHaveLength(4)
-    expect(workspace.packageBoundaries[0]!.name).toBe('@marchen-spec/shared')
+    expect(workspace.packageBoundaries[0]!.name).toBe('@marchen/shared')
   })
 
   describe('isInitialized', () => {

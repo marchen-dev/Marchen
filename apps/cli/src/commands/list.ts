@@ -40,7 +40,7 @@ export function registerListCommand(program: Command): void {
           return
         }
 
-        p.intro('MarchenSpec CLI')
+        p.intro('Marchen CLI')
 
         if (changes.length === 0) {
           p.log.info('暂无 open 状态的变更')

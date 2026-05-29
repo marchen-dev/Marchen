@@ -1,4 +1,4 @@
-# @marchen-spec/cli
+# @marchen/cli
 
 ## 包职责
 
@@ -7,10 +7,10 @@ CLI 应用层，负责命令行界面、用户交互和参数解析。使用 `co
 ## 依赖关系
 
 ```
-@marchen-spec/core
+@marchen/core
     ↑
-marchen-spec CLI ──→ @marchen-spec/shared（错误类型）
-                 ──→ @marchen-spec/config（AgentProvider 注册表）
+marchen CLI ──→ @marchen/shared（错误类型）
+                 ──→ @marchen/config（AgentProvider 注册表）
 ```
 
 依赖 `core`（业务逻辑）、`shared`（错误类型）和 `config`（provider 列表），是依赖图的最上层。
@@ -127,5 +127,5 @@ pnpm typecheck  # 类型检查
 ## 注意事项
 
 1. **薄 CLI 层**: 只负责用户交互，业务逻辑通过 core 包的 Class 实例调用
-2. **错误处理**: 捕获 `MarchenSpecError`，转换为用户友好的消息
+2. **错误处理**: 捕获 `MarchenError`，转换为用户友好的消息
 3. **createContext()**: 使用 `utils/context.ts` 统一创建 `Workspace` + `ChangeManager` 实例

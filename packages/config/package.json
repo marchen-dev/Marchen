@@ -1,8 +1,8 @@
 {
-  "name": "@marchen-spec/config",
+  "name": "@marchen/config",
   "version": "0.8.0",
   "private": true,
-  "description": "Configuration utilities for MarchenSpec",
+  "description": "Configuration utilities for Marchen",
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -25,6 +25,6 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@marchen-spec/shared": "workspace:*"
+    "@marchen/shared": "workspace:*"
   }
 }

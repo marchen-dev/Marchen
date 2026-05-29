@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-MarchenSpec 是一个规范驱动工作流 CLI 工具（受 OpenSpec 启发），使用 pnpm + Turborepo 构建的 monorepo。
+Marchen 是一个规范驱动工作流 CLI 工具（受 OpenSpec 启发），使用 pnpm + Turborepo 构建的 monorepo。
 
 **CLI 命令**: `marchen`（已实现 init, new, list, archive, status, instructions, update, search 命令）
 
@@ -9,15 +9,15 @@ MarchenSpec 是一个规范驱动工作流 CLI 工具（受 OpenSpec 启发）�
 ## 架构
 
 ```
-@marchen-spec/shared (基础层，无依赖)
+@marchen/shared (基础层，无依赖)
     ↑
-    ├── @marchen-spec/config (依赖: shared)
+    ├── @marchen/config (依赖: shared)
     │       ↑
-    │       └── @marchen-spec/core (依赖: shared, config, fs) ←─┐
+    │       └── @marchen/core (依赖: shared, config, fs) ←─┐
     │                                                             │
-    └── @marchen-spec/fs (依赖: shared) ─────────────────────────┤
+    └── @marchen/fs (依赖: shared) ─────────────────────────┤
                                                                   │
-marchen-spec CLI (依赖: core, shared, config) ───────────────────┘
+marchen CLI (依赖: core, shared, config) ───────────────────┘
 ```
 
 - **apps/cli**: 命令注册、参数解析、终端 UI（commander + @clack/prompts）

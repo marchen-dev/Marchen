@@ -1,4 +1,4 @@
-import type { ArtifactContentStatus } from '@marchen-spec/shared'
+import type { ArtifactContentStatus } from '@marchen/shared'
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
 import pc from 'picocolors'
@@ -67,7 +67,7 @@ export function registerStatusCommand(program: Command): void {
 
         // ── 以下为人类友好的终端 UI 输出 ──
 
-        p.intro('MarchenSpec CLI')
+        p.intro('Marchen CLI')
 
         // 展示变更基本信息（名称加粗 + schema 灰色，一行展示）
         p.log.info(`${pc.bold(result.name)} · ${pc.dim(result.schema)}`)

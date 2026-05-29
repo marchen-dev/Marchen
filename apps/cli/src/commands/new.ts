@@ -1,6 +1,6 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
-import { SCHEMAS } from '@marchen-spec/config'
+import { SCHEMAS } from '@marchen/config'
 import { createContext } from '../utils/context.js'
 import { handleError } from '../utils/error.js'
 
@@ -18,7 +18,7 @@ export function registerNewCommand(program: Command): void {
     .argument('<name>', '变更名称（kebab-case，如 add-dark-mode）')
     .option('--schema <name>', '工作流 schema', 'full')
     .action(async (name: string, options: { schema: string }) => {
-      p.intro('MarchenSpec CLI')
+      p.intro('Marchen CLI')
 
       // 校验 schema 名称
       if (!SCHEMAS[options.schema]) {

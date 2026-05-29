@@ -1,5 +1,5 @@
 {
-  "name": "marchenspec",
+  "name": "marchen",
   "version": "0.8.0",
   "private": true,
   "description": "Spec-driven workflow CLI for AI coding agents",
@@ -14,7 +14,7 @@
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write .",
-    "generate": "pnpm --filter @marchen-spec/config generate",
+    "generate": "pnpm --filter @marchen/config generate",
     "format:check": "prettier --check .",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",

@@ -7,7 +7,7 @@ import type {
 import type { Workspace } from './workspace.js'
 import { mkdir } from 'node:fs/promises'
 import { dirname } from 'node:path'
-import { DEFAULT_HF_ENDPOINT } from '@marchen-spec/shared'
+import { DEFAULT_HF_ENDPOINT } from '@marchen/shared'
 import { QMD_MODEL_CACHE_DIR, QMD_MODEL_URIS } from './qmd-models.js'
 
 /** 搜索结果项 */
@@ -201,7 +201,7 @@ export class SearchManager {
     await this.store.addContext(
       'archive',
       '/',
-      'MarchenSpec 变更历史归档，包含 proposal（动机）、design（设计决策）、specs（规格）、tasks（任务清单）',
+      'Marchen 变更历史归档，包含 proposal（动机）、design（设计决策）、specs（规格）、tasks（任务清单）',
     )
   }
 

@@ -1,4 +1,4 @@
-# @marchen-spec/shared
+# @marchen/shared
 
 ## 包职责
 
@@ -23,7 +23,7 @@ src/
 - `METADATA_FILE_NAME = '.metadata.yaml'` - 元数据文件名
 
 **错误** (`errors.ts`):
-- `MarchenSpecError` - 统一错误基类，CLI 层可用 `instanceof` 兜底捕获
+- `MarchenError` - 统一错误基类，CLI 层可用 `instanceof` 兜底捕获
 - `ValidationError` - 用户输入校验错误（名称不合法、变更已存在等）
 - `StateError` - 状态前置条件错误（附带 `hint?` 操作建议）
 - `FileSystemError` - 文件系统操作错误（附带 `path` 和 `cause?`）

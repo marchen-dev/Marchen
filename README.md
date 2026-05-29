@@ -1,10 +1,10 @@
 [English](./README.en.md)
 
-# MarchenSpec
+# Marchen
 
 AI 编码工作流工装 — 给编码代理一层工程化外壳。
 
-[![npm version](https://img.shields.io/npm/v/marchen-spec)](https://www.npmjs.com/package/marchen-spec)
+[![npm version](https://img.shields.io/npm/v/marchen)](https://www.npmjs.com/package/marchen)
 
 ## 为什么
 
@@ -14,7 +14,7 @@ AI 编码工具（Claude Code、Codex、Cursor 等）已经把"AI 怎么写代�
 
 没有这层，AI 容易想到哪写到哪、上下文一断就失忆、过去的决策无从回顾。这层缺口被称为 **harness engineering**——给 AI 编码代理搭一层工程化外壳。
 
-MarchenSpec 就是做这件事的，由两根支柱组成：
+Marchen 就是做这件事的，由两根支柱组成：
 
 - **工作流工装**：从想法到实现的每一步都有对应的 skill——探索、提案、实现、审查、归档
 - **长期记忆**：每次变更自动留痕归档，可被语义检索，让 AI 在下一次工作时调出相关上下文
@@ -22,7 +22,7 @@ MarchenSpec 就是做这件事的，由两根支柱组成：
 ## 快速开始
 
 ```bash
-npm install -g marchen-spec
+npm install -g marchen
 
 # 在项目根目录初始化，选择要集成的 AI 编码工具
 marchen init
@@ -127,14 +127,14 @@ marchen/
 └── config.yaml       # 配置（含 providers 选择）
 ```
 
-归档变更时，MarchenSpec 自动在 `changelog.md` 中追加记录，为项目提供结构化的变更历史。
+归档变更时，Marchen 自动在 `changelog.md` 中追加记录，为项目提供结构化的变更历史。
 
 ## 更新
 
-升级 marchen-spec 后，运行 update 同步 skill 文件：
+升级 marchen 后，运行 update 同步 skill 文件：
 
 ```bash
-npm install -g marchen-spec@latest
+npm install -g marchen@latest
 marchen update
 ```
 

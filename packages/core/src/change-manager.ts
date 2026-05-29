@@ -12,14 +12,14 @@ import type {
   StatusResult,
   TaskItem,
   WorkflowStatus,
-} from '@marchen-spec/shared'
+} from '@marchen/shared'
 import type { Workspace } from './workspace.js'
 import { join } from 'node:path'
 import {
   APPLY_INSTRUCTION,
   DEFAULT_SCHEMA_NAME,
   getSchema,
-} from '@marchen-spec/config'
+} from '@marchen/config'
 import {
   appendFile,
   ensureDir,
@@ -30,12 +30,12 @@ import {
   readYaml,
   writeFile,
   writeYaml,
-} from '@marchen-spec/fs'
+} from '@marchen/fs'
 import {
   METADATA_FILE_NAME,
   StateError,
   ValidationError,
-} from '@marchen-spec/shared'
+} from '@marchen/shared'
 
 /** kebab-case 校验正则 */
 const KEBAB_CASE_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
@@ -66,11 +66,11 @@ export class ChangeManager {
    * 创建一个新的变更
    *
    * 在 marchen/changes/ 下创建变更目录，写入元数据和初始 artifact 文件。
-   * 会依次校验：MarchenSpec 是否已初始化、名称格式、是否重名。
+   * 会依次校验：Marchen 是否已初始化、名称格式、是否重名。
    *
    * @param name - 变更名称（kebab-case）
    * @param schemaName - schema 名称，默认 full
-   * @throws {MarchenSpecError} 未初始化、名称格式错误或变更已存在时抛出
+   * @throws {MarchenError} 未初始化、名称格式错误或变更已存在时抛出
    */
   async create(name: string, schemaName?: string): Promise<void> {
     // 校验初始化状态
@@ -117,7 +117,7 @@ export class ChangeManager {
   /**
    * 归档一个已完成的变更
    *
-   * 将变更目录从 marchenspec/changes/ 移动到 marchenspec/archive/，
+   * 将变更目录从 marchen/changes/ 移动到 marchen/archive/，
    * 目标目录名格式为 YYYY-MM-DD-<name>。同时更新元数据的 status 和 archivedAt，
    * 并追加一行条目到 changelog.md。
    *
@@ -230,11 +230,11 @@ export class ChangeManager {
   /**
    * 列出所有 open 状态的变更
    *
-   * 扫描 marchenspec/changes/ 目录，读取各变更的元数据，
+   * 扫描 marchen/changes/ 目录，读取各变更的元数据，
    * 返回按创建时间降序排列的列表。跳过缺失元数据的目录。
    *
    * @returns 变更元数据数组，按 createdAt 降序排列
-   * @throws {MarchenSpecError} 未初始化时抛出
+   * @throws {MarchenError} 未初始化时抛出
    */
   async list(): Promise<ChangeMetadata[]> {
     await this.ensureInitialized()
@@ -279,7 +279,7 @@ export class ChangeManager {
    *
    * @param name - 变更名称
    * @returns 状态结果
-   * @throws {MarchenSpecError} 未初始化或变更不存在时抛出
+   * @throws {MarchenError} 未初始化或变更不存在时抛出
    */
   async status(name: string): Promise<StatusResult> {
     await this.ensureInitialized()
@@ -339,7 +339,7 @@ export class ChangeManager {
    * @param name - 变更名称
    * @param artifactId - artifact 标识符
    * @returns 指令结果
-   * @throws {MarchenSpecError} 未初始化、变更不存在或 artifact 不存在时抛出
+   * @throws {MarchenError} 未初始化、变更不存在或 artifact 不存在时抛出
    */
   async getInstructions(
     name: string,
@@ -657,12 +657,12 @@ export class ChangeManager {
   }
 
   /**
-   * 确保 MarchenSpec 已初始化，否则抛出错误
+   * 确保 Marchen 已初始化，否则抛出错误
    */
   private async ensureInitialized(): Promise<void> {
     const initialized = await this.workspace.isInitialized()
     if (!initialized) {
-      throw new StateError('MarchenSpec 尚未初始化', '运行 marchen init 初始化')
+      throw new StateError('Marchen 尚未初始化', '运行 marchen init 初始化')
     }
   }
 }

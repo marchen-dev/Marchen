@@ -1,24 +1,24 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
-import { AGENT_PROVIDERS } from '@marchen-spec/config'
-import { SearchManager } from '@marchen-spec/core'
+import { AGENT_PROVIDERS } from '@marchen/config'
+import { SearchManager } from '@marchen/core'
 import { createContext } from '../utils/context.js'
 import { formatModelProgress } from '../utils/model-progress.js'
 
 /**
  * 注册 init 命令
  *
- * 初始化 MarchenSpec 目录结构，创建 marchen/ 目录及默认配置
+ * 初始化 Marchen 目录结构，创建 marchen/ 目录及默认配置
  *
  * @param program - Commander 程序实例
  */
 export function registerInitCommand(program: Command): void {
   program
     .command('init')
-    .description('初始化 MarchenSpec 目录结构')
+    .description('初始化 Marchen 目录结构')
     .option('--force', '强制覆盖已存在的目录')
     .action(async (options) => {
-      p.intro('MarchenSpec CLI')
+      p.intro('Marchen CLI')
 
       const { workspace } = createContext()
 
@@ -26,7 +26,7 @@ export function registerInitCommand(program: Command): void {
       const alreadyExists = await workspace.isInitialized()
       if (alreadyExists && !options.force) {
         const confirm = await p.confirm({
-          message: 'MarchenSpec 目录已存在，是否覆盖？',
+          message: 'Marchen 目录已存在，是否覆盖？',
         })
 
         if (p.isCancel(confirm) || !confirm) {
@@ -93,6 +93,6 @@ export function registerInitCommand(program: Command): void {
         spinner.stop('Hybrid Search 已启用')
       }
 
-      p.outro('MarchenSpec 初始化成功！')
+      p.outro('Marchen 初始化成功！')
     })
 }

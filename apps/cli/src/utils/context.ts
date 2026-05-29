@@ -1,4 +1,4 @@
-import { ChangeManager, Workspace } from '@marchen-spec/core'
+import { ChangeManager, Workspace } from '@marchen/core'
 
 /**
  * 创建 CLI 上下文，包含 workspace 和 change manager 实例

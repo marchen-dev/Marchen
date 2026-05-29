@@ -3,14 +3,14 @@ import type {
   PackageBoundary,
   UpdateResult,
   WorkspaceConfig,
-} from '@marchen-spec/shared'
+} from '@marchen/shared'
 import { join } from 'node:path'
 import {
   AGENT_PROVIDERS,
   COMMAND_TEMPLATES,
   DEFAULT_PROVIDER_IDS,
   SKILL_TEMPLATES,
-} from '@marchen-spec/config'
+} from '@marchen/config'
 import {
   ensureDir,
   exists,
@@ -21,8 +21,8 @@ import {
   resolveWorkspaceRoot,
   writeFile,
   writeYaml,
-} from '@marchen-spec/fs'
-import { CONFIG_FILE_NAME, DEFAULT_HF_ENDPOINT } from '@marchen-spec/shared'
+} from '@marchen/fs'
+import { CONFIG_FILE_NAME, DEFAULT_HF_ENDPOINT } from '@marchen/shared'
 
 /** 初始化选项 */
 export interface InitializeOptions {
@@ -50,33 +50,29 @@ export class Workspace {
   /** 工作区根目录 */
   readonly root: string
 
-  /** 规范目录路径（marchenspec/） */
+  /** 规范目录路径（marchen/） */
   readonly specDir: string
 
-  /** 变更目录路径（marchenspec/changes/） */
+  /** 变更目录路径（marchen/changes/） */
   readonly changeDir: string
 
-  /** 归档目录路径（marchenspec/archive/） */
+  /** 归档目录路径（marchen/archive/） */
   readonly archiveDir: string
 
-  /** 变更日志路径（marchenspec/changelog.md） */
+  /** 变更日志路径（marchen/changelog.md） */
   readonly changelogPath: string
 
-  /** 搜索索引数据库路径（marchenspec/.search/index.sqlite） */
+  /** 搜索索引数据库路径（marchen/.search/index.sqlite） */
   readonly searchDbPath: string
 
   /** 包边界信息 */
   readonly packageBoundaries: readonly PackageBoundary[] = [
-    { name: '@marchen-spec/shared', dependsOn: [] },
-    { name: '@marchen-spec/config', dependsOn: ['@marchen-spec/shared'] },
-    { name: '@marchen-spec/fs', dependsOn: ['@marchen-spec/shared'] },
+    { name: '@marchen/shared', dependsOn: [] },
+    { name: '@marchen/config', dependsOn: ['@marchen/shared'] },
+    { name: '@marchen/fs', dependsOn: ['@marchen/shared'] },
     {
-      name: '@marchen-spec/core',
-      dependsOn: [
-        '@marchen-spec/config',
-        '@marchen-spec/fs',
-        '@marchen-spec/shared',
-      ],
+      name: '@marchen/core',
+      dependsOn: ['@marchen/config', '@marchen/fs', '@marchen/shared'],
     },
   ]
 
@@ -93,21 +89,21 @@ export class Workspace {
   }
 
   /**
-   * 检查 MarchenSpec 是否已初始化
+   * 检查 Marchen 是否已初始化
    *
-   * @returns 如果 marchenspec 目录存在则返回 true
+   * @returns 如果 marchen 目录存在则返回 true
    */
   async isInitialized(): Promise<boolean> {
     return await exists(this.specDir)
   }
 
   /**
-   * 初始化 MarchenSpec 目录结构
+   * 初始化 Marchen 目录结构
    *
    * 创建标准目录结构和默认配置文件：
-   * - marchenspec/config.yaml
-   * - marchenspec/changes/
-   * - marchenspec/archive/
+   * - marchen/config.yaml
+   * - marchen/changes/
+   * - marchen/archive/
    *
    * @param options - 初始化选项
    */

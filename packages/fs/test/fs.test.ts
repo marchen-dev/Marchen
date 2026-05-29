@@ -63,7 +63,7 @@ describe('fs 文件系统操作', () => {
       expect(await readFile(file)).toBe('deep')
     })
 
-    it('读取不存在的文件时应该抛出 MarchenSpecError', async () => {
+    it('读取不存在的文件时应该抛出 MarchenError', async () => {
       await expect(readFile(join(testDir, 'missing.txt'))).rejects.toThrow(
         '文件不存在',
       )
@@ -87,7 +87,7 @@ describe('fs 文件系统操作', () => {
       expect(await listDir(emptyDir)).toEqual([])
     })
 
-    it('目录不存在时应该抛出 MarchenSpecError', async () => {
+    it('目录不存在时应该抛出 MarchenError', async () => {
       await expect(listDir(join(testDir, 'nope'))).rejects.toThrow('目录不存在')
     })
   })
@@ -122,7 +122,7 @@ describe('fs 文件系统操作', () => {
       expect(result).toEqual(data)
     })
 
-    it('无效 YAML 时应该抛出 MarchenSpecError', async () => {
+    it('无效 YAML 时应该抛出 MarchenError', async () => {
       const file = join(testDir, 'bad.yaml')
       await writeFile(file, '{{invalid: yaml::}')
       await expect(readYaml(file)).rejects.toThrow('YAML 解析失败')

@@ -1,4 +1,4 @@
-# @marchen-spec/core
+# @marchen/core
 
 ## 包职责
 
@@ -7,15 +7,15 @@
 ## 依赖关系
 
 ```
-@marchen-spec/shared
+@marchen/shared
     ↑
-    ├── @marchen-spec/config
+    ├── @marchen/config
     │       ↑
-    │       └── @marchen-spec/core
+    │       └── @marchen/core
     │
-    └── @marchen-spec/fs
+    └── @marchen/fs
             ↑
-            └── @marchen-spec/core
+            └── @marchen/core
 ```
 
 依赖 `shared`、`config`、`fs`，被 `cli` 依赖。
@@ -115,5 +115,5 @@ pnpm typecheck  # 类型检查
 ## 注意事项
 
 1. **纯业务逻辑**: 不包含 UI 交互代码，UI 由 CLI 层处理
-2. **可测试性**: 通过 mock `@marchen-spec/fs` 进行单元测试
+2. **可测试性**: 通过 mock `@marchen/fs` 进行单元测试
 3. **Class 架构**: 使用类封装相关操作，通过构造函数注入依赖

@@ -3,7 +3,7 @@ import { defineConfig } from 'tsdown'
 export default defineConfig({
   entry: ['./src/index.ts'],
   deps: {
-    alwaysBundle: [/^@marchen-spec\//],
+    alwaysBundle: [/^@marchen\//],
     neverBundle: ['@tobilu/qmd', 'node-llama-cpp'],
   },
   platform: 'node',

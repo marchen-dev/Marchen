@@ -66,28 +66,28 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
     devDependencies:
-      '@marchen-spec/core':
+      '@marchen/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@marchen-spec/shared':
+      '@marchen/shared':
         specifier: workspace:*
         version: link:../../packages/shared
 
   packages/config:
     dependencies:
-      '@marchen-spec/shared':
+      '@marchen/shared':
         specifier: workspace:*
         version: link:../shared
 
   packages/core:
     dependencies:
-      '@marchen-spec/config':
+      '@marchen/config':
         specifier: workspace:*
         version: link:../config
-      '@marchen-spec/fs':
+      '@marchen/fs':
         specifier: workspace:*
         version: link:../fs
-      '@marchen-spec/shared':
+      '@marchen/shared':
         specifier: workspace:*
         version: link:../shared
       '@tobilu/qmd':
@@ -99,7 +99,7 @@ importers:
 
   packages/fs:
     dependencies:
-      '@marchen-spec/shared':
+      '@marchen/shared':
         specifier: workspace:*
         version: link:../shared
       js-yaml:

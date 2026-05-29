@@ -1,11 +1,11 @@
-import * as fs from '@marchen-spec/fs'
-import { StateError, ValidationError } from '@marchen-spec/shared'
+import * as fs from '@marchen/fs'
+import { StateError, ValidationError } from '@marchen/shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ChangeManager, Workspace } from '../src/index.js'
 
 // Mock fs 层，避免真实文件操作
-vi.mock('@marchen-spec/fs', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@marchen-spec/fs')>()
+vi.mock('@marchen/fs', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@marchen/fs')>()
   return {
     ...actual,
     appendFile: vi.fn().mockResolvedValue(undefined),

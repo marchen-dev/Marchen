@@ -1,5 +1,5 @@
-import type { SchemaDefinition } from '@marchen-spec/shared'
-import { ValidationError } from '@marchen-spec/shared'
+import type { SchemaDefinition } from '@marchen/shared'
+import { ValidationError } from '@marchen/shared'
 import {
   DESIGN_TEMPLATE,
   PROPOSAL_TEMPLATE,

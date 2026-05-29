@@ -1,8 +1,8 @@
 {
-  "name": "@marchen-spec/core",
+  "name": "@marchen/core",
   "version": "0.8.0",
   "private": true,
-  "description": "Core workflow layer for MarchenSpec",
+  "description": "Core workflow layer for Marchen",
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
@@ -24,9 +24,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@marchen-spec/config": "workspace:*",
-    "@marchen-spec/fs": "workspace:*",
-    "@marchen-spec/shared": "workspace:*",
+    "@marchen/config": "workspace:*",
+    "@marchen/fs": "workspace:*",
+    "@marchen/shared": "workspace:*",
     "@tobilu/qmd": "^2.1.0",
     "node-llama-cpp": "^3.18.1"
   }

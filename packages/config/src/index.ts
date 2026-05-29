@@ -1,4 +1,4 @@
-import { SPEC_DIRECTORY_NAME } from '@marchen-spec/shared'
+import { SPEC_DIRECTORY_NAME } from '@marchen/shared'
 
 export { COMMAND_TEMPLATES } from './commands.js'
 export type { CommandTemplate } from './commands.js'
@@ -18,17 +18,17 @@ export {
   TASKS_TEMPLATE,
 } from './templates.js'
 
-export interface MarchenSpecConfig {
+export interface MarchenConfig {
   readonly specDirectory: string
 }
 
-export const defaultConfig: MarchenSpecConfig = {
+export const defaultConfig: MarchenConfig = {
   specDirectory: SPEC_DIRECTORY_NAME,
 }
 
-export function defineMarchenSpecConfig(
-  config: Partial<MarchenSpecConfig> = {},
-): MarchenSpecConfig {
+export function defineMarchenConfig(
+  config: Partial<MarchenConfig> = {},
+): MarchenConfig {
   return {
     ...defaultConfig,
     ...config,

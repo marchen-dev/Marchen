@@ -1,12 +1,12 @@
 /**
- * MarchenSpec 统一错误基类
+ * Marchen 统一错误基类
  *
- * 所有业务错误的根类，CLI 层可用 instanceof MarchenSpecError 兜底捕获
+ * 所有业务错误的根类，CLI 层可用 instanceof MarchenError 兜底捕获
  */
-export class MarchenSpecError extends Error {
+export class MarchenError extends Error {
   constructor(message: string) {
     super(message)
-    this.name = 'MarchenSpecError'
+    this.name = 'MarchenError'
   }
 }
 
@@ -15,7 +15,7 @@ export class MarchenSpecError extends Error {
  *
  * 名称不合法、变更已存在/不存在等用户操作问题
  */
-export class ValidationError extends MarchenSpecError {
+export class ValidationError extends MarchenError {
   constructor(message: string) {
     super(message)
     this.name = 'ValidationError'
@@ -27,7 +27,7 @@ export class ValidationError extends MarchenSpecError {
  *
  * 工作区未初始化等系统状态不满足的场景，可附带操作建议
  */
-export class StateError extends MarchenSpecError {
+export class StateError extends MarchenError {
   constructor(
     message: string,
     public readonly hint?: string,
@@ -42,7 +42,7 @@ export class StateError extends MarchenSpecError {
  *
  * 文件/目录不存在、YAML 解析失败等 IO 异常
  */
-export class FileSystemError extends MarchenSpecError {
+export class FileSystemError extends MarchenError {
   constructor(
     message: string,
     public readonly path: string,
