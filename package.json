@@ -4,7 +4,7 @@
   "private": true,
   "description": "A harness for AI coding agents — structured workflows and long-term memory",
   "type": "module",
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@11.7.0",
   "engines": {
     "node": ">=20.19.0"
   },

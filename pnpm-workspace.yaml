@@ -2,15 +2,14 @@ packages:
   - apps/*
   - packages/*
 
+allowBuilds:
+  better-sqlite3: true
+  esbuild: true
+  node-llama-cpp: true
+  tree-sitter-go: false
+  tree-sitter-javascript: false
+  tree-sitter-python: false
+  tree-sitter-rust: false
+  tree-sitter-typescript: false
+
 enableGlobalVirtualStore: true
-
-ignoredBuiltDependencies:
-  - tree-sitter-go
-  - tree-sitter-javascript
-  - tree-sitter-python
-  - tree-sitter-rust
-  - tree-sitter-typescript
-
-onlyBuiltDependencies:
-  - better-sqlite3
-  - node-llama-cpp

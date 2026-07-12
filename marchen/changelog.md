@@ -51,3 +51,4 @@
 - 2026-05-21: [delegate-model-download-to-qmd](./archive/2026-05-21-delegate-model-download-to-qmd/) — 委托 qmd 生态下载 GGUF 模型，默认 hf-mirror 镜像，删除 ModelManager 和自建 CDN 链路（老模型 ~/.marchen/models/qmd/ 可手动删除）
 - 2026-05-21: [reposition-readme-harness](./archive/2026-05-21-reposition-readme-harness/) — 重写中英文 README，把项目定位从 spec 规范驱动改为 AI 编码工作流工装（harness engineering），新增两根支柱叙事并提升长期记忆为核心卖点。
 - 2026-05-28: [update-readme-add-propose-preview](./archive/2026-05-28-update-readme-add-propose-preview/) — 中英文 README 补充 propose-preview skill，两根支柱表格列入 preview
+- 2026-07-12: [add-update-skill](./archive/2026-07-12-add-update-skill/) — 新增 /marchen:update skill:修订变更规划产物并双向调和保持一致,绝不改代码;联动更新 apply/lite/propose-preview 指引
