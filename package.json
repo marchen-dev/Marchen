@@ -1,6 +1,6 @@
 {
   "name": "marchen",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "private": true,
   "description": "A harness for AI coding agents — structured workflows and long-term memory",
   "type": "module",

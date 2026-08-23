@@ -1,6 +1,6 @@
 {
   "name": "@marchen/core",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "private": true,
   "description": "Core workflow layer for Marchen",
   "type": "module",
