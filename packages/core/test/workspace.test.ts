@@ -92,7 +92,7 @@ describe('workspace', () => {
       await workspace.initialize()
 
       const ensureDirCalls = vi.mocked(fs.ensureDir).mock.calls.map(([p]) => p)
-      expect(ensureDirCalls.some((p) => p.includes('.codex'))).toBe(false)
+      expect(ensureDirCalls.some((p) => p.includes('.agents'))).toBe(false)
     })
 
     it('config.yaml 包含 providers 字段', async () => {
@@ -113,7 +113,7 @@ describe('workspace', () => {
         expect.stringContaining('.claude/skills/marchen-propose'),
       )
       expect(fs.ensureDir).toHaveBeenCalledWith(
-        expect.stringContaining('.codex/skills/marchen-propose'),
+        expect.stringContaining('.agents/skills/marchen-propose'),
       )
     })
 
@@ -138,7 +138,7 @@ describe('workspace', () => {
       const codexSkill = writeFileCalls.find(
         ([p]) =>
           typeof p === 'string' &&
-          p.includes('.codex/skills/marchen-apply/SKILL.md'),
+          p.includes('.agents/skills/marchen-apply/SKILL.md'),
       )
       expect(claudeSkill).toBeDefined()
       expect(codexSkill).toBeDefined()

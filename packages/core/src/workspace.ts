@@ -18,6 +18,7 @@ import {
   getChangeDirectory,
   getSpecDirectory,
   readYaml,
+  removeFile,
   resolveWorkspaceRoot,
   writeFile,
   writeYaml,
@@ -204,9 +205,11 @@ export class Workspace {
     // 覆盖写入最新模板文件
     for (const provider of providers) {
       await this.generateSkills(provider.skillDir)
+      await this.removeRetiredSkills(provider.skillDir)
       skillCount += skillTemplateCount
       if (provider.commandDir) {
         await this.generateCommands(provider.commandDir)
+        await this.removeRetiredCommands(provider.commandDir)
         commandCount += commandTemplateCount
       }
       providerNames.push(provider.name)
@@ -266,5 +269,19 @@ export class Workspace {
     for (const template of Object.values(COMMAND_TEMPLATES)) {
       await writeFile(join(dir, template.fileName), template.content)
     }
+  }
+
+  /**
+   * 删掉本工具目录里由 Marchen 生成、现已退役的 skill
+   */
+  private async removeRetiredSkills(skillDir: string): Promise<void> {
+    await removeFile(join(this.root, skillDir, 'marchen-review', 'SKILL.md'))
+  }
+
+  /**
+   * 删掉本工具目录里由 Marchen 生成、现已退役的 command
+   */
+  private async removeRetiredCommands(commandDir: string): Promise<void> {
+    await removeFile(join(this.root, commandDir, 'review.md'))
   }
 }

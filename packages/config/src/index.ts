@@ -2,6 +2,7 @@ import { SPEC_DIRECTORY_NAME } from '@marchen/shared'
 
 export { COMMAND_TEMPLATES } from './commands.js'
 export type { CommandTemplate } from './commands.js'
+export { ACCEPTANCE_PAGE_TEMPLATE } from './generated/acceptance-page.js'
 export { AGENT_PROVIDERS, DEFAULT_PROVIDER_IDS } from './providers.js'
 export {
   APPLY_INSTRUCTION,

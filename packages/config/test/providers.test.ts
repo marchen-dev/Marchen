@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { AGENT_PROVIDERS, DEFAULT_PROVIDER_IDS } from '../src/index.js'
+import {
+  AGENT_PROVIDERS,
+  COMMAND_TEMPLATES,
+  DEFAULT_PROVIDER_IDS,
+  SKILL_TEMPLATES,
+} from '../src/index.js'
 
 describe('providers', () => {
   it('注册表包含 10 个 provider', () => {
@@ -20,7 +25,7 @@ describe('providers', () => {
     expect(provider).toBeDefined()
     expect(provider!.id).toBe('codex')
     expect(provider!.name).toBe('Codex')
-    expect(provider!.skillDir).toBe('.codex/skills')
+    expect(provider!.skillDir).toBe('.agents/skills')
     expect(provider!.commandDir).toBeUndefined()
   })
 
@@ -58,5 +63,26 @@ describe('providers', () => {
         expect(provider.commandDir).toBeUndefined()
       }
     }
+  })
+})
+
+describe('acceptance 模板', () => {
+  it('skill 使用 decision.json 且禁止代点、禁止 agent-browser', () => {
+    const content = SKILL_TEMPLATES.acceptance?.content ?? ''
+    expect(content).toContain('decision.json')
+    expect(content).not.toContain('decision.md')
+    expect(content).toContain('让 AI 修改')
+    expect(content).toContain('human-decision.json')
+    expect(content).toContain('agent-browser')
+  })
+
+  it.each([
+    ['skill', SKILL_TEMPLATES.acceptance?.content ?? ''],
+    ['command', COMMAND_TEMPLATES.acceptance?.content ?? ''],
+  ])('%s 约束跨轮案例 id 在改文案、新增和移除时的行为', (_, content) => {
+    expect(content).toContain('文案调整或排序变化不得生成新 id')
+    expect(content).toContain('新增验收目标才生成新 id')
+    expect(content).toContain('已移除目标的 id 只留在历史轮次')
+    expect(content).toContain('不得拿给别的新目标复用')
   })
 })

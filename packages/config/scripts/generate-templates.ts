@@ -5,7 +5,13 @@
  * 解决 cli bundle（alwaysBundle）无法打包静态 .md 文件的问题。
  */
 
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs'
 import { basename, dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -40,6 +46,25 @@ function quoteIfNeeded(key: string): string {
 /** 文件名转 skill 目录名（propose.md → marchen-propose） */
 function toSkillDirName(fileName: string): string {
   return `marchen-${basename(fileName, '.md')}`
+}
+
+/** 按 Prettier 的默认行宽生成对象项，避免 codegen 后工作区变脏 */
+function pushObjectEntry(
+  lines: string[],
+  key: string,
+  properties: string[],
+): void {
+  const singleLine = `  ${key}: { ${properties.join(', ')} },`
+  if (singleLine.length <= 80) {
+    lines.push(singleLine)
+    return
+  }
+
+  lines.push(`  ${key}: {`)
+  for (const property of properties) {
+    lines.push(`    ${property},`)
+  }
+  lines.push('  },')
 }
 
 /** 读取目录下所有 .md 文件 */
@@ -90,7 +115,10 @@ for (const { fileName } of skills) {
   const key = quoteIfNeeded(toKey(fileName))
   const constName = `SKILL_${toConstName(fileName)}`
   const dirName = toSkillDirName(fileName)
-  skillLines.push(`  ${key}: { dirName: '${dirName}', content: ${constName} },`)
+  pushObjectEntry(skillLines, key, [
+    `dirName: '${dirName}'`,
+    `content: ${constName}`,
+  ])
 }
 skillLines.push('}')
 skillLines.push('')
@@ -125,13 +153,38 @@ cmdLines.push(
 for (const { fileName } of commands) {
   const key = quoteIfNeeded(toKey(fileName))
   const constName = `COMMAND_${toConstName(fileName)}`
-  cmdLines.push(`  ${key}: { fileName: '${fileName}', content: ${constName} },`)
+  pushObjectEntry(cmdLines, key, [
+    `fileName: '${fileName}'`,
+    `content: ${constName}`,
+  ])
 }
 cmdLines.push('}')
 cmdLines.push('')
 
 writeFileSync(join(generatedDir, 'command-templates.ts'), cmdLines.join('\n'))
 
+const pagePath = join(root, '..', 'acceptance-ui', 'dist', 'index.html')
+if (!existsSync(pagePath)) {
+  throw new Error(
+    '缺少 @marchen/acceptance-ui 的 dist/index.html，请先运行 pnpm --filter @marchen/acceptance-ui build',
+  )
+}
+const pageContent = readFileSync(pagePath, 'utf-8')
+if (!pageContent.includes('id="acceptance-data"')) {
+  throw new Error(
+    '验收页构建产物缺少 <script id="acceptance-data">，无法灌数据',
+  )
+}
+writeFileSync(
+  join(generatedDir, 'acceptance-page.ts'),
+  [
+    '// 此文件由 scripts/generate-templates.ts 自动生成，请勿手动修改',
+    '',
+    `export const ACCEPTANCE_PAGE_TEMPLATE = \`${escapeTemplateString(pageContent)}\``,
+    '',
+  ].join('\n'),
+)
+
 console.log(
-  `Generated ${skills.length} skill template(s), ${commands.length} command template(s)`,
+  `Generated ${skills.length} skill template(s), ${commands.length} command template(s), acceptance page`,
 )

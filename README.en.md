@@ -16,7 +16,7 @@ Without this layer, AI tends to jump straight into implementation, loses context
 
 That's what Marchen does, organized as two pillars:
 
-- **Workflow harness**: every step from idea to implementation has a matching skill — explore, propose, apply, review, archive
+- **Workflow harness**: every step from idea to implementation has a matching skill — explore, propose, apply, acceptance, archive
 - **Long-term memory**: every change is automatically archived and made semantically searchable, so AI can pull relevant context into the next session
 
 ## Quick Start
@@ -42,7 +42,7 @@ marchen:archive                           # Archive when done
 
 | Pillar | Role | Core capabilities |
 |---|---|---|
-| **Workflow harness** | Give every AI step structure | explore / propose / preview / lite / apply / update / review / archive |
+| **Workflow harness** | Give every AI step structure | explore / propose / preview / lite / apply / update / acceptance / archive |
 | **Long-term memory** | Survive cross-session amnesia | archive auto-trail · changelog index · search retrieval |
 
 The two pillars work together: the workflow harness produces structured artifacts, archiving moves them into long-term memory, and on the next change skills like explore / apply automatically pull relevant history back in as context.
@@ -57,7 +57,7 @@ Each skill addresses one step in the workflow. After `marchen init`, invoke them
 - **`marchen:lite`** — Lightweight end-to-end. Create a lite change → implement tasks → ask to archive, all in one command. For bug fixes, small changes, quick iterations.
 - **`marchen:apply`** — Implement the generated task list one by one, checking off each as you go.
 - **`marchen:update`** — Revise a change's existing planning artifacts (proposal / specs / design / tasks) and reconcile them in any direction to stay coherent. Plans only, never code.
-- **`marchen:review`** — Check that the implementation matches the change's intent for completeness and consistency, with chrome-devtools MCP support for UI scenarios.
+- **`marchen:acceptance`** — After apply, publish a local acceptance page with evidence for a human to sign off before archive.
 - **`marchen:archive`** — Archive completed changes and automatically append to the changelog index.
 
 ## Long-term Memory

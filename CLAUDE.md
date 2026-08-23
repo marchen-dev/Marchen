@@ -2,9 +2,9 @@
 
 Marchen 是一个 AI 编码工作流工装（harness engineering）CLI 工具（受 OpenSpec 启发），使用 pnpm + Turborepo 构建的 monorepo。
 
-**CLI 命令**: `marchen`（已实现 init, new, list, archive, status, instructions, update, search 命令）
+**CLI 命令**: `marchen`（已实现 init, new, list, archive, status, instructions, update, search, acceptance 命令）
 
-**AI Skills**: `marchen init` 自动生成 skill 和 command 文件（marchen-propose, marchen-lite, marchen-apply, marchen-explore, marchen-archive），支持 10 个 AI 工具
+**AI Skills**: `marchen init` 自动生成 skill 和 command 文件（marchen-propose, marchen-lite, marchen-apply, marchen-explore, marchen-archive, marchen-acceptance），支持 10 个 AI 工具
 
 ## 架构
 
@@ -18,13 +18,18 @@ Marchen 是一个 AI 编码工作流工装（harness engineering）CLI 工具（
     └── @marchen/fs (依赖: shared) ─────────────────────────┤
                                                                   │
 marchen CLI (依赖: core, shared, config) ───────────────────┘
+
+@marchen/acceptance-ui（Vite + React，无运行时 workspace 依赖）
+        ↓ 构建单文件 HTML，config generate 烘焙
+@marchen/config
 ```
 
 - **apps/cli**: 命令注册、参数解析、终端 UI（commander + @clack/prompts）
-- **packages/core**: 业务逻辑，`Workspace` 类 + `ChangeManager` 类 + `SearchManager` 类 + `ModelManager` 类
+- **packages/core**: 业务逻辑，`Workspace` 类 + `ChangeManager` 类 + `SearchManager` 类 + `ModelManager` 类 + `AcceptanceManager` 类
 - **packages/fs**: 文件系统操作（paths / directory / file / yaml / binary）
 - **packages/config**: Schema 定义、Artifact 模板、AgentProvider 注册表、Skill/Command 模板（codegen 生成）
 - **packages/shared**: 共享类型、常量、错误定义
+- **packages/acceptance-ui**: 验收页 React 源码，构建为单文件 HTML；不作为 CLI 运行时依赖
 
 ## 语言
 

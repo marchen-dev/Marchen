@@ -30,9 +30,33 @@ export async function writeFile(path: string, content: string): Promise<void> {
 }
 
 /**
+ * 写入二进制文件，自动创建父目录
+ */
+export async function writeBinary(
+  path: string,
+  content: Uint8Array,
+): Promise<void> {
+  await ensureDir(dirname(path))
+  await nodeFs.writeFile(path, content)
+}
+
+/**
  * 追加内容到文件末尾（UTF-8），自动创建父目录
  */
 export async function appendFile(path: string, content: string): Promise<void> {
   await ensureDir(dirname(path))
   await nodeFs.appendFile(path, content, 'utf-8')
+}
+
+/**
+ * 删除文件，不存在时静默跳过
+ */
+export async function removeFile(path: string): Promise<void> {
+  try {
+    await nodeFs.unlink(path)
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+      throw error
+    }
+  }
 }

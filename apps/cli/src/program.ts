@@ -1,5 +1,6 @@
 import { createRequire } from 'node:module'
 import { Command } from 'commander'
+import { registerAcceptanceCommand } from './commands/acceptance.js'
 import { registerArchiveCommand } from './commands/archive.js'
 import { registerInitCommand } from './commands/init.js'
 import { registerInstructionsCommand } from './commands/instructions.js'
@@ -25,6 +26,7 @@ export function buildCliProgram(): Command {
     .description('Workflow harness for AI coding agents')
     .version(version, '-v, --version')
 
+  registerAcceptanceCommand(program)
   registerArchiveCommand(program)
   registerInitCommand(program)
   registerInstructionsCommand(program)

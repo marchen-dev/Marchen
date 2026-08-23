@@ -26,7 +26,8 @@ src/
 ├── commands.ts      # Command 模板导出（codegen 生成）
 └── generated/       # codegen 自动生成，勿手动修改
     ├── skill-templates.ts
-    └── command-templates.ts
+    ├── command-templates.ts
+    └── acceptance-page.ts   # 来自 @marchen/acceptance-ui 的 dist/index.html
 templates/
 ├── skills/          # Skill 模板源文件（.md）
 │   ├── propose.md

@@ -11,3 +11,9 @@ repomix-output.xml
 .hatch-pet-runs
 hatch-runs
 tmp
+
+# Local agent skills installed for development, not Marchen-generated output
+/.agents/skills/migrate-radix-to-base/
+/.claude/skills/migrate-radix-to-base
+/agent/
+/skills-lock.json

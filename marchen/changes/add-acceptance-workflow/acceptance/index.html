@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f5f2" />
+    <title>Marchen 验收记录</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ground: #f4f5f2;
+        --paper: #fff;
+        --ink: #1d211e;
+        --muted: #687069;
+        --rule: #d8ddd7;
+        --soft: #eef1ed;
+        --pass: #176b4d;
+        --pass-soft: #e9f3ed;
+        --fail: #a33a2b;
+        --fail-soft: #f8ece9;
+        --wait: #8a6018;
+        --wait-soft: #f7f0df;
+        --mono:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          'Liberation Mono', monospace;
+        --sans:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+          'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: var(--ground);
+      }
+      body {
+        min-width: 320px;
+        margin: 0;
+        overflow-x: hidden;
+        color: var(--ink);
+        background: var(--ground);
+        font: 15px/1.7 var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .skip-link {
+        position: fixed;
+        z-index: 10;
+        top: 12px;
+        left: 12px;
+        padding: 8px 12px;
+        color: #fff;
+        background: var(--ink);
+        transform: translateY(-160%);
+      }
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+      .sheet {
+        width: min(980px, calc(100% - 40px));
+        margin: 36px auto 72px;
+        border: 1px solid var(--rule);
+        background: var(--paper);
+        box-shadow: 0 24px 70px rgba(29, 33, 30, 0.08);
+      }
+      .report-head {
+        padding: 42px 48px 0;
+      }
+      .meta-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--ink);
+        color: var(--muted);
+        font: 12px/1.4 var(--mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .document-name {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .title-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 36px;
+        align-items: start;
+        padding: 34px 0 32px;
+      }
+      h1 {
+        max-width: 740px;
+        margin: 0;
+        overflow-wrap: anywhere;
+        font-size: clamp(27px, 4vw, 42px);
+        font-weight: 650;
+        letter-spacing: -0.04em;
+        line-height: 1.22;
+        text-wrap: balance;
+      }
+      h2,
+      h3,
+      p {
+        overflow-wrap: anywhere;
+      }
+      .decision-comment {
+        max-width: 700px;
+        margin: -14px 0 30px;
+        color: var(--muted);
+      }
+      .status-stamp {
+        display: grid;
+        width: 92px;
+        min-height: 70px;
+        place-items: center;
+        padding: 8px;
+        border: 2px solid currentColor;
+        color: var(--wait);
+        background: var(--wait-soft);
+        box-shadow: inset 0 0 0 3px var(--paper);
+        font: 700 15px/1.2 var(--mono);
+        letter-spacing: 0.08em;
+        text-align: center;
+        transform: rotate(-2deg);
+      }
+      .status-stamp.accepted {
+        color: var(--pass);
+        background: var(--pass-soft);
+      }
+      .status-stamp.rejected {
+        color: var(--fail);
+        background: var(--fail-soft);
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin: 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+      }
+      .summary div {
+        min-width: 0;
+        padding: 15px 18px 16px 0;
+      }
+      .summary div + div {
+        padding-left: 18px;
+        border-left: 1px solid var(--rule);
+      }
+      .summary dt {
+        color: var(--muted);
+        font: 11px/1.4 var(--mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .summary dd {
+        margin: 2px 0 0;
+        font: 600 16px/1.4 var(--mono);
+        font-variant-numeric: tabular-nums;
+      }
+      .rounds {
+        padding: 12px 48px 22px;
+      }
+      .round {
+        display: grid;
+        grid-template-columns: 90px minmax(0, 1fr);
+        padding: 38px 0 34px;
+        border-bottom: 1px solid var(--ink);
+      }
+      .round-index {
+        padding-top: 4px;
+        color: var(--muted);
+        font: 700 12px/1.4 var(--mono);
+        letter-spacing: 0.08em;
+      }
+      .round-main {
+        min-width: 0;
+      }
+      .round-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 20px;
+        align-items: start;
+      }
+      .round-head h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        line-height: 1.35;
+      }
+      .status-mark {
+        min-width: 68px;
+        padding: 4px 7px;
+        border: 1px solid currentColor;
+        color: var(--wait);
+        background: var(--wait-soft);
+        font: 700 11px/1.3 var(--mono);
+        letter-spacing: 0.06em;
+        text-align: center;
+      }
+      .status-mark.pass,
+      .status-mark.accepted {
+        color: var(--pass);
+        background: var(--pass-soft);
+      }
+      .status-mark.fail,
+      .status-mark.failed,
+      .status-mark.rejected {
+        color: var(--fail);
+        background: var(--fail-soft);
+      }
+      .status-mark.blocked {
+        color: var(--muted);
+        background: var(--soft);
+      }
+      .round-conclusion {
+        margin: 14px 0 0;
+        color: var(--muted);
+      }
+      .case-list {
+        margin: 28px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .case {
+        position: relative;
+        display: grid;
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: 18px;
+        padding: 20px 0;
+        border-top: 1px solid var(--rule);
+      }
+      .case::before {
+        content: '';
+        position: absolute;
+        top: 29px;
+        left: -94px;
+        width: 7px;
+        height: 7px;
+        border: 2px solid var(--paper);
+        border-radius: 50%;
+        background: var(--rule);
+        box-shadow: 0 0 0 1px var(--rule);
+      }
+      .case:has(.status-mark.pass)::before {
+        background: var(--pass);
+        box-shadow: 0 0 0 1px var(--pass);
+      }
+      .case:has(.status-mark.fail)::before,
+      .case:has(.status-mark.failed)::before {
+        background: var(--fail);
+        box-shadow: 0 0 0 1px var(--fail);
+      }
+      .case-body {
+        min-width: 0;
+      }
+      .case-body h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 650;
+        line-height: 1.45;
+      }
+      .observation {
+        margin: 7px 0 0;
+        color: #3f4640;
+      }
+      .evidence-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .evidence-list figure {
+        min-width: 0;
+        margin: 0;
+      }
+      .evidence-list img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--rule);
+        background: var(--soft);
+      }
+      .evidence-text {
+        margin: 12px 0 0;
+        padding: 10px 12px;
+        color: #3f4640;
+        background: var(--soft);
+        font: 12px/1.6 var(--mono);
+        white-space: pre-wrap;
+      }
+      .empty-state {
+        margin: 36px 0;
+        padding: 28px 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        color: var(--muted);
+      }
+      #write-zone {
+        padding: 34px 48px 42px;
+        border-top: 5px solid var(--ink);
+        background: #fafbf8;
+      }
+      .sign-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+      .sign-head h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .live-mark {
+        color: var(--pass);
+        font: 700 11px/1.4 var(--mono);
+        letter-spacing: 0.08em;
+      }
+      .field-label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: 650;
+      }
+      .field-help {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      textarea {
+        display: block;
+        width: 100%;
+        min-height: 92px;
+        resize: vertical;
+        padding: 12px 13px;
+        border: 1px solid #aeb5af;
+        border-radius: 0;
+        color: var(--ink);
+        background: var(--paper);
+        font: inherit;
+      }
+      textarea:focus-visible,
+      button:focus-visible,
+      .skip-link:focus-visible {
+        outline: 3px solid rgba(23, 107, 77, 0.28);
+        outline-offset: 3px;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      button {
+        min-height: 44px;
+        padding: 10px 18px;
+        border: 1px solid var(--ink);
+        border-radius: 0;
+        color: var(--ink);
+        background: transparent;
+        font: 650 14px/1.4 var(--sans);
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(29, 33, 30, 0.12);
+      }
+      button:hover {
+        background: var(--soft);
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button:disabled {
+        cursor: wait;
+        opacity: 0.58;
+      }
+      button.primary {
+        border-color: var(--pass);
+        color: #fff;
+        background: var(--pass);
+      }
+      button.primary:hover {
+        background: #10573e;
+      }
+      button.danger {
+        border-color: var(--fail);
+        color: var(--fail);
+      }
+      button.danger:hover {
+        background: var(--fail-soft);
+      }
+      #hint {
+        min-height: 1.5em;
+        margin: 10px 0 0;
+        color: var(--fail);
+        font-size: 13px;
+      }
+      @media (max-width: 700px) {
+        .sheet {
+          width: 100%;
+          margin: 0;
+          border-width: 0;
+          box-shadow: none;
+        }
+        .report-head,
+        #write-zone {
+          padding-right: 20px;
+          padding-left: 20px;
+        }
+        .report-head {
+          padding-top: 28px;
+        }
+        .title-row {
+          grid-template-columns: 1fr;
+          gap: 22px;
+        }
+        .status-stamp {
+          width: 84px;
+          min-height: 62px;
+        }
+        .summary {
+          grid-template-columns: 1fr;
+        }
+        .summary div,
+        .summary div + div {
+          padding: 11px 0;
+          border-left: 0;
+        }
+        .summary div + div {
+          border-top: 1px solid var(--rule);
+        }
+        .rounds {
+          padding-right: 20px;
+          padding-left: 20px;
+        }
+        .round {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .round-head {
+          grid-template-columns: 1fr;
+        }
+        .status-mark {
+          width: max-content;
+        }
+        .case {
+          grid-template-columns: 66px minmax(0, 1fr);
+          gap: 12px;
+        }
+        .case::before {
+          display: none;
+        }
+        .evidence-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到验收内容</a>
+    <main class="sheet" id="main-content">
+      <header class="report-head">
+        <div class="meta-line">
+          <span class="document-name">Marchen / Acceptance Record</span>
+          <span id="round-meta">尚无验收轮次</span>
+        </div>
+        <div class="title-row">
+          <h1 id="requirement">验收目标尚未填写</h1>
+          <div
+            class="status-stamp pending"
+            id="status-stamp"
+            role="status"
+            aria-live="polite"
+          >
+            待签核
+          </div>
+        </div>
+        <p class="decision-comment" id="comment-view" hidden></p>
+        <dl class="summary" aria-label="验收摘要">
+          <div>
+            <dt>轮次</dt>
+            <dd id="summary-rounds">0</dd>
+          </div>
+          <div>
+            <dt>检查项</dt>
+            <dd id="summary-cases">0</dd>
+          </div>
+          <div>
+            <dt>结果</dt>
+            <dd id="summary-result">等待取证</dd>
+          </div>
+        </dl>
+      </header>
+
+      <div class="rounds" id="rounds"></div>
+
+      <section id="write-zone" aria-labelledby="sign-title" hidden>
+        <div class="sign-head">
+          <h2 id="sign-title">交付签核</h2>
+          <span class="live-mark">LOCAL SERVICE ONLINE</span>
+        </div>
+        <label class="field-label" for="comment">评语</label>
+        <p class="field-help" id="comment-help">
+          接受时可以留空；打回时请写明需要修改的内容。
+        </p>
+        <textarea
+          id="comment"
+          name="acceptance-comment"
+          autocomplete="off"
+          aria-describedby="comment-help hint"
+          placeholder="打回理由或附言…"
+        ></textarea>
+        <div class="actions">
+          <button type="button" class="primary" id="btn-accept">
+            接受交付
+          </button>
+          <button type="button" class="danger" id="btn-reject">打回修改</button>
+        </div>
+        <p id="hint" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script type="application/json" id="acceptance-data">
+      {
+        "requirement": "本地验收夹、CLI 针孔和冻页能用：人能在 localhost 签字，关服务后双击仍看得到结论。",
+        "decision": { "status": "accepted", "comment": "", "items": "" },
+        "rounds": [
+          {
+            "index": 1,
+            "title": "acceptance 工作流",
+            "conclusion": "CLI 子命令、decision 接口、烤页离线阅读都已手跑过。review 模板已从发行物拿掉。",
+            "verdict": "pass",
+            "cases": [
+              {
+                "id": "cli",
+                "name": "marchen acceptance 子命令可用",
+                "status": "pass",
+                "observation": "help 含四子命令；临时工作区 status --json 在签字前 decision 为 null，exists true。",
+                "evidence": []
+              },
+              {
+                "id": "sign",
+                "name": "带 token 才能写入决定，关服务后页上仍是已接受",
+                "status": "pass",
+                "observation": "无 token POST 401；带 token 后 decision.md 为 accepted，index.html 嵌了 status accepted；#write-zone 默认 display:none。",
+                "evidence": []
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+    <script>
+      const data = JSON.parse(
+        document.getElementById('acceptance-data').textContent,
+      )
+      const token = new URLSearchParams(location.search).get('t') || ''
+      const writeZone = document.getElementById('write-zone')
+      const hint = document.getElementById('hint')
+      const acceptButton = document.getElementById('btn-accept')
+      const rejectButton = document.getElementById('btn-reject')
+      let live = false
+      let submitting = false
+
+      const statusLabel = {
+        pending: '待签核',
+        accepted: '已接受',
+        rejected: '已打回',
+        pass: '通过',
+        failed: '未通过',
+        fail: '未通过',
+        blocked: '受阻',
+      }
+
+      function create(tag, className, text) {
+        const node = document.createElement(tag)
+        if (className) node.className = className
+        if (text != null) node.textContent = text
+        return node
+      }
+
+      function statusMark(status) {
+        const normalized = status || 'pending'
+        return create(
+          'span',
+          'status-mark ' + normalized,
+          statusLabel[normalized] || normalized,
+        )
+      }
+
+      function paintDecision(decision) {
+        const status = (decision && decision.status) || 'pending'
+        const stamp = document.getElementById('status-stamp')
+        stamp.className = 'status-stamp ' + status
+        stamp.textContent = statusLabel[status] || status
+
+        const comment = ((decision && decision.comment) || '').trim()
+        const commentView = document.getElementById('comment-view')
+        commentView.textContent = comment.startsWith('#') ? '' : comment
+        commentView.hidden = !commentView.textContent
+        writeZone.hidden = !(live && status === 'pending')
+      }
+
+      function renderEvidence(caseItem, caseName) {
+        const evidence = caseItem.evidence || []
+        if (!evidence.length) return null
+        const list = create('div', 'evidence-list')
+        for (const item of evidence) {
+          if (
+            item.type === 'image' ||
+            /\.(png|jpe?g|gif|webp)$/i.test(item.path || '')
+          ) {
+            const figure = document.createElement('figure')
+            const image = document.createElement('img')
+            image.src = item.path || ''
+            image.alt = caseName + '的验收证据'
+            image.width = 1440
+            image.height = 900
+            image.loading = 'lazy'
+            image.decoding = 'async'
+            figure.appendChild(image)
+            list.appendChild(figure)
+          } else {
+            list.appendChild(
+              create('pre', 'evidence-text', item.text || item.path || ''),
+            )
+          }
+        }
+        return list
+      }
+
+      function renderCase(caseItem) {
+        const item = create('li', 'case')
+        item.appendChild(statusMark(caseItem.status))
+
+        const body = create('div', 'case-body')
+        const name = caseItem.name || caseItem.id || '未命名检查项'
+        body.appendChild(create('h3', '', name))
+        if (caseItem.observation) {
+          body.appendChild(create('p', 'observation', caseItem.observation))
+        }
+        const evidence = renderEvidence(caseItem, name)
+        if (evidence) body.appendChild(evidence)
+        item.appendChild(body)
+        return item
+      }
+
+      function renderRound(round) {
+        const section = create('section', 'round')
+        section.appendChild(
+          create(
+            'div',
+            'round-index',
+            'ROUND ' + String(round.index).padStart(2, '0'),
+          ),
+        )
+
+        const main = create('div', 'round-main')
+        const head = create('div', 'round-head')
+        head.appendChild(create('h2', '', round.title || '未命名验收轮次'))
+        head.appendChild(statusMark(round.verdict))
+        main.appendChild(head)
+
+        if (round.conclusion) {
+          main.appendChild(create('p', 'round-conclusion', round.conclusion))
+        }
+        const cases = round.cases || []
+        if (cases.length) {
+          const list = create('ol', 'case-list')
+          for (const caseItem of cases) list.appendChild(renderCase(caseItem))
+          main.appendChild(list)
+        }
+        section.appendChild(main)
+        return section
+      }
+
+      document.getElementById('requirement').textContent =
+        data.requirement || '验收目标尚未填写'
+      paintDecision(data.decision)
+
+      const rounds = data.rounds || []
+      const allCases = rounds.flatMap((round) => round.cases || [])
+      const passed = allCases.filter((item) => item.status === 'pass').length
+      const blocked = allCases.filter((item) =>
+        ['blocked', 'fail', 'failed'].includes(item.status),
+      ).length
+      document.getElementById('round-meta').textContent = rounds.length
+        ? rounds.length + ' 轮 / ' + allCases.length + ' 项检查'
+        : '尚无验收轮次'
+      document.getElementById('summary-rounds').textContent = rounds.length
+      document.getElementById('summary-cases').textContent = allCases.length
+      document.getElementById('summary-result').textContent = allCases.length
+        ? passed + ' 通过 / ' + blocked + ' 异常'
+        : '等待取证'
+
+      const roundsElement = document.getElementById('rounds')
+      if (rounds.length) {
+        for (const round of rounds)
+          roundsElement.appendChild(renderRound(round))
+      } else {
+        roundsElement.appendChild(
+          create(
+            'p',
+            'empty-state',
+            '还没有验收记录。完成取证后，本页会显示检查结果。',
+          ),
+        )
+      }
+
+      function api(path, options) {
+        const query = token
+          ? path +
+            (path.includes('?') ? '&' : '?') +
+            't=' +
+            encodeURIComponent(token)
+          : path
+        return fetch(
+          query,
+          Object.assign(
+            { headers: { 'content-type': 'application/json' } },
+            options,
+          ),
+        )
+      }
+
+      fetch('/health')
+        .then((response) => {
+          if (!response.ok) return
+          live = true
+          return api('/decision')
+            .then((result) => (result.ok ? result.json() : null))
+            .then((decision) => paintDecision(decision || data.decision))
+        })
+        .catch(() => {})
+
+      function submit(status) {
+        if (submitting) return
+        const comment = document.getElementById('comment').value.trim()
+        if (status === 'rejected' && !comment) {
+          hint.textContent = '请填写需要修改的内容，再打回。'
+          document.getElementById('comment').focus()
+          return
+        }
+        submitting = true
+        acceptButton.disabled = true
+        rejectButton.disabled = true
+        writeZone.setAttribute('aria-busy', 'true')
+        hint.textContent = '正在写入签核结果…'
+        api('/decision', {
+          method: 'POST',
+          body: JSON.stringify({ status, comment }),
+        })
+          .then((response) =>
+            response.json().then((body) => ({ response, body })),
+          )
+          .then(({ response, body }) => {
+            if (!response.ok) {
+              hint.textContent = (body.error || '写入失败') + '，请重试。'
+              submitting = false
+              acceptButton.disabled = false
+              rejectButton.disabled = false
+              writeZone.removeAttribute('aria-busy')
+              return
+            }
+            hint.textContent = ''
+            paintDecision(body)
+          })
+          .catch(() => {
+            hint.textContent = '无法写入签核结果，请检查本地服务后重试。'
+            submitting = false
+            acceptButton.disabled = false
+            rejectButton.disabled = false
+            writeZone.removeAttribute('aria-busy')
+          })
+      }
+
+      document.getElementById('btn-accept').onclick = () => submit('accepted')
+      document.getElementById('btn-reject').onclick = () => submit('rejected')
+    </script>
+  </body>
+</html>

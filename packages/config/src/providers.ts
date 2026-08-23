@@ -15,7 +15,7 @@ export const AGENT_PROVIDERS: Record<string, AgentProvider> = {
   codex: {
     id: 'codex',
     name: 'Codex',
-    skillDir: '.codex/skills',
+    skillDir: '.agents/skills',
   },
   copilot: {
     id: 'copilot',

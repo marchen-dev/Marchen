@@ -25,4 +25,10 @@ export default antfu(
       'ts/no-redeclare': 'off',
     },
   },
+  {
+    files: ['packages/acceptance-ui/**/*.{ts,tsx}'],
+    rules: {
+      'ts/explicit-function-return-type': 'off',
+    },
+  },
 )

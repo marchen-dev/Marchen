@@ -1,3 +1,4 @@
+export { AcceptanceManager } from './acceptance-manager.js'
 export { ChangeManager } from './change-manager.js'
 export type {
   ModelDownloadProgress,

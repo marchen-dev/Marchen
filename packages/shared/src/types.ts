@@ -230,6 +230,69 @@ export interface ArchiveOptions {
   readonly summary?: string | undefined
 }
 
+/** 人在验收页上的整单决定 */
+export type DecisionStatus = 'pending' | 'accepted' | 'rejected'
+
+/**
+ * 验收页上的一条待修改项
+ */
+export interface AcceptanceDecisionItem {
+  /** 对齐 plan / case 的稳定 id；同一验收目标跨轮不得变化 */
+  readonly id: string
+  /** 人填写的修改理由 */
+  readonly comment: string
+  /** 相对 index.html 的附图路径 */
+  readonly images: readonly string[]
+}
+
+/**
+ * 解析后的 decision.json
+ */
+export interface AcceptanceDecision {
+  readonly status: DecisionStatus
+  readonly items: readonly AcceptanceDecisionItem[]
+}
+
+/**
+ * 一轮取证的摘要（给灌页和 status 用）
+ */
+export interface AcceptanceRoundSummary {
+  readonly index: number
+  readonly title: string
+  readonly verdict: string
+  readonly conclusion: string
+  readonly result: unknown
+  /** 开下一轮前冻住的人工决定；旧轮次可能没有 */
+  readonly humanDecision: AcceptanceDecision | null
+}
+
+/**
+ * `marchen acceptance status` 的返回
+ */
+export interface AcceptanceStatusResult {
+  readonly name: string
+  /** 是否存在 acceptance/ 目录 */
+  readonly exists: boolean
+  readonly requirement: string | null
+  /** 没有 decision.json 时为 null，不是 accepted */
+  readonly decision: AcceptanceDecision | null
+  readonly roundCount: number
+  readonly rounds: readonly AcceptanceRoundSummary[]
+  readonly serving: boolean
+  readonly url: string | null
+}
+
+/**
+ * serve 启动结果
+ */
+export interface AcceptanceServeResult {
+  readonly name: string
+  readonly url: string
+  readonly port: number
+  readonly token: string
+  readonly reused: boolean
+}
+
 /**
  * 更新操作结果
  */

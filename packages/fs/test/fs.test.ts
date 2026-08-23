@@ -9,6 +9,7 @@ import {
   listDir,
   readFile,
   readYaml,
+  writeBinary,
   writeFile,
   writeYaml,
 } from '../src/index.js'
@@ -67,6 +68,13 @@ describe('fs 文件系统操作', () => {
       await expect(readFile(join(testDir, 'missing.txt'))).rejects.toThrow(
         '文件不存在',
       )
+    })
+
+    it('应该写入二进制文件', async () => {
+      const file = join(testDir, 'blob.bin')
+      await writeBinary(file, Uint8Array.from([1, 2, 3]))
+      const { readFile: readBytes } = await import('node:fs/promises')
+      expect([...new Uint8Array(await readBytes(file))]).toEqual([1, 2, 3])
     })
   })
 

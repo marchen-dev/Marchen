@@ -26,5 +26,8 @@
   },
   "dependencies": {
     "@marchen/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@marchen/acceptance-ui": "workspace:*"
   }
 }

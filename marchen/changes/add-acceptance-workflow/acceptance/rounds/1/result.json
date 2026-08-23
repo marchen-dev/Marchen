@@ -1,0 +1,49 @@
+{
+  "title": "acceptance 工作流",
+  "commit": "working-tree",
+  "surfaces": ["cli"],
+  "summary": {
+    "verdict": "pass",
+    "conclusion": "CLI 子命令、decision 接口、烤页离线阅读都已手跑过。review 模板已从发行物拿掉。"
+  },
+  "plan": [
+    {
+      "id": "cli",
+      "title": "marchen acceptance 子命令可用",
+      "category": "CLI",
+      "verifier": "program",
+      "method": "acceptance --help / status --json",
+      "expected": "列出 serve stop render status；无夹时 decision 为 null",
+      "requiredEvidence": ["text"]
+    },
+    {
+      "id": "sign",
+      "title": "带 token 才能写入决定，关服务后页上仍是已接受",
+      "category": "签字",
+      "verifier": "agent",
+      "method": "POST /decision",
+      "expected": "无 token 401；有 token 写入 accepted 并烤进 html",
+      "requiredEvidence": ["text"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "cli",
+      "name": "marchen acceptance 子命令可用",
+      "category": "CLI",
+      "surface": "cli",
+      "status": "pass",
+      "observation": "help 含四子命令；临时工作区 status --json 在签字前 decision 为 null，exists true。",
+      "evidence": []
+    },
+    {
+      "id": "sign",
+      "name": "带 token 才能写入决定，关服务后页上仍是已接受",
+      "category": "签字",
+      "surface": "cli",
+      "status": "pass",
+      "observation": "无 token POST 401；带 token 后 decision.md 为 accepted，index.html 嵌了 status accepted；#write-zone 默认 display:none。",
+      "evidence": []
+    }
+  ]
+}

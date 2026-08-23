@@ -17,4 +17,14 @@ describe('buildCliProgram', () => {
     expect(newCommand).toBeDefined()
     expect(newCommand?.description()).toBe('创建一个新的变更')
   })
+
+  it('registers acceptance subcommands', () => {
+    const program = buildCliProgram()
+    const acc = program.commands.find((cmd) => cmd.name() === 'acceptance')
+    expect(acc).toBeDefined()
+    const names = acc?.commands.map((cmd) => cmd.name()) ?? []
+    expect(names).toEqual(
+      expect.arrayContaining(['serve', 'stop', 'render', 'status']),
+    )
+  })
 })
