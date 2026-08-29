@@ -1,6 +1,6 @@
 {
   "name": "@marchen/acceptance-ui",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "private": true,
   "description": "验收页源码：Vite + React + shadcn，构建为单文件 HTML",
   "type": "module",

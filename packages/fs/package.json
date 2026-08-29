@@ -1,6 +1,6 @@
 {
   "name": "@marchen/fs",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "private": true,
   "description": "Filesystem access for Marchen",
   "type": "module",

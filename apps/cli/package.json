@@ -1,6 +1,6 @@
 {
   "name": "marchen",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "A harness for AI coding agents — structured workflows and long-term memory",
   "license": "MIT",
   "type": "module",
