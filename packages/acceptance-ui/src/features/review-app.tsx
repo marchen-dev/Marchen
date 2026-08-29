@@ -10,10 +10,10 @@ import {
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CircleAlertIcon,
+  CircleDashedIcon,
   ImageIcon,
   ImagePlusIcon,
-  Maximize2Icon,
-  MenuIcon,
   MessageSquareIcon,
   SendIcon,
   Undo2Icon,
@@ -43,6 +43,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   Empty,
@@ -71,17 +72,20 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { useWideInspector } from '@/hooks/use-wide-inspector'
 import {
   caseHistory,
   caseStatusLabel,
@@ -95,10 +99,17 @@ import {
   probeLive,
   readEmbeddedPayload,
 } from '@/lib/payload'
+import { normalizeImageIndex, opinionDraftKey } from '@/lib/review-workbench'
 import { cn } from '@/lib/utils'
 
 type ConfirmMode = 'accept' | 'reject' | null
-type ImageMode = 'fit' | 'original'
+
+interface OpinionDraft {
+  comment: string
+  keptImages: string[]
+  files: File[]
+  tab: string
+}
 
 /** 验收页主界面：在同一条案例证据链中完成查看、追溯和签核。 */
 export function ReviewApp() {
@@ -112,9 +123,11 @@ export function ReviewApp() {
     Math.max(0, embedded.rounds.length - 1),
   )
   const [caseIndex, setCaseIndex] = useState(0)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [changesOpen, setChangesOpen] = useState(false)
+  const [inspectorOpen, setInspectorOpen] = useState(false)
   const [confirmMode, setConfirmMode] = useState<ConfirmMode>(null)
+  const [drafts, setDrafts] = useState<Record<string, OpinionDraft>>({})
+  const wideInspector = useWideInspector()
 
   const rounds = embedded.rounds
   const latestPosition = Math.max(0, rounds.length - 1)
@@ -124,6 +137,13 @@ export function ReviewApp() {
   const viewingLatest = roundPosition === latestPosition
   const writable = isReviewWritable(live, decision.status, viewingLatest)
   const pending = decision.items
+  const draftKey = current
+    ? opinionDraftKey(selectedRound?.index ?? 0, current.id)
+    : ''
+  const initialOpinion = current
+    ? pending.find((item) => item.id === current.id)
+    : undefined
+  const draft = drafts[draftKey] ?? createOpinionDraft(initialOpinion)
 
   useEffect(() => {
     let cancelled = false
@@ -147,18 +167,6 @@ export function ReviewApp() {
 
   useEffect(() => {
     setCaseIndex((value) => Math.min(value, Math.max(0, cases.length - 1)))
-  }, [cases.length])
-
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowRight') {
-        setCaseIndex((value) => Math.min(cases.length - 1, value + 1))
-      } else if (event.key === 'ArrowLeft') {
-        setCaseIndex((value) => Math.max(0, value - 1))
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
   }, [cases.length])
 
   const persist = useCallback(
@@ -208,9 +216,16 @@ export function ReviewApp() {
     )
   }
 
+  const updateDraft = (nextDraft: OpinionDraft) => {
+    if (!draftKey) return
+    setDrafts((currentDrafts) => ({
+      ...currentDrafts,
+      [draftKey]: nextDraft,
+    }))
+  }
+
   const selectCase = (index: number) => {
     setCaseIndex(index)
-    setSidebarOpen(false)
   }
 
   const jumpToPending = (id: string) => {
@@ -220,6 +235,7 @@ export function ReviewApp() {
     )
     setCaseIndex(nextIndex != null && nextIndex >= 0 ? nextIndex : 0)
     setChangesOpen(false)
+    if (!wideInspector) setInspectorOpen(true)
   }
 
   const confirmDecision = async () => {
@@ -234,93 +250,65 @@ export function ReviewApp() {
   }
 
   return (
-    <div className="flex h-full flex-col bg-background text-foreground">
-      <AppHeader
-        requirement={embedded.requirement}
-        round={selectedRound}
-        roundPosition={roundPosition}
-        roundCount={rounds.length}
-        decision={decision}
-        live={live}
-        pendingCount={pending.length}
-        writable={writable}
-        onOpenSidebar={() => setSidebarOpen(true)}
-        onPreviousRound={() => {
-          setRoundPosition((value) => Math.max(0, value - 1))
-          setCaseIndex(0)
-        }}
-        onNextRound={() => {
-          setRoundPosition((value) => Math.min(latestPosition, value + 1))
-          setCaseIndex(0)
-        }}
-        onPrimaryAction={() => {
-          if (pending.length === 0) setConfirmMode('accept')
-          else setChangesOpen(true)
-        }}
+    <SidebarProvider className="h-full min-h-0 overflow-hidden text-foreground">
+      <CaseSidebar
+        cases={cases}
+        selectedIndex={caseIndex}
+        pending={pending}
+        onSelect={selectCase}
       />
-
-      <main className="grid min-h-0 flex-1 grid-cols-[17rem_minmax(0,1fr)] max-[900px]:grid-cols-1">
-        <CaseSidebar
-          cases={cases}
-          selectedIndex={caseIndex}
-          pending={pending}
-          className="border-r max-[900px]:hidden"
-          onSelect={selectCase}
+      <SidebarInset className="h-svh min-h-0 overflow-hidden">
+        <AcceptanceHeader
+          requirement={embedded.requirement}
+          round={selectedRound}
+          roundPosition={roundPosition}
+          roundCount={rounds.length}
+          caseCount={cases.length}
+          decision={decision}
+          live={live}
+          pendingCount={pending.length}
+          writable={writable}
+          showInspectorAction={!wideInspector && Boolean(current)}
+          onBeforeToggleSidebar={() => {
+            setInspectorOpen(false)
+            setChangesOpen(false)
+          }}
+          onOpenInspector={() => {
+            setChangesOpen(false)
+            setInspectorOpen(true)
+          }}
+          onPreviousRound={() => {
+            setRoundPosition((value) => Math.max(0, value - 1))
+            setCaseIndex(0)
+          }}
+          onNextRound={() => {
+            setRoundPosition((value) => Math.min(latestPosition, value + 1))
+            setCaseIndex(0)
+          }}
+          onPrimaryAction={() => {
+            setInspectorOpen(false)
+            if (pending.length === 0) setConfirmMode('accept')
+            else setChangesOpen(true)
+          }}
         />
 
-        <ScrollArea className="min-h-0 bg-background">
+        <div className="grid min-h-0 flex-1 grid-cols-1 xl:grid-cols-[minmax(0,1fr)_var(--review-inspector-width)]">
           {current && selectedRound ? (
-            <article className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-8 py-8 max-[720px]:gap-8 max-[720px]:px-4 max-[720px]:py-5">
-              <CaseHeading
-                item={current}
-                index={caseIndex}
-                total={cases.length}
-                pending={pending.some((item) => item.id === current.id)}
-                onPrevious={() =>
-                  setCaseIndex((value) => Math.max(0, value - 1))
-                }
-                onNext={() =>
-                  setCaseIndex((value) => Math.min(cases.length - 1, value + 1))
-                }
-              />
-              <EvidenceViewer item={current} roundIndex={selectedRound.index} />
-              <section
-                aria-labelledby="ai-review-title"
-                className="flex flex-col gap-3"
-              >
-                <SectionLabel
-                  id="ai-review-title"
-                  index="AI"
-                  title="检查说明"
+            <ScrollArea className="min-h-0 min-w-0 bg-background">
+              <article className="flex min-h-full min-w-0 flex-col gap-4 p-4 sm:p-6">
+                <EvidenceToolbar
+                  item={current}
+                  index={caseIndex}
+                  total={cases.length}
+                  pending={pending.some((item) => item.id === current.id)}
+                  onPrevious={() => setCaseIndex((value) => Math.max(0, value - 1))}
+                  onNext={() =>
+                    setCaseIndex((value) => Math.min(cases.length - 1, value + 1))
+                  }
                 />
-                <div className="border-l-2 pl-5">
-                  <p className="text-base leading-7">
-                    {current.observation || '这一轮没有留下补充说明。'}
-                  </p>
-                </div>
-              </section>
-              <HistoryTimeline
-                rounds={rounds}
-                caseId={current.id}
-                selectedRoundIndex={selectedRound.index}
-              />
-              <OpinionComposer
-                key={`${selectedRound.index}-${current.id}`}
-                item={current}
-                initial={pending.find((item) => item.id === current.id)}
-                writable={writable}
-                busy={busy}
-                readOnlyReason={
-                  !viewingLatest
-                    ? '历史轮次只读。切回最新一轮才能填写意见。'
-                    : decision.status !== 'pending'
-                      ? '本轮决定已经提交，不能继续修改。'
-                      : '当前为只读模式，请启动本机签核服务。'
-                }
-                onSave={saveOpinion}
-                onWithdraw={withdrawOpinion}
-              />
-            </article>
+                <EvidenceViewer item={current} roundIndex={selectedRound.index} />
+              </article>
+            </ScrollArea>
           ) : (
             <Empty className="h-full rounded-none border-0">
               <EmptyHeader>
@@ -334,28 +322,65 @@ export function ReviewApp() {
               </EmptyHeader>
             </Empty>
           )}
-        </ScrollArea>
-      </main>
+          {wideInspector && current && selectedRound ? (
+            <ReviewInspector
+              item={current}
+              round={selectedRound}
+              rounds={rounds}
+              pending={initialOpinion}
+              draft={draft}
+              writable={writable}
+              busy={busy}
+              readOnlyReason={readOnlyReason(viewingLatest, decision.status)}
+              onDraftChange={updateDraft}
+              onSave={saveOpinion}
+              onWithdraw={withdrawOpinion}
+            />
+          ) : null}
+        </div>
+      </SidebarInset>
 
-      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="p-0">
-          <SheetHeader>
-            <SheetTitle>验收项</SheetTitle>
-            <SheetDescription>选择要查看的证据。</SheetDescription>
-          </SheetHeader>
-          <CaseSidebar
-            cases={cases}
-            selectedIndex={caseIndex}
-            pending={pending}
-            className="flex-1"
-            onSelect={selectCase}
-          />
-        </SheetContent>
-      </Sheet>
+      <SurfaceCoordinator
+        inspectorOpen={inspectorOpen}
+        changesOpen={changesOpen}
+      />
+
+      {!wideInspector && current && selectedRound ? (
+        <Sheet
+          open={inspectorOpen}
+          onOpenChange={(open) => {
+            setInspectorOpen(open)
+            if (open) setChangesOpen(false)
+          }}
+        >
+          <SheetContent side="right" className="w-[min(31rem,calc(100%-1rem))] p-0">
+            <SheetHeader className="sr-only">
+              <SheetTitle>当前项检查器</SheetTitle>
+              <SheetDescription>查看结论、历史并填写人工意见。</SheetDescription>
+            </SheetHeader>
+            <ReviewInspector
+              item={current}
+              round={selectedRound}
+              rounds={rounds}
+              pending={initialOpinion}
+              draft={draft}
+              writable={writable}
+              busy={busy}
+              readOnlyReason={readOnlyReason(viewingLatest, decision.status)}
+              onDraftChange={updateDraft}
+              onSave={saveOpinion}
+              onWithdraw={withdrawOpinion}
+            />
+          </SheetContent>
+        </Sheet>
+      ) : null}
 
       <ChangesSheet
         open={changesOpen}
-        onOpenChange={setChangesOpen}
+        onOpenChange={(open) => {
+          setChangesOpen(open)
+          if (open) setInspectorOpen(false)
+        }}
         pending={pending}
         cases={rounds[latestPosition]?.cases ?? []}
         writable={writable}
@@ -376,20 +401,23 @@ export function ReviewApp() {
       <p className="sr-only" role="status">
         {hint}
       </p>
-    </div>
+    </SidebarProvider>
   )
 }
 
-function AppHeader({
+function AcceptanceHeader({
   requirement,
   round,
   roundPosition,
   roundCount,
+  caseCount,
   decision,
   live,
   pendingCount,
   writable,
-  onOpenSidebar,
+  showInspectorAction,
+  onBeforeToggleSidebar,
+  onOpenInspector,
   onPreviousRound,
   onNextRound,
   onPrimaryAction,
@@ -398,34 +426,36 @@ function AppHeader({
   round: Round | undefined
   roundPosition: number
   roundCount: number
+  caseCount: number
   decision: Decision
   live: boolean
   pendingCount: number
   writable: boolean
-  onOpenSidebar: () => void
+  showInspectorAction: boolean
+  onBeforeToggleSidebar: () => void
+  onOpenInspector: () => void
   onPreviousRound: () => void
   onNextRound: () => void
   onPrimaryAction: () => void
 }) {
   return (
     <header className="flex min-h-16 shrink-0 items-center gap-3 border-b px-4 py-3 sm:px-5">
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        className="min-[901px]:hidden"
-        aria-label="打开验收项"
-        onClick={onOpenSidebar}
-      >
-        <MenuIcon />
-      </Button>
+      <SidebarTrigger
+        aria-label="切换案例导航"
+        onClick={onBeforeToggleSidebar}
+      />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold tracking-tight">交付验收</p>
           <StatusBadge status={decision.status} live={live} />
         </div>
-        <p className="mt-0.5 truncate text-xs text-muted-foreground">
-          {requirement || round?.title || '未写验收目标'}
-        </p>
+        <div className="mt-0.5 flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
+          <p className="truncate">{requirement || round?.title || '未写验收目标'}</p>
+          <span aria-hidden="true">·</span>
+          <span className="shrink-0">{caseCount} 项</span>
+          <span aria-hidden="true">·</span>
+          <span className="shrink-0">{pendingCount} 项待修改</span>
+        </div>
       </div>
       {roundCount > 0 ? (
         <div className="flex items-center gap-1">
@@ -451,6 +481,12 @@ function AppHeader({
             <ChevronRightIcon />
           </Button>
         </div>
+      ) : null}
+      {showInspectorAction ? (
+        <Button variant="outline" onClick={onOpenInspector}>
+          <MessageSquareIcon data-icon="inline-start" />
+          <span className="max-[560px]:sr-only">检查当前项</span>
+        </Button>
       ) : null}
       <div id="write-zone" hidden={!writable}>
         {writable ? (
@@ -484,8 +520,10 @@ function CaseSidebar({
   className?: string
   onSelect: (index: number) => void
 }) {
+  const { setOpenMobile } = useSidebar()
+
   return (
-    <Sidebar className={className}>
+    <Sidebar collapsible="offcanvas" className={className}>
       <SidebarHeader>
         <div className="flex items-center justify-between px-1">
           <p className="text-sm font-medium">验收项</p>
@@ -505,12 +543,14 @@ function CaseSidebar({
                 return (
                   <SidebarMenuItem key={`${item.id}-${index}`}>
                     <SidebarMenuButton
-                      aria-current={
-                        index === selectedIndex ? 'page' : undefined
-                      }
-                      onClick={() => onSelect(index)}
+                      isActive={index === selectedIndex}
+                      aria-current={index === selectedIndex ? 'page' : undefined}
+                      onClick={() => {
+                        onSelect(index)
+                        setOpenMobile(false)
+                      }}
                     >
-                      <Thumb item={item} flagged={flagged} />
+                      <CaseStatusIcon status={item.status} flagged={flagged} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate font-medium">
                           {item.name || item.id}
@@ -527,17 +567,11 @@ function CaseSidebar({
           </SidebarGroup>
         </ScrollArea>
       </SidebarContent>
-      <Separator />
-      <SidebarFooter>
-        <p className="text-xs leading-relaxed text-muted-foreground">
-          使用 ← → 快速切换验收项
-        </p>
-      </SidebarFooter>
     </Sidebar>
   )
 }
 
-function CaseHeading({
+function EvidenceToolbar({
   item,
   index,
   total,
@@ -553,18 +587,15 @@ function CaseHeading({
   onNext: () => void
 }) {
   return (
-    <div className="flex items-start gap-4">
+    <div className="flex items-center gap-3">
       <div className="min-w-0 flex-1">
-        <p className="text-xs tabular-nums text-muted-foreground">
-          CASE {String(index + 1).padStart(2, '0')} /{' '}
-          {String(total).padStart(2, '0')}
-        </p>
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {item.name || item.id}
-          </h1>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="truncate text-sm font-medium">{item.name || item.id}</p>
           <CaseStatusBadge status={item.status} flagged={pending} />
         </div>
+        <p className="mt-1 text-xs tabular-nums text-muted-foreground">
+          {index + 1} / {total}
+        </p>
       </div>
       <div className="flex items-center gap-1">
         <Button
@@ -590,6 +621,91 @@ function CaseHeading({
   )
 }
 
+/** 当前案例的模型结论、历史和人工意见检查器。 */
+function ReviewInspector({
+  item,
+  round,
+  rounds,
+  pending,
+  draft,
+  writable,
+  busy,
+  readOnlyReason,
+  onDraftChange,
+  onSave,
+  onWithdraw,
+}: {
+  item: CaseItem
+  round: Round
+  rounds: Round[]
+  pending: DecisionItem | undefined
+  draft: OpinionDraft
+  writable: boolean
+  busy: boolean
+  readOnlyReason: string
+  onDraftChange: (draft: OpinionDraft) => void
+  onSave: (comment: string, keptImages: string[], files: File[]) => Promise<boolean>
+  onWithdraw: (id: string) => Promise<void>
+}) {
+  return (
+    <aside className="min-h-0 min-w-0 border-l bg-background" aria-label="当前项检查器">
+      <ScrollArea className="h-full min-h-0">
+        <div className="flex flex-col gap-6 p-5">
+          <header>
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-lg font-semibold tracking-tight">
+                {item.name || item.id}
+              </h1>
+              <CaseStatusBadge status={item.status} flagged={Boolean(pending)} />
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">第 {round.index} 轮</p>
+          </header>
+          <Separator />
+          <section aria-labelledby="ai-observation-title" className="flex flex-col gap-2">
+            <h2 id="ai-observation-title" className="text-sm font-semibold">
+              AI 检查结论
+            </h2>
+            <p className="text-sm leading-6 text-muted-foreground">
+              {item.observation || round.conclusion || '这一轮没有留下补充说明。'}
+            </p>
+          </section>
+          <HistoryTimeline
+            rounds={rounds}
+            caseId={item.id}
+            selectedRoundIndex={round.index}
+          />
+          <OpinionComposer
+            item={item}
+            initial={pending}
+            draft={draft}
+            writable={writable}
+            busy={busy}
+            readOnlyReason={readOnlyReason}
+            onDraftChange={onDraftChange}
+            onSave={onSave}
+            onWithdraw={onWithdraw}
+          />
+        </div>
+      </ScrollArea>
+    </aside>
+  )
+}
+
+/** 任一右侧 Sheet 打开时关闭移动端案例导航，避免多个浮层叠加。 */
+function SurfaceCoordinator({
+  inspectorOpen,
+  changesOpen,
+}: {
+  inspectorOpen: boolean
+  changesOpen: boolean
+}) {
+  const { setOpenMobile } = useSidebar()
+  useEffect(() => {
+    if (inspectorOpen || changesOpen) setOpenMobile(false)
+  }, [changesOpen, inspectorOpen, setOpenMobile])
+  return null
+}
+
 function EvidenceViewer({
   item,
   roundIndex,
@@ -599,98 +715,112 @@ function EvidenceViewer({
 }) {
   const images = imageEvidence(item)
   const [active, setActive] = useState(0)
-  const [mode, setMode] = useState<ImageMode>('fit')
-  const [fullscreen, setFullscreen] = useState(false)
-  const current = images[active] ?? images[0]
+  const safeActive = normalizeImageIndex(active, images.length)
+  const current = images[safeActive]
 
   useEffect(() => {
     setActive(0)
-    setMode('fit')
   }, [item.id, roundIndex])
 
-  return (
-    <section aria-labelledby="evidence-title" className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <SectionLabel id="evidence-title" index="01" title="截图证据" />
-        {current ? (
-          <div className="flex items-center gap-2">
-            <ToggleGroup
-              size="sm"
-              value={[mode]}
-              onValueChange={(value) => {
-                const next = value[0] as ImageMode | undefined
-                if (next) setMode(next)
-              }}
-            >
-              <ToggleGroupItem value="fit">适应</ToggleGroupItem>
-              <ToggleGroupItem value="original">原始尺寸</ToggleGroupItem>
-            </ToggleGroup>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              aria-label="全屏查看"
-              onClick={() => setFullscreen(true)}
-            >
-              <Maximize2Icon />
-            </Button>
-          </div>
-        ) : null}
-      </div>
+  if (!current) return <EvidenceEmpty observation={item.observation} />
 
-      {current ? (
-        <>
-          <div className="flex h-[min(56vh,34rem)] items-center justify-center overflow-auto rounded-xl bg-muted p-3 ring-1 ring-border">
+  return (
+    <Dialog>
+      <section
+        aria-labelledby="evidence-title"
+        className="flex min-h-[calc(100svh-9rem)] min-w-0 flex-1 flex-col gap-3"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="evidence-title" className="text-sm font-semibold">
+            截图证据
+          </h2>
+          <span className="text-xs tabular-nums text-muted-foreground">
+            {safeActive + 1} / {images.length}
+          </span>
+        </div>
+        <DialogTrigger
+          render={
+            <button
+              type="button"
+              aria-label={`全屏查看${item.name || item.id}的第 ${safeActive + 1} 张截图`}
+              className="flex min-h-80 flex-1 cursor-zoom-in items-center justify-center overflow-hidden rounded-xl bg-[var(--evidence-canvas)] p-4 outline-none ring-1 ring-border focus-visible:ring-3 focus-visible:ring-ring/60"
+            />
+          }
+        >
+          <img
+            src={current.path}
+            alt={`${item.name || item.id} 截图 ${safeActive + 1}`}
+            className="max-h-[calc(100svh-14rem)] max-w-full object-contain"
+          />
+        </DialogTrigger>
+        <EvidenceThumbnails images={images} active={safeActive} onSelect={setActive} />
+      </section>
+
+      <DialogContent
+        className="top-0 left-0 grid size-full max-w-none translate-x-0 translate-y-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-0 rounded-none bg-[var(--evidence-canvas)] p-0 text-white ring-0 sm:max-w-none"
+        showCloseButton
+      >
+        <DialogHeader className="border-b border-white/15 bg-black/30 px-5 py-4 pr-14">
+          <DialogTitle className="truncate text-white">
+            {item.name || item.id}
+          </DialogTitle>
+          <p className="text-xs text-white/65">
+            截图 {safeActive + 1} / {images.length}
+          </p>
+        </DialogHeader>
+        <ScrollArea className="min-h-0">
+          <div className="flex min-h-full justify-center p-4 sm:p-8">
             <img
               src={current.path}
-              alt={`${item.name} 截图 ${active + 1}`}
-              className={cn(
-                mode === 'fit'
-                  ? 'max-h-full max-w-full object-contain'
-                  : 'max-w-none self-start object-none',
-              )}
+              alt={`${item.name || item.id} 截图 ${safeActive + 1}`}
+              className="h-auto max-w-full self-start object-contain"
             />
           </div>
-          {images.length > 1 ? (
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {images.map((image, index) => (
-                <button
-                  key={`${image.path}-${index}`}
-                  type="button"
-                  aria-current={index === active ? 'true' : undefined}
-                  aria-label={`查看第 ${index + 1} 张截图`}
-                  className="size-16 shrink-0 overflow-hidden rounded-lg bg-muted outline-none ring-1 ring-border transition-opacity hover:opacity-80 focus-visible:ring-3 focus-visible:ring-ring/50 aria-current:ring-2 aria-current:ring-foreground"
-                  onClick={() => setActive(index)}
-                >
-                  <img
-                    src={image.path}
-                    alt=""
-                    className="size-full object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </>
-      ) : (
-        <EvidenceEmpty observation={item.observation} />
-      )}
+        </ScrollArea>
+        <div className="border-t border-white/15 bg-black/30 p-3">
+          <EvidenceThumbnails
+            images={images}
+            active={safeActive}
+            inverse
+            onSelect={setActive}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
-      <Dialog open={fullscreen} onOpenChange={setFullscreen}>
-        <DialogContent
-          className="h-[calc(100%-2rem)] max-w-[calc(100%-2rem)] p-3"
-          showCloseButton
+/** 主画布与全屏 Dialog 共用的图片切换条。 */
+function EvidenceThumbnails({
+  images,
+  active,
+  inverse = false,
+  onSelect,
+}: {
+  images: ReturnType<typeof imageEvidence>
+  active: number
+  inverse?: boolean
+  onSelect: (index: number) => void
+}) {
+  if (images.length <= 1) return null
+  return (
+    <div className="flex gap-2 overflow-x-auto p-1" aria-label="截图列表">
+      {images.map((image, index) => (
+        <button
+          key={`${image.path}-${index}`}
+          type="button"
+          aria-pressed={index === active}
+          aria-label={`查看第 ${index + 1} 张截图`}
+          className={cn(
+            'size-16 shrink-0 overflow-hidden rounded-lg bg-muted outline-none ring-1 ring-border transition-[opacity,box-shadow] hover:opacity-80 focus-visible:ring-3 focus-visible:ring-ring/60 aria-pressed:ring-2 aria-pressed:ring-foreground',
+            inverse && 'ring-white/25 aria-pressed:ring-white',
+          )}
+          onClick={() => onSelect(index)}
         >
-          <DialogHeader className="sr-only">
-            <DialogTitle>{item.name} 的截图证据</DialogTitle>
-          </DialogHeader>
-          <div className="flex min-h-0 items-center justify-center overflow-auto rounded-lg bg-muted">
-            {current ? (
-              <img src={current.path} alt={item.name} className="max-w-none" />
-            ) : null}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </section>
+          <img src={image.path} alt="" className="size-full object-cover" />
+        </button>
+      ))}
+    </div>
   )
 }
 
@@ -723,7 +853,9 @@ function HistoryTimeline({
 
   return (
     <section aria-labelledby="history-title" className="flex flex-col gap-4">
-      <SectionLabel id="history-title" index="02" title="验收记录" />
+      <h2 id="history-title" className="text-sm font-semibold">
+        验收记录
+      </h2>
       {history.length === 0 ? (
         <p className="border-l-2 pl-5 text-sm text-muted-foreground">
           这是该案例的第一条记录。
@@ -794,17 +926,21 @@ function RoundRecord({ round, caseId }: { round: Round; caseId: string }) {
 function OpinionComposer({
   item,
   initial,
+  draft,
   writable,
   busy,
   readOnlyReason,
+  onDraftChange,
   onSave,
   onWithdraw,
 }: {
   item: CaseItem
   initial: DecisionItem | undefined
+  draft: OpinionDraft
   writable: boolean
   busy: boolean
   readOnlyReason: string
+  onDraftChange: (draft: OpinionDraft) => void
   onSave: (
     comment: string,
     keptImages: string[],
@@ -812,24 +948,13 @@ function OpinionComposer({
   ) => Promise<boolean>
   onWithdraw: (id: string) => Promise<void>
 }) {
-  const [comment, setComment] = useState(initial?.comment ?? '')
-  const [keptImages, setKeptImages] = useState<string[]>([
-    ...(initial?.images ?? []),
-  ])
-  const [files, setFiles] = useState<File[]>([])
-  const [tab, setTab] = useState('edit')
   const [error, setError] = useState('')
   const [dragging, setDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const previews = useMemo(
-    () => files.map((file) => URL.createObjectURL(file)),
-    [files],
+    () => draft.files.map((file) => URL.createObjectURL(file)),
+    [draft.files],
   )
-
-  useEffect(() => {
-    setComment(initial?.comment ?? '')
-    setKeptImages([...(initial?.images ?? [])])
-  }, [initial])
 
   useEffect(() => {
     return () => {
@@ -843,13 +968,15 @@ function OpinionComposer({
     setError(
       next.length === all.length ? '' : '附图只支持 png / jpeg / webp / gif',
     )
-    setFiles((current) => [...current, ...next])
+    onDraftChange({ ...draft, files: [...draft.files, ...next] })
   }
 
   if (!writable) {
     return (
       <section aria-labelledby="opinion-title" className="flex flex-col gap-3">
-        <SectionLabel id="opinion-title" index="03" title="你的意见" />
+        <h2 id="opinion-title" className="text-sm font-semibold">
+          你的意见
+        </h2>
         <div className="border-l-2 pl-5">
           {initial ? (
             <>
@@ -872,7 +999,9 @@ function OpinionComposer({
       className="flex flex-col gap-3 pb-8"
     >
       <div className="flex items-center justify-between gap-3">
-        <SectionLabel id="opinion-title" index="03" title="你的意见" />
+        <h2 id="opinion-title" className="text-sm font-semibold">
+          你的意见
+        </h2>
         {initial ? <Badge variant="outline">已加入修改清单</Badge> : null}
       </div>
       <div
@@ -893,8 +1022,10 @@ function OpinionComposer({
         }}
       >
         <Tabs
-          value={tab}
-          onValueChange={(value) => setTab(String(value))}
+          value={draft.tab}
+          onValueChange={(value) =>
+            onDraftChange({ ...draft, tab: String(value) })
+          }
           className="gap-0"
         >
           <div className="flex items-center justify-between border-b px-3 py-2">
@@ -912,11 +1043,13 @@ function OpinionComposer({
                 </FieldLabel>
                 <Textarea
                   id={`opinion-${item.id}`}
-                  value={comment}
+                  value={draft.comment}
                   aria-invalid={Boolean(error)}
                   className="min-h-36 resize-y border-0 bg-transparent p-1 shadow-none focus-visible:ring-0"
                   placeholder="说明哪里不符合预期，以及希望改成什么样。"
-                  onChange={(event) => setComment(event.target.value)}
+                  onChange={(event) =>
+                    onDraftChange({ ...draft, comment: event.target.value })
+                  }
                   onPaste={(event) => {
                     const pasted = [...event.clipboardData.files].filter(
                       (file) => file.type.startsWith('image/'),
@@ -934,8 +1067,8 @@ function OpinionComposer({
             </FieldGroup>
           </TabsContent>
           <TabsContent value="preview" className="min-h-44 p-4">
-            {comment.trim() ? (
-              <MarkdownPreview text={comment} />
+            {draft.comment.trim() ? (
+              <MarkdownPreview text={draft.comment} />
             ) : (
               <p className="text-sm text-muted-foreground">
                 还没有可预览的内容。
@@ -944,16 +1077,17 @@ function OpinionComposer({
           </TabsContent>
         </Tabs>
 
-        {keptImages.length + files.length > 0 ? (
+        {draft.keptImages.length + draft.files.length > 0 ? (
           <div className="flex flex-wrap gap-2 border-t p-3">
-            {keptImages.map((src) => (
+            {draft.keptImages.map((src) => (
               <AttachmentPreview
                 key={src}
                 src={src}
                 onRemove={() =>
-                  setKeptImages((images) =>
-                    images.filter((image) => image !== src),
-                  )
+                  onDraftChange({
+                    ...draft,
+                    keptImages: draft.keptImages.filter((image) => image !== src),
+                  })
                 }
               />
             ))}
@@ -962,9 +1096,10 @@ function OpinionComposer({
                 key={src}
                 src={src}
                 onRemove={() =>
-                  setFiles((items) =>
-                    items.filter((_, itemIndex) => itemIndex !== index),
-                  )
+                  onDraftChange({
+                    ...draft,
+                    files: draft.files.filter((_, itemIndex) => itemIndex !== index),
+                  })
                 }
               />
             ))}
@@ -1007,13 +1142,17 @@ function OpinionComposer({
               type="button"
               disabled={busy}
               onClick={() => {
-                if (comment.trim() === '') {
+                if (draft.comment.trim() === '') {
                   setError('请填写修改说明')
                   return
                 }
                 setError('')
-                void onSave(comment, keptImages, files).then((saved) => {
-                  if (saved) setFiles([])
+                void onSave(
+                  draft.comment,
+                  draft.keptImages,
+                  draft.files,
+                ).then((saved) => {
+                  if (saved) onDraftChange({ ...draft, files: [] })
                 })
               }}
             >
@@ -1268,25 +1407,6 @@ function AttachmentStrip({
   )
 }
 
-function SectionLabel({
-  id,
-  index,
-  title,
-}: {
-  id: string
-  index: string
-  title: string
-}) {
-  return (
-    <div id={id} className="flex items-center gap-3">
-      <span className="font-mono text-xs tabular-nums text-muted-foreground">
-        {index}
-      </span>
-      <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
-    </div>
-  )
-}
-
 function StatusBadge({
   status,
   live,
@@ -1322,24 +1442,38 @@ function CaseStatusBadge({
   )
 }
 
-function Thumb({ item, flagged }: { item: CaseItem; flagged: boolean }) {
-  const src = imageEvidence(item)[0]?.path
-  return (
-    <span className="relative block aspect-[4/3] w-14 shrink-0 overflow-hidden rounded-md bg-muted ring-1 ring-border">
-      {src ? (
-        <img src={src} alt="" className="size-full object-cover" />
-      ) : (
-        <span className="flex size-full items-center justify-center text-muted-foreground">
-          <ImageIcon />
-        </span>
-      )}
-      {flagged ? (
-        <span className="absolute top-1 right-1 size-2 rounded-full bg-foreground ring-2 ring-background" />
-      ) : null}
-    </span>
-  )
+/** 用图标和文字共同表达案例状态，不依赖颜色或截图缩略图。 */
+function CaseStatusIcon({ status, flagged }: { status: string; flagged: boolean }) {
+  if (flagged) return <MessageSquareIcon aria-label="待修改" />
+  if (status === 'pass' || status === '通过') {
+    return <CheckCircle2Icon aria-label="通过" />
+  }
+  if (status === 'blocked' || status === '受阻') {
+    return <CircleAlertIcon aria-label="受阻" />
+  }
+  return <CircleDashedIcon aria-label={caseStatusLabel(status)} />
 }
 
 function labelFor(id: string, cases: CaseItem[]): string {
   return cases.find((item) => item.id === id)?.name || id
+}
+
+/** 从已保存意见创建可跨断点复用的编辑草稿。 */
+function createOpinionDraft(initial: DecisionItem | undefined): OpinionDraft {
+  return {
+    comment: initial?.comment ?? '',
+    keptImages: [...(initial?.images ?? [])],
+    files: [],
+    tab: 'edit',
+  }
+}
+
+/** 解释当前检查器为何只读。 */
+function readOnlyReason(
+  viewingLatest: boolean,
+  status: Decision['status'],
+): string {
+  if (!viewingLatest) return '历史轮次只读。切回最新一轮才能填写意见。'
+  if (status !== 'pending') return '本轮决定已经提交，不能继续修改。'
+  return '当前为只读模式，请启动本机签核服务。'
 }

@@ -76,13 +76,18 @@ export function readEmbeddedPayload(): AcceptancePayload {
  * 探测签字服务。file:// 或 health 失败都视为只读。
  */
 export async function probeLive(): Promise<boolean> {
-  if (location.protocol === 'file:') return false
+  if (!supportsLiveDecision(location.protocol)) return false
   try {
     const res = await fetch('/health', { cache: 'no-store' })
     return res.ok
   } catch {
     return false
   }
+}
+
+/** 只有 HTTP(S) 页面允许探测并写入本机签核服务。 */
+export function supportsLiveDecision(protocol: string): boolean {
+  return protocol === 'http:' || protocol === 'https:'
 }
 
 export function decisionToken(): string {

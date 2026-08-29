@@ -1,0 +1,67 @@
+{
+  "title": "验收审查工作台重构",
+  "commit": "working-tree@beeeb9f",
+  "surfaces": ["web"],
+  "summary": {
+    "verdict": "pass",
+    "conclusion": "官方 shadcn Sidebar、响应式当前项检查器、证据画布和多图全屏预览已组合为统一审查工作台。"
+  },
+  "plan": [
+    {
+      "id": "review-workbench-shell",
+      "title": "宽屏审查工作台突出证据与当前项",
+      "category": "布局",
+      "verifier": "human",
+      "method": "在 1440px 视口查看验收页",
+      "expected": "左侧案例 Sidebar、中央证据画布和 21rem 当前项检查器同时清晰可用，不显示逐项已查看进度",
+      "requiredEvidence": ["image"]
+    },
+    {
+      "id": "responsive-inspector",
+      "title": "窄屏按需打开当前项检查器",
+      "category": "响应式",
+      "verifier": "human",
+      "method": "在 375px 视口打开当前项检查器",
+      "expected": "页面主区只保留证据，检查器以 Sheet 打开，案例 Sidebar 与其他 Sheet 不叠加",
+      "requiredEvidence": ["image"]
+    },
+    {
+      "id": "multi-image-dialog",
+      "title": "全屏预览支持长图滚动与多图切换",
+      "category": "证据",
+      "verifier": "human",
+      "method": "点击证据主图并在 Dialog 底部切换缩略图",
+      "expected": "Dialog 铺满视口、长图可滚动、底部可切图，且没有缩放或下载工具栏",
+      "requiredEvidence": ["image"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "review-workbench-shell",
+      "name": "宽屏审查工作台突出证据与当前项",
+      "category": "布局",
+      "surface": "web",
+      "status": "pass",
+      "observation": "1440px 下 Sidebar、证据画布和内联检查器各自承担独立导航、证据和判断职责，页面无横向溢出。",
+      "evidence": [{ "type": "image", "path": "assets/workbench-wide.jpg" }]
+    },
+    {
+      "id": "responsive-inspector",
+      "name": "窄屏按需打开当前项检查器",
+      "category": "响应式",
+      "surface": "web",
+      "status": "pass",
+      "observation": "低于 1280px 后检查器进入 Sheet；375px 下 Sidebar、修改清单和检查器保持单浮层，跨断点草稿不丢失。",
+      "evidence": [{ "type": "image", "path": "assets/inspector-mobile.jpg" }]
+    },
+    {
+      "id": "multi-image-dialog",
+      "name": "全屏预览支持长图滚动与多图切换",
+      "category": "证据",
+      "surface": "web",
+      "status": "pass",
+      "observation": "主画布和 Dialog 共享图片索引，长图内容高度超过可视区并可纵向滚动；Escape 关闭后焦点回到触发按钮。",
+      "evidence": [{ "type": "image", "path": "assets/evidence-dialog.jpg" }]
+    }
+  ]
+}
