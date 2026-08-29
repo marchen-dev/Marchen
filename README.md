@@ -17,7 +17,7 @@ AI 编码工具（Claude Code、Codex、Cursor 等）已经把"AI 怎么写代�
 Marchen 就是做这件事的，由两根支柱组成：
 
 - **工作流工装**：从想法到实现的每一步都有对应的 skill——探索、提案、实现、验收、归档
-- **长期记忆**：每次变更自动留痕归档，可被语义检索，让 AI 在下一次工作时调出相关上下文
+- **长期记忆**：每次变更自动留痕归档，通过 changelog 定位历史，让 AI 在下一次工作时恢复相关上下文
 
 ## 快速开始
 
@@ -32,6 +32,7 @@ marchen init
 
 ```bash
 marchen:explore 我想给项目加暗色模式   # 先理清想法
+marchen:capture                       # 暂存探索状态，以后继续
 marchen:lite                          # 轻量一气呵成：创建 → 实现 → 归档
 marchen:propose                       # 复杂功能：生成完整方案文档
 marchen:apply                         # 按计划逐步实现
@@ -42,16 +43,17 @@ marchen:archive                       # 完成后归档留痕
 
 | 支柱 | 角色 | 核心能力 |
 |---|---|---|
-| **工作流工装** | 让 AI 的每一步都有结构 | explore / propose / preview / lite / apply / update / acceptance / archive |
-| **长期记忆** | 让 AI 跨会话不失忆 | archive 自动留痕 · changelog 索引 · search 语义检索 |
+| **工作流工装** | 让 AI 的每一步都有结构 | explore / capture / propose / preview / lite / apply / update / acceptance / archive |
+| **长期记忆** | 让 AI 跨会话不失忆 | archive 自动留痕 · changelog 索引 · artifact 回读 |
 
-两根支柱协同工作：工作流工装产出结构化 artifact，归档后进入长期记忆；下次启动新变更时，explore / apply 等 skill 自动从记忆中检索相关历史作为上下文。
+两根支柱协同工作：工作流工装产出结构化 artifact，归档后进入长期记忆；下次启动新变更时，explore / apply 等 skill 先从 changelog 定位候选记录，再读取相关 artifact 恢复上下文。
 
 ## 工作流工装
 
 每个 skill 解决工作流中的一个具体环节。`marchen init` 后可在 AI 工具中直接调用：
 
 - **`marchen:explore`** — 探索模式。在动手前理清想法、调查问题、比较方案。不写代码，只思考。
+- **`marchen:capture`** — 把尚未准备实施的讨论提炼为 Idea 状态快照，稍后可继续 explore 或晋升；不保存聊天原文。
 - **`marchen:propose`** — 提出新变更。引导 AI 产出一套结构化文档：动机（proposal）、需求规格（specs）、技术方案（design）、任务清单（tasks）。适合复杂功能、架构变更。
 - **`marchen:propose-preview`** — 把 propose 产出的 4~7 个 artifact 浓缩成一张终端卡片，便于人快速 review，决定下一步是 apply 还是回头改 propose。
 - **`marchen:lite`** — 轻量一气呵成。创建 lite 变更 → 实现任务 → 询问归档，全程一条命令。适合 bug 修复、小改动、快速迭代。
@@ -60,29 +62,35 @@ marchen:archive                       # 完成后归档留痕
 - **`marchen:acceptance`** — apply 完成后出示本地验收页（截图与结论），等人签核后再归档。
 - **`marchen:archive`** — 归档已完成的变更，自动写入 changelog 索引。
 
-## 长期记忆
+尚未准备实施时，可以把探索停放在 `marchen/ideas/<name>.md`：
 
-每个归档的变更都成为项目的长期记忆——完整保留所有 artifact 文件，并被索引以便后续检索。
-
-```bash
-marchen search "用户认证"              # 语义搜索归档历史
-marchen search "重构" -n 10            # 指定结果数量
-marchen search "认证" --min-score 0.5  # 设置最低分数阈值
-marchen search "认证" --rebuild        # 重建索引后搜索
+```text
+explore → capture → explore idea:<name> → lite/propose idea:<name>
 ```
 
-内置 Hybrid Search（BM25 + 向量检索 + 重排序），可以从归档历史中检索相关的设计决策和变更记录。归档 → changelog → search 构成完整闭环：
+Idea 默认是 Git 可追踪的项目文件，但 Marchen 不会自动执行 Git add 或 commit。Capture 会清理凭据、账号数据和绝对本机路径等明显敏感信息，但无法判断任意业务描述是否属于组织机密；提交前仍需人工 review。晋升后，Idea 会移动到 change 的 `exploration/`，正式 proposal/specs/design/tasks 始终是真相源。
+
+## 长期记忆
+
+每个归档的变更都成为项目的长期记忆——完整保留所有 artifact 文件，并在 `changelog.md` 中留下摘要索引。
+
+```bash
+cat marchen/changelog.md
+# 根据摘要读取相关目录，例如 marchen/archive/<date>-<change>/design.md
+```
+
+长期记忆使用确定性的 archive → changelog → artifact 回读闭环：
 
 1. `marchen:archive` 把变更移入 `marchen/archive/`，并在 `changelog.md` 中追加一行索引
-2. `marchen search` 在归档内容上做语义检索
-3. `marchen:explore` 和 `marchen:apply` 在工作流中自动调用 search，把相关历史作为上下文喂给 AI
+2. `marchen:explore`、`marchen:apply` 先扫描 changelog 摘要，定位少量候选归档
+3. AI 按需读取候选归档中的 proposal、design 或 spec，恢复决策上下文
 
-首次初始化时可选择启用搜索，启用后会下载所需模型（约 2GB）。未启用搜索时，skill 会自动回退到读取 `changelog.md` 获取历史上下文。
+内置 `marchen search`、QMD 和模型下载链路已经退役。升级后请运行 `marchen update`：它会删除废弃的 `search`、`models` 配置，并重新生成所选 AI 工具的 Skill/Command 文件。
 
-模型默认从国内镜像 `https://hf-mirror.com` 下载，缓存于 `~/.cache/qmd/models/`。需要切换下载源时有两种方式：
+迁移不会自动删除现有数据：
 
-- 临时切换：`HF_ENDPOINT=https://huggingface.co marchen update`
-- 持久化：编辑 `marchen/config.yaml`，修改 `models.endpoint` 字段
+- `marchen/.search/` 继续被 Git 忽略，确认不再需要后可手动删除。
+- `~/.cache/qmd/models/` 可能被独立 QMD 或其他工具共享；只有确认没有其他消费者时才手动清理。
 
 ## 支持的 AI 工具
 
@@ -109,20 +117,27 @@ marchen status <name> [--json]            # 查看 artifact 状态和工作流�
 marchen instructions <name> <artifact>    # 获取 artifact 创建指令（JSON）
 marchen archive <name> [--summary <text>] # 归档变更并写入 changelog
 marchen update                            # 更新 skill/command 文件到最新版本
-marchen search <query> [--rebuild]        # 搜索归档变更历史
+marchen idea list [--json]                # 列出尚未晋升的 Idea
+marchen idea show <name> [--json]         # 读取完整 Idea 和 revision
+marchen idea create <name> --stdin         # 从 stdin 创建 Idea
+marchen idea update <name> --if-revision <revision> --stdin
+marchen idea promote <names...> --change <change> # 晋升到正式变更
+marchen idea remove <name> [--yes]         # 删除未晋升 Idea
 ```
 
 ## 工作区结构
 
 ```
 marchen/
+├── ideas/            # 尚未晋升、可继续探索的 Idea
 ├── changes/          # 进行中的变更
 │   └── add-user-auth/
 │       ├── .metadata.yaml
 │       ├── proposal.md
 │       ├── specs/
 │       ├── design.md
-│       └── tasks.md
+│       ├── tasks.md
+│       └── exploration/ # 晋升后保留的探索背景
 ├── archive/          # 已归档的变更
 ├── changelog.md      # 变更日志索引
 └── config.yaml       # 配置（含 providers 选择）
@@ -132,7 +147,9 @@ marchen/
 
 ## 更新
 
-升级 marchen 后，运行 update 同步 skill 文件：
+升级 marchen 后，运行 update 同步 skill 文件并执行工作区配置迁移：
+
+> 从仍包含 `marchen search` 的版本升级属于 breaking change；升级后旧命令将按未知命令处理。
 
 ```bash
 npm install -g marchen@latest
@@ -145,7 +162,7 @@ pnpm monorepo，Turborepo 编排构建：
 
 ```
 apps/cli          CLI 入口（commander + @clack/prompts）
-packages/core     业务逻辑（Workspace + ChangeManager）
+packages/core     业务逻辑（Workspace + ChangeManager + IdeaManager）
 packages/config   Schema 定义、模板、provider 注册表
 packages/fs       文件系统操作封装
 packages/shared   共享类型、常量

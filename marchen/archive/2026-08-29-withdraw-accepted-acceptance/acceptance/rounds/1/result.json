@@ -1,0 +1,40 @@
+{
+  "title": "撤回已接受的验收决定",
+  "commit": "working-tree",
+  "surfaces": ["web"],
+  "summary": {
+    "verdict": "pass",
+    "conclusion": "新版 CLI 渲染的已接受终态显示撤回入口，确认弹窗明确说明将恢复为待签核并可继续填写修改意见。"
+  },
+  "plan": [
+    {
+      "id": "withdraw-accepted-decision",
+      "title": "已接受决定可以在归档前撤回",
+      "category": "签核",
+      "verifier": "human",
+      "method": "在本机签核页查看最新轮的已接受状态，并打开撤回确认",
+      "expected": "页头显示撤回接受；确认说明明确恢复为待签核并可继续填写修改意见",
+      "requiredEvidence": ["image"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "withdraw-accepted-decision",
+      "name": "已接受决定可以在归档前撤回",
+      "category": "签核",
+      "surface": "web",
+      "status": "pass",
+      "observation": "Chrome 中在线签核页显示“撤回接受”；打开后出现二次确认，未执行最终确认。取证使用临时 accepted 预览夹，真实变更的人工决定保持 pending。",
+      "evidence": [
+        {
+          "type": "image",
+          "path": "assets/withdraw-accepted-button.png"
+        },
+        {
+          "type": "image",
+          "path": "assets/withdraw-accepted-confirmation.png"
+        }
+      ]
+    }
+  ]
+}

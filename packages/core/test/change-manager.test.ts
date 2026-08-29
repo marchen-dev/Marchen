@@ -20,11 +20,6 @@ vi.mock('@marchen/fs', async (importOriginal) => {
   }
 })
 
-// Mock qmd，避免 archive 时 updateSearchIndex 发起网络请求
-vi.mock('@tobilu/qmd', () => {
-  throw new Error('qmd not available in test')
-})
-
 describe('changeManager.isValidName 名称校验', () => {
   it('合法的 kebab-case 名称', () => {
     expect(ChangeManager.isValidName('add-dark-mode')).toBe(true)
@@ -882,6 +877,9 @@ describe('changeManager.archive 归档变更', () => {
       expect.objectContaining({ status: 'archived' }),
     )
     expect(fs.moveDir).toHaveBeenCalledTimes(1)
+    expect(fs.ensureDir).not.toHaveBeenCalledWith(
+      expect.stringContaining('.search'),
+    )
   })
 
   it('归档时应该写入 changelog 条目（无 summary）', async () => {

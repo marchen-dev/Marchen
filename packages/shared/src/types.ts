@@ -43,6 +43,98 @@ export interface ChangeMetadata {
   readonly status: ChangeStatus
 }
 
+// ============================================================
+// Idea 生命周期
+// ============================================================
+
+/** Idea Markdown frontmatter 中的结构化元数据 */
+export interface IdeaMetadata {
+  /** 文档格式版本 */
+  readonly format: number
+  /** 面向人的标题 */
+  readonly title: string
+  /** 用于轻量语义判断的一句话摘要 */
+  readonly summary: string
+  /** 可选的主题标签 */
+  readonly tags: readonly string[]
+  /** 创建时间（ISO 8601） */
+  readonly createdAt: string
+  /** 最后更新时间（ISO 8601） */
+  readonly updatedAt: string
+}
+
+/** Idea 列表中的轻量条目，不包含正文 */
+export interface IdeaSummary extends IdeaMetadata {
+  /** 由 Markdown 文件名派生的唯一名称 */
+  readonly name: string
+}
+
+/** 完整 Idea 文档 */
+export interface IdeaDocument {
+  /** 由 Markdown 文件名派生的唯一名称 */
+  readonly name: string
+  /** 结构化元数据 */
+  readonly metadata: IdeaMetadata
+  /** 不含 frontmatter 的 Markdown 正文 */
+  readonly body: string
+  /** 规范化后的完整 Markdown */
+  readonly markdown: string
+  /** 完整 Markdown 内容的 SHA-256 修订值 */
+  readonly revision: string
+}
+
+/** Idea 列举过程中单个不可解析文件的问题 */
+export interface IdeaListIssue {
+  /** 由文件名派生的名称 */
+  readonly name: string
+  /** 可供人和 Skill 定位问题的说明 */
+  readonly message: string
+}
+
+/** Idea 列举结果 */
+export interface IdeaListResult {
+  /** 可正常读取的 idea，按更新时间倒序排列 */
+  readonly ideas: readonly IdeaSummary[]
+  /** 未阻塞整体列举的单文件问题 */
+  readonly issues: readonly IdeaListIssue[]
+}
+
+/** Idea 创建或更新结果 */
+export interface IdeaWriteResult {
+  /** Idea 名称 */
+  readonly name: string
+  /** 工作区内相对路径 */
+  readonly path: string
+  /** 写入后的修订值 */
+  readonly revision: string
+}
+
+/** Idea 删除结果 */
+export interface IdeaRemoveResult {
+  /** 被删除的 Idea 名称 */
+  readonly name: string
+  /** 删除前的工作区内相对路径 */
+  readonly path: string
+}
+
+/** 单个已晋升 Idea 的路径信息 */
+export interface PromotedIdea {
+  /** Idea 名称 */
+  readonly name: string
+  /** 晋升前的工作区内相对路径 */
+  readonly from: string
+  /** 晋升后的工作区内相对路径 */
+  readonly to: string
+}
+
+/** Idea 批量晋升结果 */
+export interface IdeaPromoteResult {
+  /** 目标 open change */
+  readonly change: string
+  /** 已晋升的 Idea 列表 */
+  readonly ideas: readonly PromotedIdea[]
+}
+
 /**
  * Artifact 定义
  *
@@ -325,13 +417,4 @@ export interface WorkspaceConfig {
   readonly providers: readonly string[]
   /** CLI 版本号 */
   readonly version?: string
-  /** 搜索配置 */
-  readonly search?: {
-    readonly enabled: boolean
-  }
-  /** 模型下载配置 */
-  readonly models?: {
-    /** HuggingFace 端点，覆盖默认的 hf-mirror.com */
-    readonly endpoint?: string
-  }
 }

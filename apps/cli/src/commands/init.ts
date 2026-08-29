@@ -1,9 +1,7 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
 import { AGENT_PROVIDERS } from '@marchen/config'
-import { SearchManager } from '@marchen/core'
 import { createContext } from '../utils/context.js'
-import { formatModelProgress } from '../utils/model-progress.js'
 
 /**
  * 注册 init 命令
@@ -57,41 +55,16 @@ export function registerInitCommand(program: Command): void {
 
       const version = program.version() as string
 
-      // 是否启用搜索
-      const searchEnabled = await p.confirm({
-        message: '是否启用搜索？（需下载约 2GB 模型）',
-        initialValue: false,
-      })
-
-      if (p.isCancel(searchEnabled)) {
-        p.cancel('操作已取消')
-        process.exit(0)
-      }
-
       // 执行初始化
       await workspace.initialize({
         providers: selectedProviders,
         version,
-        searchEnabled,
       })
 
       const names = (selectedProviders as string[])
         .map((id) => AGENT_PROVIDERS[id]?.name ?? id)
         .join(', ')
       p.log.success(`已为 ${names} 生成 skills 文件`)
-
-      // 启用搜索时下载模型
-      if (searchEnabled) {
-        const searchManager = new SearchManager(workspace)
-        const spinner = p.spinner()
-        spinner.start('下载搜索模型...')
-        await searchManager.ensureModels({
-          onProgress: (prog) => {
-            spinner.message(formatModelProgress(prog))
-          },
-        })
-        spinner.stop('Hybrid Search 已启用')
-      }
 
       p.outro('Marchen 初始化成功！')
     })

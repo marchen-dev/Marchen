@@ -321,6 +321,25 @@ describe('serve', () => {
     expect(body.items).toEqual([])
   })
 
+  it('已接受决定可以撤回为 pending', async () => {
+    const { manager, served } = await boot()
+    const endpoint = `http://127.0.0.1:${served.port}/decision?t=${served.token}`
+    const options = (status: 'accepted' | 'pending') => ({
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ status, items: [] }),
+    })
+
+    expect((await fetch(endpoint, options('accepted'))).ok).toBe(true)
+    expect((await manager.readDecision('foo'))?.status).toBe('accepted')
+
+    expect((await fetch(endpoint, options('pending'))).ok).toBe(true)
+    expect(await manager.readDecision('foo')).toEqual({
+      status: 'pending',
+      items: [],
+    })
+  })
+
   it('accepted 带待修改项返回 400', async () => {
     const { manager, served } = await boot()
     const posted = await fetch(

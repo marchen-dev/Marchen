@@ -2,7 +2,7 @@
 
 ## 包职责
 
-核心业务逻辑层，使用 Class 架构组织领域逻辑。提供 `Workspace`（工作区上下文）、`ChangeManager`（变更管理）、`SearchManager`（搜索）和 `ModelManager`（模型管理）四个核心类。
+核心业务逻辑层，使用 Class 架构组织领域逻辑。提供 `Workspace`（工作区上下文）、`ChangeManager`（变更管理）、`IdeaManager`（Idea 生命周期）和 `AcceptanceManager`（验收管理）四个核心类。
 
 ## 依赖关系
 
@@ -27,8 +27,8 @@ src/
 ├── index.ts            # 统一导出
 ├── workspace.ts        # Workspace 类
 ├── change-manager.ts   # ChangeManager 类
-├── search-manager.ts   # SearchManager 类（封装 qmd SDK）
-└── model-manager.ts    # ModelManager 类（模型下载与管理）
+├── idea-manager.ts     # IdeaManager 类
+└── acceptance-manager.ts # AcceptanceManager 类
 ```
 
 ## 核心导出
@@ -45,16 +45,14 @@ workspace.root           // 工作区根目录
 workspace.specDir        // marchen/ 路径
 workspace.changeDir      // marchen/changes/ 路径
 workspace.archiveDir     // marchen/archive/ 路径
+workspace.ideaDir        // marchen/ideas/ 路径
 workspace.changelogPath  // marchen/changelog.md 路径
-workspace.searchDbPath   // marchen/.search/index.sqlite 路径
 
 await workspace.isInitialized()  // 检查是否已初始化
-await workspace.initialize({ providers, version, searchEnabled })  // 执行初始化
+await workspace.initialize({ providers, version })  // 执行初始化
 await workspace.readConfig()     // 读取 config.yaml 配置
-await workspace.update({ version })  // 更新 skill/command 文件，补全缺失配置
+await workspace.update({ version })  // 更新 skill/command 文件并迁移配置
 ```
-
-`searchEnabled` 参数控制搜索开关，持久化到 config.yaml 的 `search.enabled` 字段。
 
 ### ChangeManager 类
 
@@ -75,33 +73,9 @@ await changes.getApplyInstructions('my-feature')         // 获取 apply 实现�
 ChangeManager.isValidName('my-feature')  // 静态方法，校验名称
 ```
 
-### SearchManager 类
+### IdeaManager 与 AcceptanceManager
 
-搜索管理器，封装 qmd SDK，支持 Hybrid Search（BM25 + Vector + Reranking），通过 dynamic import 加载：
-
-```typescript
-const search = new SearchManager(workspace)
-
-await search.isAvailable()               // 检测 qmd SDK 是否可用
-await search.prepare({ onModelProgress })  // 加载模型，准备搜索引擎
-await search.search(query, { limit, minScore })  // Hybrid Search
-await search.index()                     // 全量索引
-await search.indexChange()               // 增量索引（archive 后调用）
-await search.close()                     // 释放资源
-```
-
-`prepare()` 加载模型并初始化 store，模型不存在时抛出 StateError。调用方（CLI search 命令）在 `config.search.enabled: false` 时不应调用此类。
-
-### ModelManager 类
-
-QMD 模型管理，从自定义 CDN 下载模型到 `~/.marchen/models/qmd/`：
-
-```typescript
-const modelManager = new ModelManager()
-
-const paths = await modelManager.ensureModels({ onProgress })  // 确保模型就绪
-modelManager.applyEnv(paths)  // 设置 QMD_*_MODEL 环境变量
-```
+`IdeaManager` 管理未晋升 Idea 的创建、更新、读取、删除与晋升；`AcceptanceManager` 管理验收轮次、离线验收页、服务状态与人的签核结果。两者都通过 `Workspace` 获取路径，并通过 `@marchen/fs` 执行文件操作。
 
 ## 开发命令
 

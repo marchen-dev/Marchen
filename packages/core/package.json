@@ -26,8 +26,6 @@
   "dependencies": {
     "@marchen/config": "workspace:*",
     "@marchen/fs": "workspace:*",
-    "@marchen/shared": "workspace:*",
-    "@tobilu/qmd": "^2.1.0",
-    "node-llama-cpp": "^3.18.1"
+    "@marchen/shared": "workspace:*"
   }
 }

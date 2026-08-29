@@ -1,0 +1,85 @@
+{
+  "title": "退役 Marchen 内置搜索",
+  "commit": "working-tree",
+  "surfaces": ["cli", "skill", "docs"],
+  "summary": {
+    "verdict": "pass",
+    "conclusion": "CLI、Core、配置、依赖和生成模板中的内置搜索链路已整体移除；新旧工作区改用 changelog 与 archive 恢复历史，显式 update 可迁移旧配置和托管模板，同时不会修改遗留索引或共享模型缓存。"
+  },
+  "plan": [
+    {
+      "id": "retired-cli-surface",
+      "title": "CLI 不再公开或执行 search",
+      "category": "CLI",
+      "verifier": "human",
+      "method": "查看构建后 CLI 的顶层帮助，并执行旧 marchen search 命令",
+      "expected": "帮助列表中没有 search；旧命令以未知命令退出，且没有模型或索引副作用",
+      "requiredEvidence": ["text"]
+    },
+    {
+      "id": "new-workspace-without-search",
+      "title": "新工作区不产生搜索状态",
+      "category": "初始化",
+      "verifier": "human",
+      "method": "在空临时目录运行交互式 init，查看提示、config.yaml 和目录结构",
+      "expected": "只选择 AI 工具，不询问搜索；配置没有 search/models，目录中没有新建 .search",
+      "requiredEvidence": ["text"]
+    },
+    {
+      "id": "legacy-workspace-migration",
+      "title": "旧工作区迁移且遗留索引不变",
+      "category": "迁移",
+      "verifier": "human",
+      "method": "构造带旧配置、旧 Skill 和索引哨兵的临时工作区，分别执行同版本与跨版本 update，再归档示例变更",
+      "expected": "废弃配置被清理，跨版本覆盖旧 Skill；archive 不再索引，索引哨兵在整个过程中保持原哈希",
+      "requiredEvidence": ["text"]
+    },
+    {
+      "id": "deterministic-history-guidance",
+      "title": "Skill 与文档改用确定性历史路径",
+      "category": "Skill 与文档",
+      "verifier": "human",
+      "method": "查看生成的 Explore/Apply 内容和中英文 README 的长期记忆、升级章节",
+      "expected": "Explore/Apply 使用 changelog 与候选 archive，并保留 Idea 路径；README 说明 breaking change、update 迁移和缓存安全边界",
+      "requiredEvidence": ["text"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "retired-cli-surface",
+      "name": "CLI 不再公开或执行 search",
+      "category": "CLI",
+      "surface": "cli",
+      "status": "pass",
+      "observation": "构建后的 marchen --help 仅列出 acceptance、archive、init、idea、instructions、list、new、status、update；执行 marchen search 历史决策以退出码 1 返回 unknown command 'search'。",
+      "evidence": []
+    },
+    {
+      "id": "new-workspace-without-search",
+      "name": "新工作区不产生搜索状态",
+      "category": "初始化",
+      "surface": "cli",
+      "status": "pass",
+      "observation": "在 /tmp 隔离目录通过真实 TTY 完成 init，交互只选择 Claude Code；生成的 config.yaml 仅含 schema、providers、version，且初始化未创建 .search。",
+      "evidence": []
+    },
+    {
+      "id": "legacy-workspace-migration",
+      "name": "旧工作区迁移且遗留索引不变",
+      "category": "迁移",
+      "surface": "cli",
+      "status": "pass",
+      "observation": "同版本 update 删除 search/models 且不刷新其他内容；跨版本 update 同时覆盖带 marchen search 的旧 Apply Skill。随后 archive 成功写入 changelog。索引哨兵在迁移前、同版本 update 后、跨版本 update 后和 archive 后的 SHA-1 均为 020a40b013b8a60b06e8f8a8d1911552e11b7397。",
+      "evidence": []
+    },
+    {
+      "id": "deterministic-history-guidance",
+      "name": "Skill 与文档改用确定性历史路径",
+      "category": "Skill 与文档",
+      "surface": "skill",
+      "status": "pass",
+      "observation": "Explore 保留 marchen idea list/show，并按 list、changelog、候选 archive 调查；Apply 改为扫描 changelog 后读取 proposal/design/spec。中英文 README 已删除当前搜索命令示例，并说明 breaking change、marchen update 迁移以及两个遗留缓存路径的手动清理边界。",
+      "evidence": []
+    }
+  ]
+}

@@ -93,6 +93,7 @@ import {
   fetchDecision,
   fileToNewImage,
   imageEvidence,
+  isAcceptanceWithdrawable,
   isAllowedImageFile,
   isReviewWritable,
   postDecision,
@@ -102,7 +103,7 @@ import {
 import { normalizeImageIndex, opinionDraftKey } from '@/lib/review-workbench'
 import { cn } from '@/lib/utils'
 
-type ConfirmMode = 'accept' | 'reject' | null
+type ConfirmMode = 'accept' | 'reject' | 'withdraw-acceptance' | null
 
 interface OpinionDraft {
   comment: string
@@ -136,6 +137,11 @@ export function ReviewApp() {
   const current = cases[caseIndex] ?? cases[0]
   const viewingLatest = roundPosition === latestPosition
   const writable = isReviewWritable(live, decision.status, viewingLatest)
+  const acceptanceWithdrawable = isAcceptanceWithdrawable(
+    live,
+    decision.status,
+    viewingLatest,
+  )
   const pending = decision.items
   const draftKey = current
     ? opinionDraftKey(selectedRound?.index ?? 0, current.id)
@@ -243,6 +249,8 @@ export function ReviewApp() {
     setConfirmMode(null)
     if (mode === 'accept') {
       await persist('accepted', [])
+    } else if (mode === 'withdraw-acceptance') {
+      await persist('pending', [])
     } else if (mode === 'reject') {
       const ok = await persist('rejected', pending)
       if (ok) setChangesOpen(false)
@@ -268,6 +276,7 @@ export function ReviewApp() {
           live={live}
           pendingCount={pending.length}
           writable={writable}
+          acceptanceWithdrawable={acceptanceWithdrawable}
           showInspectorAction={!wideInspector && Boolean(current)}
           onBeforeToggleSidebar={() => {
             setInspectorOpen(false)
@@ -290,6 +299,7 @@ export function ReviewApp() {
             if (pending.length === 0) setConfirmMode('accept')
             else setChangesOpen(true)
           }}
+          onWithdrawAcceptance={() => setConfirmMode('withdraw-acceptance')}
         />
 
         <div className="grid min-h-0 flex-1 grid-cols-1 xl:grid-cols-[minmax(0,1fr)_var(--review-inspector-width)]">
@@ -415,12 +425,14 @@ function AcceptanceHeader({
   live,
   pendingCount,
   writable,
+  acceptanceWithdrawable,
   showInspectorAction,
   onBeforeToggleSidebar,
   onOpenInspector,
   onPreviousRound,
   onNextRound,
   onPrimaryAction,
+  onWithdrawAcceptance,
 }: {
   requirement: string
   round: Round | undefined
@@ -431,12 +443,14 @@ function AcceptanceHeader({
   live: boolean
   pendingCount: number
   writable: boolean
+  acceptanceWithdrawable: boolean
   showInspectorAction: boolean
   onBeforeToggleSidebar: () => void
   onOpenInspector: () => void
   onPreviousRound: () => void
   onNextRound: () => void
   onPrimaryAction: () => void
+  onWithdrawAcceptance: () => void
 }) {
   return (
     <header className="flex min-h-16 shrink-0 items-center gap-3 border-b px-4 py-3 sm:px-5">
@@ -503,6 +517,12 @@ function AcceptanceHeader({
           </Button>
         ) : null}
       </div>
+      {acceptanceWithdrawable ? (
+        <Button variant="outline" onClick={onWithdrawAcceptance}>
+          <Undo2Icon data-icon="inline-start" />
+          撤回接受
+        </Button>
+      ) : null}
     </header>
   )
 }
@@ -1275,23 +1295,34 @@ function DecisionConfirmation({
   onConfirm: () => void
 }) {
   const accepting = mode === 'accept'
+  const withdrawingAcceptance = mode === 'withdraw-acceptance'
   return (
     <AlertDialog open={mode != null} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {accepting ? '接受本轮交付？' : '提交修改清单？'}
+            {accepting
+              ? '接受本轮交付？'
+              : withdrawingAcceptance
+                ? '撤回本轮接受？'
+                : '提交修改清单？'}
           </AlertDialogTitle>
           <AlertDialogDescription>
             {accepting
               ? '接受后本轮将变为只读，之后可以归档。'
-              : `将 ${count} 项意见交给 AI，提交后本轮将变为只读。`}
+              : withdrawingAcceptance
+                ? '撤回后本轮将恢复为待签核，可以继续填写修改意见。'
+                : `将 ${count} 项意见交给 AI，提交后本轮将变为只读。`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={busy}>取消</AlertDialogCancel>
           <AlertDialogAction disabled={busy} onClick={onConfirm}>
-            {accepting ? '确认接受' : '确认提交'}
+            {accepting
+              ? '确认接受'
+              : withdrawingAcceptance
+                ? '确认撤回'
+                : '确认提交'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

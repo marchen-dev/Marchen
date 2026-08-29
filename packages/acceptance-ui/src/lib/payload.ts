@@ -189,6 +189,15 @@ export function isReviewWritable(
   return live && status === 'pending' && viewingLatest
 }
 
+/** 只有在线查看最新轮的已接受决定才允许撤回。 */
+export function isAcceptanceWithdrawable(
+  live: boolean,
+  status: DecisionStatus,
+  viewingLatest: boolean,
+): boolean {
+  return live && status === 'accepted' && viewingLatest
+}
+
 export function caseHistory(
   rounds: readonly Round[],
   caseId: string,

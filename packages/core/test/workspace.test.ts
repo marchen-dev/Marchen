@@ -11,6 +11,7 @@ vi.mock('@marchen/fs', async (importOriginal) => {
     writeFile: vi.fn().mockResolvedValue(undefined),
     writeYaml: vi.fn().mockResolvedValue(undefined),
     readYaml: vi.fn().mockResolvedValue({}),
+    removeFile: vi.fn().mockResolvedValue(undefined),
     exists: vi.fn().mockResolvedValue(false),
   }
 })
@@ -25,6 +26,7 @@ describe('workspace', () => {
     expect(workspace.root).toBe('/test/root')
     expect(workspace.specDir).toContain('marchen')
     expect(workspace.changeDir).toContain('changes')
+    expect(workspace.ideaDir).toContain('ideas')
   })
 
   it('提供包边界信息', () => {
@@ -61,10 +63,27 @@ describe('workspace', () => {
       expect(fs.ensureDir).toHaveBeenCalledWith(
         expect.stringContaining('archive'),
       )
+      expect(fs.ensureDir).toHaveBeenCalledWith(
+        expect.stringContaining('ideas'),
+      )
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        expect.stringContaining('ideas/.gitkeep'),
+        '',
+      )
       expect(fs.writeYaml).toHaveBeenCalledWith(
         expect.stringContaining('config.yaml'),
         expect.objectContaining({ schema: 'full' }),
       )
+      const configCall = vi
+        .mocked(fs.writeYaml)
+        .mock.calls.find(([path]) => path.endsWith('config.yaml'))
+      expect(configCall?.[1]).not.toHaveProperty('search')
+      expect(configCall?.[1]).not.toHaveProperty('models')
+      expect(
+        vi
+          .mocked(fs.ensureDir)
+          .mock.calls.some(([path]) => path.includes('.search')),
+      ).toBe(false)
     })
 
     it('默认只生成 Claude Code 的文件', async () => {
@@ -84,6 +103,14 @@ describe('workspace', () => {
       expect(fs.writeFile).toHaveBeenCalledWith(
         expect.stringContaining('.claude/commands/marchen/propose.md'),
         expect.stringContaining('marchen:propose'),
+      )
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        expect.stringContaining('.claude/skills/marchen-capture/SKILL.md'),
+        expect.stringContaining('marchen-capture'),
+      )
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        expect.stringContaining('.claude/commands/marchen/capture.md'),
+        expect.stringContaining('Marchen: Capture'),
       )
     })
 
@@ -115,6 +142,12 @@ describe('workspace', () => {
       expect(fs.ensureDir).toHaveBeenCalledWith(
         expect.stringContaining('.agents/skills/marchen-propose'),
       )
+      expect(fs.ensureDir).toHaveBeenCalledWith(
+        expect.stringContaining('.claude/skills/marchen-capture'),
+      )
+      expect(fs.ensureDir).toHaveBeenCalledWith(
+        expect.stringContaining('.agents/skills/marchen-capture'),
+      )
     })
 
     it('codex provider 不生成 command 文件', async () => {
@@ -125,24 +158,28 @@ describe('workspace', () => {
       expect(ensureDirCalls.some((p) => p.includes('commands'))).toBe(false)
     })
 
-    it('skill.md 内容跨 provider 一致', async () => {
+    it('所有 skill 内容跨 provider 一致', async () => {
       const workspace = new Workspace('/test/root')
       await workspace.initialize({ providers: ['claude-code', 'codex'] })
 
       const writeFileCalls = vi.mocked(fs.writeFile).mock.calls
-      const claudeSkill = writeFileCalls.find(
-        ([p]) =>
-          typeof p === 'string' &&
-          p.includes('.claude/skills/marchen-apply/SKILL.md'),
+      const claudeSkills = writeFileCalls.filter(
+        ([path]) =>
+          typeof path === 'string' &&
+          path.includes('.claude/skills/') &&
+          path.endsWith('/SKILL.md'),
       )
-      const codexSkill = writeFileCalls.find(
-        ([p]) =>
-          typeof p === 'string' &&
-          p.includes('.agents/skills/marchen-apply/SKILL.md'),
-      )
-      expect(claudeSkill).toBeDefined()
-      expect(codexSkill).toBeDefined()
-      expect(claudeSkill![1]).toBe(codexSkill![1])
+      expect(claudeSkills.length).toBeGreaterThan(0)
+
+      for (const [claudePath, content] of claudeSkills) {
+        const suffix = claudePath.split('.claude/skills/')[1]
+        const codexSkill = writeFileCalls.find(
+          ([path]) =>
+            typeof path === 'string' &&
+            path.endsWith(`.agents/skills/${suffix}`),
+        )
+        expect(codexSkill?.[1]).toBe(content)
+      }
     })
 
     it('config.yaml 持久化多个 provider', async () => {
@@ -224,7 +261,83 @@ describe('workspace', () => {
       expect(result.skillCount).toBe(0)
       expect(result.commandCount).toBe(0)
       expect(fs.writeYaml).not.toHaveBeenCalled()
-      expect(fs.ensureDir).not.toHaveBeenCalled()
+      expect(fs.ensureDir).toHaveBeenCalledWith(
+        expect.stringContaining('ideas'),
+      )
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        expect.stringContaining('ideas/.gitkeep'),
+        '',
+      )
+    })
+
+    it('版本一致时仍清理旧搜索配置', async () => {
+      vi.mocked(fs.readYaml).mockResolvedValueOnce({
+        schema: 'full',
+        providers: ['claude-code'],
+        version: '1.0.0',
+        search: { enabled: true },
+        models: { endpoint: 'https://example.com' },
+        custom: '保留',
+      })
+
+      const workspace = new Workspace('/test/root')
+      const result = await workspace.update({ version: '1.0.0' })
+
+      expect(result.providersUpdated).toEqual([])
+      expect(fs.writeYaml).toHaveBeenCalledTimes(1)
+      const migrated = vi.mocked(fs.writeYaml).mock.calls[0]![1]
+      expect(migrated).not.toHaveProperty('search')
+      expect(migrated).not.toHaveProperty('models')
+      expect(migrated).toMatchObject({ custom: '保留', version: '1.0.0' })
+    })
+
+    it('重复迁移搜索配置保持幂等', async () => {
+      vi.mocked(fs.readYaml)
+        .mockResolvedValueOnce({
+          schema: 'full',
+          providers: ['claude-code'],
+          version: '1.0.0',
+          search: { enabled: false },
+          models: { endpoint: 'https://example.com' },
+        })
+        .mockResolvedValueOnce({
+          schema: 'full',
+          providers: ['claude-code'],
+          version: '1.0.0',
+        })
+
+      const workspace = new Workspace('/test/root')
+      await workspace.update({ version: '1.0.0' })
+      await workspace.update({ version: '1.0.0' })
+
+      expect(fs.writeYaml).toHaveBeenCalledTimes(1)
+    })
+
+    it('跨版本迁移保留其他配置且不删除遗留索引', async () => {
+      vi.mocked(fs.readYaml).mockResolvedValueOnce({
+        schema: 'full',
+        context: 'custom context',
+        providers: ['claude-code'],
+        version: '0.8.3',
+        search: { enabled: true },
+        models: { endpoint: 'https://example.com' },
+      })
+
+      const workspace = new Workspace('/test/root')
+      await workspace.update({ version: '1.0.0' })
+
+      const migrated = vi.mocked(fs.writeYaml).mock.calls.at(-1)![1]
+      expect(migrated).toMatchObject({
+        context: 'custom context',
+        version: '1.0.0',
+      })
+      expect(migrated).not.toHaveProperty('search')
+      expect(migrated).not.toHaveProperty('models')
+      expect(
+        vi
+          .mocked(fs.removeFile)
+          .mock.calls.some(([path]) => path.includes('.search')),
+      ).toBe(false)
     })
 
     it('旧项目无 version 字段时正常更新', async () => {

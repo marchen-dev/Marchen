@@ -1,15 +1,13 @@
 import type { Command } from 'commander'
 import * as p from '@clack/prompts'
-import { SearchManager } from '@marchen/core'
 import { StateError } from '@marchen/shared'
 import { createContext } from '../utils/context.js'
 import { handleError } from '../utils/error.js'
-import { formatModelProgress } from '../utils/model-progress.js'
 
 /**
  * 注册 update 命令
  *
- * 更新 skill/command 文件到最新版本，并按 config.yaml 同步搜索模型状态
+ * 更新 skill/command 文件到最新版本
  *
  * @param program - Commander 程序实例
  */
@@ -41,26 +39,6 @@ export function registerUpdateCommand(program: Command): void {
           }
 
           p.log.success('config.yaml 版本已更新')
-        }
-
-        // 按 search.enabled 同步模型状态
-        const config = await workspace.readConfig()
-        const searchEnabled = config.search?.enabled ?? false
-
-        if (searchEnabled) {
-          const searchManager = new SearchManager(workspace)
-          let downloaded = false
-          const spinner = p.spinner()
-          spinner.start('检查搜索模型...')
-          await searchManager.ensureModels({
-            onProgress: (prog) => {
-              if (prog.stage === 'downloading') downloaded = true
-              spinner.message(formatModelProgress(prog))
-            },
-          })
-          spinner.stop(
-            downloaded ? 'Hybrid Search 已启用' : 'Hybrid Search 已就绪',
-          )
         }
 
         p.outro('更新完成！')

@@ -1,0 +1,67 @@
+{
+  "title": "Idea Capture 与晋升工作流",
+  "commit": "working-tree",
+  "surfaces": ["cli", "skill"],
+  "summary": {
+    "verdict": "pass",
+    "conclusion": "Idea CLI 已可创建、列举、恢复和受 revision 保护地更新探索状态；规划就绪后可晋升到 change/exploration 并随变更归档，Capture/Explore/Lite/Propose 模板已接入同一生命周期。"
+  },
+  "plan": [
+    {
+      "id": "idea-state-lifecycle",
+      "title": "Idea 可以创建、恢复并安全更新",
+      "category": "CLI",
+      "verifier": "human",
+      "method": "在临时工作区依次调用 idea create、list、show、update，并使用旧 revision 再次更新",
+      "expected": "JSON 可读取标题、摘要、正文和 revision；有效更新返回新 revision，旧 revision 被拒绝且不覆盖内容",
+      "requiredEvidence": ["text"]
+    },
+    {
+      "id": "idea-promotion-archive",
+      "title": "Idea 晋升后进入正式变更并随之归档",
+      "category": "生命周期",
+      "verifier": "human",
+      "method": "创建规划就绪的 lite change，执行 idea promote，再归档目标 change",
+      "expected": "源 Idea 从 ideas 列表消失，文件出现在 change/exploration，归档目录继续保留该探索背景",
+      "requiredEvidence": ["text"]
+    },
+    {
+      "id": "idea-skill-workflow",
+      "title": "Capture、Explore、Lite、Propose 使用同一 Idea 流程",
+      "category": "Skill",
+      "verifier": "human",
+      "method": "查看生成的 capture、explore、lite、propose Skill/Command 内容",
+      "expected": "Capture 提炼并清理快照；Explore 用 CLI 元数据匹配且不使用 QMD；Lite/Propose 只晋升显式 idea，并在规划验证后调用 promote",
+      "requiredEvidence": ["text"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "idea-state-lifecycle",
+      "name": "Idea 可以创建、恢复并安全更新",
+      "category": "CLI",
+      "surface": "cli",
+      "status": "pass",
+      "observation": "临时工作区中 create 返回 marchen/ideas/resumable-design.md 和 SHA-256 revision；list 只返回轻量元数据；show 返回完整正文。携带当前 revision 的 update 返回新 revision，随后使用旧 revision 更新以退出码 1 拒绝，并提示重新 show 后调和内容。",
+      "evidence": []
+    },
+    {
+      "id": "idea-promotion-archive",
+      "name": "Idea 晋升后进入正式变更并随之归档",
+      "category": "生命周期",
+      "surface": "cli",
+      "status": "pass",
+      "observation": "目标 lite change 的 tasks 为 filled 后，promote 返回 from=marchen/ideas/resumable-design.md、to=marchen/changes/implement-resumable-design/exploration/resumable-design.md；ideas 列表变为空。archive 后探索文件位于 archive/2026-08-29-implement-resumable-design/exploration/，changelog 同步生成记录。",
+      "evidence": []
+    },
+    {
+      "id": "idea-skill-workflow",
+      "name": "Capture、Explore、Lite、Propose 使用同一 Idea 流程",
+      "category": "Skill",
+      "surface": "skill",
+      "status": "pass",
+      "observation": "发行模板包含 marchen-capture；Explore 使用 marchen idea list/show 并移除了 marchen search；Lite 与 Propose 都要求显式 idea:<name>，在规划状态就绪后执行批量 promote，失败时保留源 Idea。",
+      "evidence": []
+    }
+  ]
+}

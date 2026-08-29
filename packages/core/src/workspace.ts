@@ -23,7 +23,7 @@ import {
   writeFile,
   writeYaml,
 } from '@marchen/fs'
-import { CONFIG_FILE_NAME, DEFAULT_HF_ENDPOINT } from '@marchen/shared'
+import { CONFIG_FILE_NAME, IDEA_DIRECTORY_NAME } from '@marchen/shared'
 
 /** 初始化选项 */
 export interface InitializeOptions {
@@ -31,8 +31,6 @@ export interface InitializeOptions {
   readonly providers?: readonly string[]
   /** CLI 版本号，传入时写入 config.yaml */
   readonly version?: string
-  /** 是否启用搜索，写入 config.yaml 的 search.enabled */
-  readonly searchEnabled?: boolean
 }
 
 /** 更新选项 */
@@ -60,11 +58,11 @@ export class Workspace {
   /** 归档目录路径（marchen/archive/） */
   readonly archiveDir: string
 
+  /** 尚未晋升的想法目录路径（marchen/ideas/） */
+  readonly ideaDir: string
+
   /** 变更日志路径（marchen/changelog.md） */
   readonly changelogPath: string
-
-  /** 搜索索引数据库路径（marchen/.search/index.sqlite） */
-  readonly searchDbPath: string
 
   /** 包边界信息 */
   readonly packageBoundaries: readonly PackageBoundary[] = [
@@ -85,8 +83,8 @@ export class Workspace {
     this.specDir = getSpecDirectory(this.root)
     this.changeDir = getChangeDirectory(this.root)
     this.archiveDir = getArchiveDirectory(this.root)
+    this.ideaDir = join(this.specDir, IDEA_DIRECTORY_NAME)
     this.changelogPath = join(this.specDir, 'changelog.md')
-    this.searchDbPath = join(this.specDir, '.search', 'index.sqlite')
   }
 
   /**
@@ -105,6 +103,7 @@ export class Workspace {
    * - marchen/config.yaml
    * - marchen/changes/
    * - marchen/archive/
+   * - marchen/ideas/
    *
    * @param options - 初始化选项
    */
@@ -118,7 +117,7 @@ export class Workspace {
     await ensureDir(this.specDir)
     await ensureDir(this.changeDir)
     await ensureDir(this.archiveDir)
-    await ensureDir(join(this.specDir, '.search'))
+    await ensureDir(this.ideaDir)
 
     // 写入默认配置
     const configPath = join(this.specDir, CONFIG_FILE_NAME)
@@ -129,13 +128,12 @@ export class Workspace {
     if (options?.version) {
       configData.version = options.version
     }
-    configData.search = { enabled: options?.searchEnabled ?? false }
-    configData.models = { endpoint: DEFAULT_HF_ENDPOINT }
     await writeYaml(configPath, configData)
 
     // 创建 .gitkeep 占位文件
     await writeFile(join(this.changeDir, '.gitkeep'), '')
     await writeFile(join(this.archiveDir, '.gitkeep'), '')
+    await writeFile(join(this.ideaDir, '.gitkeep'), '')
 
     // 创建 changelog.md（已存在时跳过）
     if (!(await exists(this.changelogPath))) {
@@ -174,9 +172,21 @@ export class Workspace {
     const configPath = join(this.specDir, CONFIG_FILE_NAME)
     const config = await readYaml<Record<string, unknown>>(configPath)
 
+    // 老项目升级后也立即具备 idea 停车区
+    await ensureDir(this.ideaDir)
+    await writeFile(join(this.ideaDir, '.gitkeep'), '')
+
+    // 显式 update 始终清理已经退役的搜索配置，即使版本未变化
+    const retiredConfigRemoved = 'search' in config || 'models' in config
+    delete config.search
+    delete config.models
+
     // 版本一致时跳过，避免重复写入
     const previousVersion = (config.version as string) ?? null
     if (previousVersion === options.version) {
+      if (retiredConfigRemoved) {
+        await writeYaml(configPath, config)
+      }
       return {
         previousVersion,
         currentVersion: options.version,
@@ -219,21 +229,6 @@ export class Workspace {
     config.version = options.version
     if (!config.providers) {
       config.providers = [...providerIds]
-    }
-    // 迁移旧 search.mode → search.enabled
-    const rawSearch = config.search as Record<string, unknown> | undefined
-    if (rawSearch && 'mode' in rawSearch) {
-      config.search = { enabled: rawSearch.mode === 'semantic' }
-    }
-    if (!config.search) {
-      config.search = { enabled: false }
-    }
-    // 补全 models.endpoint 默认值（老 config 不覆盖已有值）
-    const rawModels = config.models as Record<string, unknown> | undefined
-    if (!rawModels) {
-      config.models = { endpoint: DEFAULT_HF_ENDPOINT }
-    } else if (rawModels.endpoint == null) {
-      config.models = { ...rawModels, endpoint: DEFAULT_HF_ENDPOINT }
     }
     await writeYaml(configPath, config)
 

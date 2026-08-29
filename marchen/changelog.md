@@ -55,3 +55,7 @@
 - 2026-08-23: [add-acceptance-workflow](./archive/2026-08-23-add-acceptance-workflow/) — 新增本地验收工作流：acceptance 目录约定、CLI 子命令组与冻结单文件验收页，逐项待修改后整单签核，删除 review 入口
 - 2026-08-29: [refactor-acceptance-review-workbench](./archive/2026-08-29-refactor-acceptance-review-workbench/) — 将验收页重构为基于官方 shadcn 的响应式证据审查工作台
 - 2026-08-29: [simplify-acceptance-navigation](./archive/2026-08-29-simplify-acceptance-navigation/) — 收敛验收页导航与截图交互，强化当前项并支持全视口图片预览
+- 2026-08-29: [withdraw-accepted-acceptance](./archive/2026-08-29-withdraw-accepted-acceptance/) — 支持归档前撤回已接受决定并恢复待签核
+- 2026-08-29: [rename-to-marchen](./archive/2026-08-29-rename-to-marchen/) — 将活跃代码与文档命名统一为 Marchen
+- 2026-08-29: [add-idea-capture-workflow](./archive/2026-08-29-add-idea-capture-workflow/) — 新增 Idea CLI 与 Capture 工作流，支持想法保存、恢复、安全更新及晋升归档
+- 2026-08-29: [retire-marchen-search](./archive/2026-08-29-retire-marchen-search/) — 退役内置 search/QMD，旧工作区迁移至 changelog 与 archive 历史调查

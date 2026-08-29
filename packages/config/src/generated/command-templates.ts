@@ -182,7 +182,7 @@ tags: [workflow, implementation]
 - 每完成一个任务立即勾选 checkbox，不要攒着
 - 改动最小化，只做任务要求的事
 - 不确定就暂停问，不要猜
-- 如果实现过程中遇到不确定的设计决策，可以用 \`marchen search "<关键词>" --json\` 搜索历史变更中的相关方案
+- 如果实现过程中遇到不确定的设计决策，先扫描 \`marchen/changelog.md\`，再读取相关 archive 中的 proposal、design 或 spec
 - 使用 AskUserQuestion 时，选项不超过 4 个
 - \`instruction\` 是给你的指引，不要原样复制到代码注释中
 `
@@ -263,6 +263,150 @@ tags: [workflow, archive]
 - 使用 AskUserQuestion 时，选项不超过 4 个
 `
 
+export const COMMAND_CAPTURE = `---
+name: "Marchen: Capture"
+description: 把尚未准备实施的当前讨论提炼为可恢复的 Idea
+category: Workflow
+tags: [workflow, capture, idea]
+---
+
+把当前讨论保存为 \`marchen/ideas/<name>.md\`，供后续 explore、lite 或 propose 使用。
+
+**Capture 保存的是探索状态快照，不是聊天记录。** 只保留后续继续判断所需的背景、结论和问题，不逐句复制对话。
+
+---
+
+## 1. 判断是否适合 Capture
+
+- 尚未创建正式 change：可以创建或更新 Idea。
+- 正在讨论 open change，且洞察直接影响其范围、需求、设计或任务：优先建议 \`/marchen:update <change>\`，不要另建重复 Idea。
+- 正在讨论 open change，但用户明确要把独立旁支暂存到以后：可以 Capture 为新 Idea。
+
+## 2. 检查已有 Idea
+
+\`\`\`bash
+marchen idea list --json
+\`\`\`
+
+根据名称、标题、摘要和标签判断当前主题是否与已有 Idea 相同：
+
+- 唯一明确属于同一主题：读取完整内容与 revision。
+  \`\`\`bash
+  marchen idea show <name> --json
+  \`\`\`
+- 多个可能相同：让用户选择，不要猜。
+- 建议名称已存在但主题不同：改用更明确的 kebab-case 名称，必要时询问用户。
+- 没有匹配：创建新 Idea。
+
+## 3. 生成状态快照
+
+生成带 frontmatter 的完整 Markdown。不要填写 \`format\`、\`createdAt\`、\`updatedAt\`，这些字段由 CLI 管理。
+
+\`\`\`md
+---
+title: 面向人的标题
+summary: 一句话说明这个想法及当前关注点
+tags:
+  - tag-a
+  - tag-b
+---
+
+> 本文记录尚未定案的探索背景；晋升后以正式变更产物为准。
+
+## 背景与价值
+
+为什么讨论它，想解决什么。
+
+## 已确认
+
+- 已经明确且仍然有效的事实或决策。
+
+## 当前倾向
+
+- 尚未成为正式决策，但目前偏向的方案及原因。
+
+## 待确认
+
+- 下次继续时需要回答的问题。
+
+## 已否决
+
+- 不再考虑的方案及原因，避免重复讨论。
+
+## 相关上下文
+
+- 使用项目相对路径记录相关文件、change 或 archive；没有则写“无”。
+
+## 下次从这里继续
+
+一句可直接交给 Explore 的继续提示。
+\`\`\`
+
+内容应调和为当前完整状态，不要把新内容追加成时间线或聊天日志。没有内容的推荐章节可以写“无”，不要编造。
+
+## 4. 隐私检查
+
+写入前必须检查并清理：
+
+- Secret、Token、Cookie、私钥、签名 URL
+- 账号、地址、订单号等个人数据
+- \`/Users/<name>/...\`、\`C:\\Users\\<name>\\...\` 等绝对本机路径，改成项目相对路径或非识别性描述
+- 与继续探索无关的内部数据
+
+CLI 不能判断任意自然语言是否属于组织机密。Idea 默认是 Git 可追踪的项目文件，提醒用户提交前 review；不要执行 \`git add\`、commit 或 push。
+
+## 5. 通过 CLI 保存
+
+优先使用执行工具原生的 stdin 能力。只能使用 shell 重定向时，使用不展开变量的带引号 heredoc，并选择不会出现在正文中的唯一结束标记。
+
+创建：
+
+\`\`\`bash
+marchen idea create <name> --stdin --json <<'MARCHEN_IDEA_EOF'
+<完整 Markdown>
+MARCHEN_IDEA_EOF
+\`\`\`
+
+更新已有 Idea：先保留 \`show --json\` 返回的 revision，调和旧内容与当前讨论后提交完整新文档。
+
+\`\`\`bash
+marchen idea update <name> --if-revision '<revision>' --stdin --json <<'MARCHEN_IDEA_EOF'
+<完整 Markdown>
+MARCHEN_IDEA_EOF
+\`\`\`
+
+revision 冲突时，不要强制覆盖。重新 show，调和最新内容后再更新；存在实质冲突则请用户决定。
+
+写入成功后执行：
+
+\`\`\`bash
+marchen idea show <name> --json
+\`\`\`
+
+确认名称、标题、摘要、正文和新 revision 均可读取。
+
+## 输出
+
+说明创建或更新了哪个 Idea，并给出后续入口：
+
+\`\`\`text
+/marchen:explore idea:<name>
+/marchen:lite idea:<name>
+/marchen:propose idea:<name>
+\`\`\`
+
+不要自动启动下一阶段。
+
+## 护栏
+
+- 不保存完整聊天原文
+- 不把未确认倾向写成正式决策
+- 不覆盖同名但不同主题的 Idea
+- 更新必须携带刚读取到的 revision
+- 写入失败或验证失败时，不声称已经 Capture
+- 不自动执行 Git 操作
+`
+
 export const COMMAND_EXPLORE = `---
 name: "Marchen: Explore"
 description: 进入探索模式 — 思考想法、调查问题、厘清需求
@@ -280,6 +424,7 @@ tags: [workflow, explore, thinking]
 - 模糊的想法："实时协作"
 - 具体的问题："auth 系统越来越难维护了"
 - 变更名称："add-dark-mode"（在该变更上下文中探索）
+- Idea：\`idea:add-dark-mode\`（精确恢复之前保存的探索）
 - 方案比较："postgres vs sqlite"
 - 什么都不带也行
 
@@ -362,30 +507,26 @@ cat marchen/changelog.md
 \`\`\`
 这是所有已归档变更的索引，每条包含日期、变更名和一句话摘要。先扫一遍找到与用户话题相关的条目。如果找到，直接读对应 archive 目录下的 proposal.md 或 design.md 了解详情。
 
-3. 语义搜索：
-
-这是 RAG 搜索，不是 grep——构造语义完整的短语，不要用单个泛词。
+3. 尚未晋升的 Idea：
 
 \`\`\`bash
-marchen search "<语义完整的查询短语>" --json
+marchen idea list --json
 \`\`\`
 
-**查询构造指引：**
-- 用描述性短语，不用单个词：
-  "初始化适配多个 agent 客户端" → \`"multi-agent provider 初始化"\`
-  "之前怎么处理错误的" → \`"错误处理 error handling 重构"\`
-  "暗色模式的设计决策" → \`"dark mode 设计方案"\`
-- 中英文混合效果更好（归档内容里中英都有）
-- 如果结果不理想，换个角度重新构造查询
+只使用返回的名称、标题、摘要、标签和更新时间判断相关性，不要读取所有完整正文或使用数值评分。
 
-如果有匹配结果（score >= 0.4），读取对应 archive 目录下的 design.md 或 proposal.md 了解详细决策。
-
-如果 \`marchen search\` 不可用（命令报错），回退到 changelog.md + 手动读 archive 目录。
+- 输入包含 \`idea:<name>\`：直接执行 \`marchen idea show <name> --json\`。不存在就明确报告，可展示名称相近候选，但不得改用另一个 Idea。
+- 自然语言与一个 Idea 唯一明确匹配：自动 show，并在继续前告诉用户“已加载 Idea: \`<name>\`”。
+- 多个 Idea 都合理：展示名称和摘要让用户选择，选择前不读取完整正文。
+- 没有明显匹配：当作新主题，不强行关联。
+- 没有输入：展示最近更新的 Idea 和“开始新主题”，不要替用户猜。
+- \`issues\` 中的损坏文件只提示，不应阻止其他 Idea 的使用。
 
 这告诉你：
 - 是否有进行中的变更
 - 它们的名称、schema 和状态
 - 项目过去做过哪些变更
+- 是否有值得恢复的未晋升 Idea
 - 用户可能在做什么
 
 如果用户提到了特定变更名称，读取它的 artifact 作为上下文。
@@ -395,14 +536,15 @@ marchen search "<语义完整的查询短语>" --json
 自由思考。当洞察结晶时，根据复杂度推荐下一步：
 
 **判断标准：**
+- \`/marchen:capture\` — 讨论有价值但仍有关键问题未决，先保存以后继续
 - \`/marchen:lite\` — bug 修复、小改动、单一任务组、不需要设计文档
 - \`/marchen:propose\` — 新功能、多步骤、需要 design/specs、涉及多模块
 
 **推荐方式：** 直接在回复中输出推荐，说明理由，让用户自行输入命令。示例：
 
-> 想法差不多成型了。这个改动比较简单（只涉及一个文件的小调整），建议用 \`/marchen:lite\` 直接走轻量流程。
+> 这个方向值得保留，但还有关键问题未定，建议用 \`/marchen:capture\` 暂存。
 >
-> 如果你觉得需要更完整的设计文档，也可以用 \`/marchen:propose\`。
+> 如果范围已经明确，则根据复杂度选择 \`/marchen:lite\` 或 \`/marchen:propose\`。
 
 根据讨论内容给出你的推荐和理由，但让用户自己决定输入哪个命令。
 
@@ -438,6 +580,8 @@ marchen search "<语义完整的查询短语>" --json
 
 4. **用户决定** — 提议后继续。不施压，不自动捕获。
 
+如果出现与当前 change 无关的独立旁支，只有用户明确表示要暂存时才建议 \`/marchen:capture\`；不要把当前 change 的决策复制成 Idea。
+
 ---
 
 ## 不必做的事
@@ -455,7 +599,8 @@ marchen search "<语义完整的查询短语>" --json
 
 没有固定的结束方式。探索可能：
 
-- **流向下一阶段**：用 **AskUserQuestion** 提供 \`/marchen:lite\` 和 \`/marchen:propose\` 选项，附带推荐理由
+- **暂存以后继续**：建议用户显式调用 \`/marchen:capture\`，不要自动保存
+- **流向下一阶段**：按成熟度和复杂度推荐 \`/marchen:lite\` 或 \`/marchen:propose\`
 - **更新 artifact**："已将这些决策更新到 design.md"
 - **只是提供清晰度**：用户得到了需要的，继续前进
 - **稍后继续**："随时可以继续"
@@ -471,6 +616,8 @@ marchen search "<语义完整的查询短语>" --json
 - **不催促** — 探索是思考时间，不是任务时间
 - **不强制结构** — 让模式自然浮现
 - **不自动捕获** — 提议保存洞察，不要直接做
+- **不自动启动下一 Skill** — 输出建议命令，让用户决定
+- **只用轻量元数据匹配 Idea** — 读取 CLI 返回的摘要信息并由当前 AI 判断
 - **要可视化** — 一张好图胜过千言万语
 - **要探索代码库** — 让讨论扎根于现实
 - **要质疑假设** — 包括用户的和你自己的
@@ -488,13 +635,21 @@ tags: [workflow, lite]
 
 ---
 
-**输入**：\`/marchen:lite\` 后面跟变更名称（kebab-case）或变更描述。
+**输入**：\`/marchen:lite\` 后面跟变更名称（kebab-case）、变更描述，或一个/多个显式 \`idea:<name>\`。
+
+如果包含 \`idea:<name>\`，创建变更前逐个执行：
+
+\`\`\`bash
+marchen idea show <name> --json
+\`\`\`
+
+把完整 Idea 作为 tasks 的探索背景。只使用用户显式指定的 Idea，不通过模糊语义匹配自动消费其他 Idea。任一指定 Idea 不存在或损坏时先停止。
 
 **流程**
 
 1. **确定变更名称**
 
-   如果提供了输入，直接使用或从描述中提取 kebab-case 名称（如"修复登录 bug" → \`fix-login-bug\`）。
+   如果提供了输入，直接使用或从描述、Idea 标题与摘要中提取 kebab-case 名称（如"修复登录 bug" → \`fix-login-bug\`）。\`idea:<name>\` 是来源标识，不强制作为 change 名称。
 
    如果没有输入，用 **AskUserQuestion** 工具询问：
    > "你想做什么变更？描述一下你要构建或修复的内容。"
@@ -533,7 +688,7 @@ tags: [workflow, lite]
 
 4. **填充 tasks.md**
 
-   根据用户描述 + \`instruction\` 指引 + \`template\` 结构，填充 tasks.md：
+   根据用户描述 + 显式 Idea 背景 + \`instruction\` 指引 + \`template\` 结构，填充 tasks.md：
    - \`## 背景\`：简要说明变更目的和方案
    - 任务列表：按组分类，checkbox 格式
 
@@ -541,7 +696,21 @@ tags: [workflow, lite]
 
    如果用户描述太模糊，用 **AskUserQuestion** 澄清关键信息。
 
-5. **开始实现**
+5. **验证 tasks 并晋升显式 Idea**
+
+   \`\`\`bash
+   marchen status <name> --json
+   \`\`\`
+
+   确认 \`workflow.next\` 为 \`null\` 且 tasks 为 \`filled\`。如果使用了显式 Idea，在开始实现前一次性执行：
+
+   \`\`\`bash
+   marchen idea promote <idea-name> [<idea-name>...] --change <name> --json
+   \`\`\`
+
+   tasks 创建或验证失败时不得 promote，源 Idea 继续留在 \`marchen/ideas/\`。promote 失败时停止流程，不要开始实现。
+
+6. **开始实现**
 
    获取实现指令：
 
@@ -574,7 +743,7 @@ tags: [workflow, lite]
 
    暂停时显示："暂停于任务 N/M: <原因>"，流程结束。
 
-6. **全部完成 → 一道题**
+7. **全部完成 → 一道题**
 
    所有任务完成后，用 **AskUserQuestion** 只问一次：
 
@@ -599,6 +768,8 @@ tags: [workflow, lite]
 - 任务粒度要小到一个会话内能完成
 - 如果上下文关键信息不清楚，询问用户；但小疑问优先做合理判断，保持节奏
 - 已存在同名变更时必须询问用户，不要覆盖
+- 只读取和晋升用户显式指定的 \`idea:<name>\`，不得隐式消费语义候选
+- 必须在 tasks 验证后、实现前晋升 Idea；探索文件不替代 tasks
 - 实现前必须读 context 中的 artifact 内容
 - 每完成一个任务立即勾选 checkbox，不要攒着
 - 改动最小化，只做任务要求的事
@@ -672,7 +843,7 @@ tags: [workflow, preview]
 - 卡片框宽 70 字符（含 \`│\` 边框），便于主流终端整齐显示
 - 每行内容（去掉边框后）≤ 60 字符；超出必须截断/合并/重写，不许折行
 - 禁止粘贴 artifact 原文片段，所有内容必须重新组织、压缩
-- 中文为主，技术名词保留英文（如 \`SearchManager\`、\`SDK\`）
+- 中文为主，技术名词保留英文（如 \`IdeaManager\`、\`SDK\`）
 - 宁可少写，不要堆。摘不下就合并或截断，在框底加 \`更多详情见 marchen/changes/<name>/\`
 
 **full schema 段落上限：**
@@ -772,13 +943,21 @@ tags: [workflow, artifacts]
 
 ---
 
-**输入**：\`/marchen:propose\` 后面跟变更名称（kebab-case）或变更描述。
+**输入**：\`/marchen:propose\` 后面跟变更名称（kebab-case）、变更描述，或一个/多个显式 \`idea:<name>\`。
+
+如果包含 \`idea:<name>\`，在创建变更前逐个读取：
+
+\`\`\`bash
+marchen idea show <name> --json
+\`\`\`
+
+把完整 Idea 作为所有 artifact 的探索背景。只消费用户显式指定的 Idea；不要通过模糊语义匹配静默带入其他 Idea。任一指定 Idea 不存在或损坏时先停止处理。
 
 **流程**
 
 1. **确定变更名称**
 
-   如果提供了输入，直接使用或从描述中提取 kebab-case 名称（如"添加用户认证" → \`add-user-auth\`）。
+   如果提供了输入，直接使用或从描述、Idea 标题与摘要中提取 kebab-case 名称（如"添加用户认证" → \`add-user-auth\`）。\`idea:<name>\` 是来源标识，不强制作为 change 名称。
 
    如果没有输入，用 **AskUserQuestion** 工具询问：
    > "你想做什么变更？描述一下你要构建或修复的内容。"
@@ -832,12 +1011,14 @@ tags: [workflow, artifacts]
 
       **普通 artifact（proposal / design / tasks）：**
       - 读取 \`context\` 中 \`status\` 为 \`filled\` 的 \`content\` 作为上下文
+      - 如果指定了 Idea，同时读取其完整内容作为形成正式决策前的背景；区分其中的已确认事项、倾向和待确认问题
       - 按 \`instruction\` 指引 + \`template\` 结构生成内容
       - 写入 \`marchen/changes/<name>/<outputPath>\`
       - 写入后验证文件存在
 
       **specs（目录型 artifact，outputPath 为 \`specs/\`）：**
       - 读取 proposal 内容（在 \`context\` 中，\`id\` 为 \`proposal\` 的 \`content\`）
+      - 结合显式 Idea 背景，但以 proposal 中已经确定的能力范围为准
       - 从 proposal 的"能力"章节提取能力列表（kebab-case 名称）
       - 为每个能力：
         - 创建目录 \`marchen/changes/<name>/specs/<capability>/\`
@@ -851,7 +1032,21 @@ tags: [workflow, artifacts]
 
    d. 显示进度："已创建 \`<artifact-id>\`"，标记任务完成，回到步骤 a。
 
-4. **显示最终状态**
+4. **验证并晋升显式 Idea**
+
+   \`\`\`bash
+   marchen status <name> --json
+   \`\`\`
+
+   只有 \`workflow.next\` 为 \`null\`，且 proposal、specs、design、tasks 全部为 \`filled\` 时，才一次性晋升所有显式 Idea：
+
+   \`\`\`bash
+   marchen idea promote <idea-name> [<idea-name>...] --change <name> --json
+   \`\`\`
+
+   未使用 Idea 时跳过。任一 artifact 创建或验证失败时不得 promote，原 Idea 留在 \`marchen/ideas/\`。promote 失败时报告实际错误并停止，不要声称提案已经完整衔接。
+
+5. **显示最终状态**
 
    \`\`\`bash
    marchen status <name>
@@ -877,6 +1072,8 @@ tags: [workflow, artifacts]
 - 写入后验证文件存在再继续下一个
 - 如果上下文关键信息不清楚，询问用户；但小疑问优先做合理判断，保持节奏
 - 已存在同名变更时必须询问用户，不要覆盖
+- 只读取和晋升用户显式指定的 \`idea:<name>\`，不得隐式消费语义候选
+- 必须先完成并验证全部 artifact，再晋升 Idea；探索文件不替代正式 artifact
 - \`instruction\` 是给你的指引，不要把它原样复制到 artifact 文件中
 - 使用 AskUserQuestion 时，选项不超过 4 个；需要更多选项时合并或分步询问
 `
@@ -979,6 +1176,7 @@ export const COMMAND_TEMPLATES: Record<string, CommandTemplate> = {
   acceptance: { fileName: 'acceptance.md', content: COMMAND_ACCEPTANCE },
   apply: { fileName: 'apply.md', content: COMMAND_APPLY },
   archive: { fileName: 'archive.md', content: COMMAND_ARCHIVE },
+  capture: { fileName: 'capture.md', content: COMMAND_CAPTURE },
   explore: { fileName: 'explore.md', content: COMMAND_EXPLORE },
   lite: { fileName: 'lite.md', content: COMMAND_LITE },
   'propose-preview': {

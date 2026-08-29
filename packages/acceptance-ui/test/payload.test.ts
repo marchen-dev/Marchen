@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import {
   caseHistory,
+  isAcceptanceWithdrawable,
   isReviewWritable,
   normalizePayload,
   postDecision,
@@ -67,6 +68,14 @@ describe('验收页 payload', () => {
     expect(isReviewWritable(true, 'pending', false)).toBe(false)
     expect(isReviewWritable(true, 'accepted', true)).toBe(false)
     expect(isReviewWritable(true, 'rejected', true)).toBe(false)
+  })
+
+  it('只有服务在线、accepted 且查看最新轮时可撤回接受', () => {
+    expect(isAcceptanceWithdrawable(true, 'accepted', true)).toBe(true)
+    expect(isAcceptanceWithdrawable(false, 'accepted', true)).toBe(false)
+    expect(isAcceptanceWithdrawable(true, 'accepted', false)).toBe(false)
+    expect(isAcceptanceWithdrawable(true, 'pending', true)).toBe(false)
+    expect(isAcceptanceWithdrawable(true, 'rejected', true)).toBe(false)
   })
 
   it('file:// 和未知协议不能探测签核写入', () => {

@@ -29,18 +29,18 @@ src/
 │   ├── status.ts         # status 命令
 │   ├── instructions.ts   # instructions 命令
 │   ├── update.ts         # update 命令
-│   └── search.ts         # search 命令
+│   ├── idea.ts           # idea 生命周期命令组
+│   └── acceptance.ts     # acceptance 验收命令组
 └── utils/
     ├── context.ts        # createContext() 工具
-    ├── error.ts          # handleError() 错误处理
-    └── model-progress.ts # 模型下载进度格式化（init/update/search 共用）
+    └── error.ts          # handleError() 错误处理
 ```
 
 ## 已实现命令
 
 ### init 命令
 ```bash
-marchen init          # 交互式选择 AI 工具和搜索开关，初始化目录结构
+marchen init          # 交互式选择 AI 工具，初始化目录结构
 marchen init --force  # 跳过确认
 ```
 
@@ -78,16 +78,7 @@ marchen instructions <name> apply --json           # 获取 apply 实现指令�
 
 ### update 命令
 ```bash
-marchen update        # 更新 skill/command 文件，按 config.yaml 的 search.enabled 同步搜索模型
-```
-
-### search 命令
-```bash
-marchen search <query>                # 搜索归档变更历史（需 search.enabled: true）
-marchen search <query> -n 10          # 指定结果数量
-marchen search <query> --min-score 0.5  # 最低分数阈值
-marchen search <query> --rebuild      # 重建索引后搜索
-marchen search <query> --json         # JSON 输出
+marchen update        # 更新 skill/command 文件并迁移工作区配置
 ```
 
 ## 添加新命令

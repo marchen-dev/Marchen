@@ -7,10 +7,15 @@ import {
   ensureDir,
   exists,
   listDir,
+  moveFile,
+  parseYaml,
   readFile,
   readYaml,
+  replaceFileAtomic,
+  stringifyYaml,
   writeBinary,
   writeFile,
+  writeFileExclusive,
   writeYaml,
 } from '../src/index.js'
 
@@ -76,6 +81,42 @@ describe('fs 文件系统操作', () => {
       const { readFile: readBytes } = await import('node:fs/promises')
       expect([...new Uint8Array(await readBytes(file))]).toEqual([1, 2, 3])
     })
+
+    it('排他创建不应该覆盖已有文件', async () => {
+      const file = join(testDir, 'exclusive.txt')
+      await writeFileExclusive(file, 'first')
+      await expect(writeFileExclusive(file, 'second')).rejects.toThrow(
+        '文件已存在',
+      )
+      expect(await readFile(file)).toBe('first')
+    })
+
+    it('应该通过临时文件替换已有文件并清理临时文件', async () => {
+      const file = join(testDir, 'atomic.txt')
+      await writeFile(file, 'before')
+      await replaceFileAtomic(file, 'after')
+      expect(await readFile(file)).toBe('after')
+      expect(
+        (await listDir(testDir)).filter((name) => name.endsWith('.tmp')),
+      ).toEqual([])
+    })
+
+    it('应该移动文件且拒绝覆盖目标', async () => {
+      const source = join(testDir, 'source.txt')
+      const destination = join(testDir, 'nested', 'destination.txt')
+      await writeFile(source, 'source')
+      await moveFile(source, destination)
+      expect(await exists(source)).toBe(false)
+      expect(await readFile(destination)).toBe('source')
+
+      const nextSource = join(testDir, 'next.txt')
+      await writeFile(nextSource, 'next')
+      await expect(moveFile(nextSource, destination)).rejects.toThrow(
+        '目标文件已存在',
+      )
+      expect(await readFile(nextSource)).toBe('next')
+      expect(await readFile(destination)).toBe('source')
+    })
   })
 
   describe('listDir 列举目录', () => {
@@ -134,6 +175,17 @@ describe('fs 文件系统操作', () => {
       const file = join(testDir, 'bad.yaml')
       await writeFile(file, '{{invalid: yaml::}')
       await expect(readYaml(file)).rejects.toThrow('YAML 解析失败')
+    })
+
+    it('应该解析并序列化 YAML 字符串', () => {
+      const data = { title: '想法', tags: ['cli', 'skill'] }
+      expect(parseYaml<typeof data>(stringifyYaml(data))).toEqual(data)
+    })
+
+    it('解析无效 YAML 字符串时应该包含来源', () => {
+      expect(() => parseYaml('{{invalid', 'idea.md')).toThrowError(
+        expect.objectContaining({ message: 'YAML 解析失败', path: 'idea.md' }),
+      )
     })
   })
 })

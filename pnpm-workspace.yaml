@@ -5,7 +5,6 @@ packages:
 allowBuilds:
   better-sqlite3: true
   esbuild: true
-  node-llama-cpp: true
   tree-sitter-go: false
   tree-sitter-javascript: false
   tree-sitter-python: false

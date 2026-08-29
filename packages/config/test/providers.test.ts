@@ -86,3 +86,52 @@ describe('acceptance 模板', () => {
     expect(content).toContain('不得拿给别的新目标复用')
   })
 })
+
+describe('idea 工作流模板', () => {
+  it('同时生成 capture skill 和 command', () => {
+    expect(SKILL_TEMPLATES.capture?.dirName).toBe('marchen-capture')
+    expect(SKILL_TEMPLATES.capture?.content).toContain(
+      'marchen idea create <name> --stdin --json',
+    )
+    expect(COMMAND_TEMPLATES.capture?.fileName).toBe('capture.md')
+    expect(COMMAND_TEMPLATES.capture?.content).toContain(
+      'marchen idea update <name> --if-revision',
+    )
+  })
+
+  it.each([
+    ['skill', SKILL_TEMPLATES.explore?.content ?? ''],
+    ['command', COMMAND_TEMPLATES.explore?.content ?? ''],
+  ])('%s explore 使用 Idea 与确定性历史路径', (_, content) => {
+    expect(content).toContain('marchen idea list --json')
+    expect(content).toContain('/marchen:capture')
+    expect(content).toContain('marchen/changelog.md')
+    expect(content).toContain('archive')
+    expect(content).not.toContain('marchen search')
+    expect(content).not.toContain('QMD')
+    expect(content).not.toContain('Hybrid Search')
+    expect(content).not.toContain('embedding')
+  })
+
+  it.each([
+    ['skill', SKILL_TEMPLATES.apply?.content ?? ''],
+    ['command', COMMAND_TEMPLATES.apply?.content ?? ''],
+  ])('%s apply 通过 changelog 与 archive 核对历史', (_, content) => {
+    expect(content).toContain('marchen/changelog.md')
+    expect(content).toContain('archive')
+    expect(content).not.toContain('marchen search')
+    expect(content).not.toContain('QMD')
+  })
+
+  it.each([
+    ['propose skill', SKILL_TEMPLATES.propose?.content ?? ''],
+    ['propose command', COMMAND_TEMPLATES.propose?.content ?? ''],
+    ['lite skill', SKILL_TEMPLATES.lite?.content ?? ''],
+    ['lite command', COMMAND_TEMPLATES.lite?.content ?? ''],
+  ])('%s 显式读取并晋升 Idea', (_, content) => {
+    expect(content).toContain('idea:<name>')
+    expect(content).toContain('marchen idea show <name> --json')
+    expect(content).toContain('marchen idea promote')
+    expect(content).toContain('不得隐式消费')
+  })
+})

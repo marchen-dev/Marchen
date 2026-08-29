@@ -1,10 +1,13 @@
 export { ensureDir, exists, listDir, moveDir } from './directory.js'
 export {
   appendFile,
+  moveFile,
   readFile,
   removeFile,
+  replaceFileAtomic,
   writeBinary,
   writeFile,
+  writeFileExclusive,
 } from './file.js'
 export {
   getArchiveDirectory,
@@ -13,4 +16,4 @@ export {
   getSpecDirectory,
   resolveWorkspaceRoot,
 } from './paths.js'
-export { readYaml, writeYaml } from './yaml.js'
+export { parseYaml, readYaml, stringifyYaml, writeYaml } from './yaml.js'
