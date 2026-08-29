@@ -52,3 +52,4 @@
 - 2026-05-21: [reposition-readme-harness](./archive/2026-05-21-reposition-readme-harness/) — 重写中英文 README，把项目定位从 spec 规范驱动改为 AI 编码工作流工装（harness engineering），新增两根支柱叙事并提升长期记忆为核心卖点。
 - 2026-05-28: [update-readme-add-propose-preview](./archive/2026-05-28-update-readme-add-propose-preview/) — 中英文 README 补充 propose-preview skill，两根支柱表格列入 preview
 - 2026-07-12: [add-update-skill](./archive/2026-07-12-add-update-skill/) — 新增 /marchen:update skill:修订变更规划产物并双向调和保持一致,绝不改代码;联动更新 apply/lite/propose-preview 指引
+- 2026-08-23: [add-acceptance-workflow](./archive/2026-08-23-add-acceptance-workflow/) — 新增本地验收工作流：acceptance 目录约定、CLI 子命令组与冻结单文件验收页，逐项待修改后整单签核，删除 review 入口
