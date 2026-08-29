@@ -1,0 +1,82 @@
+{
+  "title": "验收页导航与全屏图片预览",
+  "commit": "working-tree",
+  "surfaces": ["web"],
+  "summary": {
+    "verdict": "pass",
+    "conclusion": "Sidebar 当前项高亮和手动导航保持不变；根据上轮反馈，截图预览已改为全视口宽度。"
+  },
+  "plan": [
+    {
+      "id": "active-navigation",
+      "title": "Sidebar 清楚高亮当前验收项",
+      "category": "导航",
+      "verifier": "human",
+      "method": "查看 Sidebar 当前项",
+      "expected": "当前项与其他项有明确的背景、边界和左侧指示差异",
+      "requiredEvidence": ["image"]
+    },
+    {
+      "id": "manual-navigation-only",
+      "title": "方向键不再切换验收项",
+      "category": "导航",
+      "verifier": "human",
+      "method": "在页面中按下左右方向键",
+      "expected": "当前验收项保持不变，Sidebar 不再显示快捷键提示",
+      "requiredEvidence": ["image"]
+    },
+    {
+      "id": "click-image-preview",
+      "title": "点击截图打开全屏大图预览",
+      "category": "截图",
+      "verifier": "human",
+      "method": "点击截图证据主图",
+      "expected": "截图标题旁无尺寸工具栏，预览容器铺满整个视口，图片按视口宽度展开",
+      "requiredEvidence": ["image"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "active-navigation",
+      "name": "Sidebar 清楚高亮当前验收项",
+      "category": "导航",
+      "surface": "web",
+      "status": "pass",
+      "observation": "当前项保持白色背景、边界阴影和左侧深色指示线。",
+      "evidence": [
+        {
+          "type": "image",
+          "path": "assets/navigation.jpg"
+        }
+      ]
+    },
+    {
+      "id": "manual-navigation-only",
+      "name": "方向键不再切换验收项",
+      "category": "导航",
+      "surface": "web",
+      "status": "pass",
+      "observation": "全局方向键监听仍已移除，Sidebar 底部不再显示快捷键提示。",
+      "evidence": [
+        {
+          "type": "image",
+          "path": "assets/navigation.jpg"
+        }
+      ]
+    },
+    {
+      "id": "click-image-preview",
+      "name": "点击截图打开全屏大图预览",
+      "category": "截图",
+      "surface": "web",
+      "status": "pass",
+      "observation": "使用现有 shadcn/Base UI Dialog，移除默认 `sm:max-w-sm` 限制后，预览容器已铺满视口，图片按整屏宽度展开并可纵向滚动。",
+      "evidence": [
+        {
+          "type": "image",
+          "path": "assets/fullscreen-preview.jpg"
+        }
+      ]
+    }
+  ]
+}

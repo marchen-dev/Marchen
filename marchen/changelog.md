@@ -54,3 +54,4 @@
 - 2026-07-12: [add-update-skill](./archive/2026-07-12-add-update-skill/) — 新增 /marchen:update skill:修订变更规划产物并双向调和保持一致,绝不改代码;联动更新 apply/lite/propose-preview 指引
 - 2026-08-23: [add-acceptance-workflow](./archive/2026-08-23-add-acceptance-workflow/) — 新增本地验收工作流：acceptance 目录约定、CLI 子命令组与冻结单文件验收页，逐项待修改后整单签核，删除 review 入口
 - 2026-08-29: [refactor-acceptance-review-workbench](./archive/2026-08-29-refactor-acceptance-review-workbench/) — 将验收页重构为基于官方 shadcn 的响应式证据审查工作台
+- 2026-08-29: [simplify-acceptance-navigation](./archive/2026-08-29-simplify-acceptance-navigation/) — 收敛验收页导航与截图交互，强化当前项并支持全视口图片预览

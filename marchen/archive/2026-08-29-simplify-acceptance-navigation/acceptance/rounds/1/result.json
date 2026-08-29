@@ -1,0 +1,86 @@
+{
+  "title": "验收页导航与图片预览收敛",
+  "commit": "working-tree",
+  "surfaces": ["web"],
+  "summary": {
+    "verdict": "pass",
+    "conclusion": "Sidebar 当前项高亮已生效，方向键不再切换验收项，截图工具栏已移除并可点击打开大图。"
+  },
+  "plan": [
+    {
+      "id": "active-navigation",
+      "title": "Sidebar 清楚高亮当前验收项",
+      "category": "导航",
+      "verifier": "human",
+      "method": "查看 Sidebar 当前项",
+      "expected": "当前项与其他项有明确的背景、边界和左侧指示差异",
+      "requiredEvidence": ["image"]
+    },
+    {
+      "id": "manual-navigation-only",
+      "title": "方向键不再切换验收项",
+      "category": "导航",
+      "verifier": "human",
+      "method": "在页面中按下左右方向键",
+      "expected": "当前验收项保持不变，Sidebar 不再显示快捷键提示",
+      "requiredEvidence": ["image"]
+    },
+    {
+      "id": "click-image-preview",
+      "title": "点击截图打开大图预览",
+      "category": "截图",
+      "verifier": "human",
+      "method": "点击截图证据主图",
+      "expected": "截图标题旁无尺寸工具栏，点击主图后打开带遮罩和关闭按钮的大图预览",
+      "requiredEvidence": ["image"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "active-navigation",
+      "name": "Sidebar 清楚高亮当前验收项",
+      "category": "导航",
+      "surface": "web",
+      "status": "pass",
+      "observation": "当前的“登录按钮”项显示白色背景、边界阴影和左侧深色指示线，与未选中项区分明显。",
+      "evidence": [
+        {
+          "type": "image",
+          "path": "assets/navigation.jpg"
+        }
+      ]
+    },
+    {
+      "id": "manual-navigation-only",
+      "name": "方向键不再切换验收项",
+      "category": "导航",
+      "surface": "web",
+      "status": "pass",
+      "observation": "按下右方向键后当前标题仍为“登录按钮”，Sidebar 底部不再出现快捷键提示。",
+      "evidence": [
+        {
+          "type": "image",
+          "path": "assets/navigation.jpg"
+        }
+      ]
+    },
+    {
+      "id": "click-image-preview",
+      "name": "点击截图打开大图预览",
+      "category": "截图",
+      "surface": "web",
+      "status": "pass",
+      "observation": "截图标题旁已无“适应 / 原始尺寸 / 全屏”工具栏；点击主图后打开了大图 Dialog。",
+      "evidence": [
+        {
+          "type": "image",
+          "path": "assets/navigation.jpg"
+        },
+        {
+          "type": "image",
+          "path": "assets/image-preview.jpg"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "rejected",
+  "items": [
+    {
+      "id": "click-image-preview",
+      "comment": "这个图片宽度怎么这么窄，应该能否铺满全屏的，不行的话你看看 shadcn 和或者库里面有没有现成的组件",
+      "images": [
+        "decision-assets/7baac750585e45e8.png"
+      ]
+    }
+  ]
+}
