@@ -87,6 +87,8 @@ Long-term memory now follows a deterministic archive → changelog → artifact 
 
 The built-in `marchen search` command, QMD integration, and model download path have been retired. After upgrading, run `marchen update`; it removes the obsolete `search` and `models` configuration and regenerates managed Skill/Command files.
 
+`marchen init` and `marchen update` also idempotently add a root `.gitattributes` rule that marks archived single-file acceptance pages as generated, preventing GitHub from misclassifying the repository as HTML without overwriting existing attributes.
+
 Migration does not delete existing data automatically:
 
 - `marchen/.search/` remains ignored by Git and may be removed manually after confirming it is no longer needed.

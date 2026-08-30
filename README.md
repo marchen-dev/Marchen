@@ -87,6 +87,8 @@ cat marchen/changelog.md
 
 内置 `marchen search`、QMD 和模型下载链路已经退役。升级后请运行 `marchen update`：它会删除废弃的 `search`、`models` 配置，并重新生成所选 AI 工具的 Skill/Command 文件。
 
+`marchen init` 和 `marchen update` 还会在项目根目录幂等补齐 `.gitattributes`，将归档中的单文件验收页标记为生成产物，避免 GitHub 将仓库语言错误识别为 HTML；已有属性规则不会被覆盖。
+
 迁移不会自动删除现有数据：
 
 - `marchen/.search/` 继续被 Git 忽略，确认不再需要后可手动删除。

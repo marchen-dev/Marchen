@@ -12,11 +12,13 @@ import {
   SKILL_TEMPLATES,
 } from '@marchen/config'
 import {
+  appendFile,
   ensureDir,
   exists,
   getArchiveDirectory,
   getChangeDirectory,
   getSpecDirectory,
+  readFile,
   readYaml,
   removeFile,
   resolveWorkspaceRoot,
@@ -24,6 +26,11 @@ import {
   writeYaml,
 } from '@marchen/fs'
 import { CONFIG_FILE_NAME, IDEA_DIRECTORY_NAME } from '@marchen/shared'
+
+const LINGUIST_ACCEPTANCE_RULE =
+  'marchen/archive/**/acceptance/index.html linguist-generated'
+const LINGUIST_ACCEPTANCE_COMMENT =
+  '# Marchen 单文件验收页是冻结的生成产物，不计入 GitHub 语言统计'
 
 /** 初始化选项 */
 export interface InitializeOptions {
@@ -134,6 +141,7 @@ export class Workspace {
     await writeFile(join(this.changeDir, '.gitkeep'), '')
     await writeFile(join(this.archiveDir, '.gitkeep'), '')
     await writeFile(join(this.ideaDir, '.gitkeep'), '')
+    await this.ensureLinguistAttributes()
 
     // 创建 changelog.md（已存在时跳过）
     if (!(await exists(this.changelogPath))) {
@@ -175,6 +183,7 @@ export class Workspace {
     // 老项目升级后也立即具备 idea 停车区
     await ensureDir(this.ideaDir)
     await writeFile(join(this.ideaDir, '.gitkeep'), '')
+    await this.ensureLinguistAttributes()
 
     // 显式 update 始终清理已经退役的搜索配置，即使版本未变化
     const retiredConfigRemoved = 'search' in config || 'models' in config
@@ -264,6 +273,44 @@ export class Workspace {
     for (const template of Object.values(COMMAND_TEMPLATES)) {
       await writeFile(join(dir, template.fileName), template.content)
     }
+  }
+
+  /**
+   * 确保归档验收页不参与 GitHub Linguist 语言统计
+   *
+   * 已有 `.gitattributes` 内容保持不变；规则存在时不重复写入。
+   */
+  private async ensureLinguistAttributes(): Promise<void> {
+    const path = join(this.root, '.gitattributes')
+    if (!(await exists(path))) {
+      await writeFile(
+        path,
+        `${LINGUIST_ACCEPTANCE_COMMENT}\n${LINGUIST_ACCEPTANCE_RULE}\n`,
+      )
+      return
+    }
+
+    const content = await readFile(path)
+    const ruleExists = content.split(/\r?\n/).some((line) => {
+      const fields = line.trim().split(/\s+/)
+      return (
+        fields[0] === 'marchen/archive/**/acceptance/index.html' &&
+        fields.slice(1).some((field) => field.includes('linguist-generated'))
+      )
+    })
+    if (ruleExists) return
+
+    const newline = content.includes('\r\n') ? '\r\n' : '\n'
+    const separator =
+      content.length === 0
+        ? ''
+        : content.endsWith('\n')
+          ? newline
+          : newline.repeat(2)
+    await appendFile(
+      path,
+      `${separator}${LINGUIST_ACCEPTANCE_COMMENT}${newline}${LINGUIST_ACCEPTANCE_RULE}${newline}`,
+    )
   }
 
   /**

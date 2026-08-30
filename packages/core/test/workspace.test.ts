@@ -7,7 +7,9 @@ vi.mock('@marchen/fs', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@marchen/fs')>()
   return {
     ...actual,
+    appendFile: vi.fn().mockResolvedValue(undefined),
     ensureDir: vi.fn().mockResolvedValue(undefined),
+    readFile: vi.fn().mockResolvedValue(''),
     writeFile: vi.fn().mockResolvedValue(undefined),
     writeYaml: vi.fn().mockResolvedValue(undefined),
     readYaml: vi.fn().mockResolvedValue({}),
@@ -84,6 +86,59 @@ describe('workspace', () => {
           .mocked(fs.ensureDir)
           .mock.calls.some(([path]) => path.includes('.search')),
       ).toBe(false)
+    })
+
+    it('创建缺失的 .gitattributes 并排除归档验收页', async () => {
+      const workspace = new Workspace('/test/root')
+      await workspace.initialize()
+
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        '/test/root/.gitattributes',
+        expect.stringContaining(
+          'marchen/archive/**/acceptance/index.html linguist-generated',
+        ),
+      )
+    })
+
+    it('保留已有 .gitattributes 内容并追加规则', async () => {
+      vi.mocked(fs.exists)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(false)
+      vi.mocked(fs.readFile).mockResolvedValueOnce(
+        '*.md linguist-documentation\n',
+      )
+
+      const workspace = new Workspace('/test/root')
+      await workspace.initialize()
+
+      expect(fs.writeFile).not.toHaveBeenCalledWith(
+        '/test/root/.gitattributes',
+        expect.any(String),
+      )
+      expect(fs.appendFile).toHaveBeenCalledWith(
+        '/test/root/.gitattributes',
+        expect.stringContaining(
+          'marchen/archive/**/acceptance/index.html linguist-generated',
+        ),
+      )
+    })
+
+    it('已有 Linguist 规则时不重复写入', async () => {
+      vi.mocked(fs.exists)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(false)
+      vi.mocked(fs.readFile).mockResolvedValueOnce(
+        'marchen/archive/**/acceptance/index.html linguist-generated\n',
+      )
+
+      const workspace = new Workspace('/test/root')
+      await workspace.initialize()
+
+      expect(fs.appendFile).not.toHaveBeenCalled()
+      expect(fs.writeFile).not.toHaveBeenCalledWith(
+        '/test/root/.gitattributes',
+        expect.any(String),
+      )
     })
 
     it('默认只生成 Claude Code 的文件', async () => {
@@ -267,6 +322,12 @@ describe('workspace', () => {
       expect(fs.writeFile).toHaveBeenCalledWith(
         expect.stringContaining('ideas/.gitkeep'),
         '',
+      )
+      expect(fs.writeFile).toHaveBeenCalledWith(
+        '/test/root/.gitattributes',
+        expect.stringContaining(
+          'marchen/archive/**/acceptance/index.html linguist-generated',
+        ),
       )
     })
 
