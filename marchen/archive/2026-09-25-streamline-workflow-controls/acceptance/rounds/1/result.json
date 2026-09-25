@@ -1,0 +1,49 @@
+{
+  "title": "名称推断与自动验收开关",
+  "plan": [
+    {
+      "id": "persistent-setting",
+      "name": "新项目提供验收开关，关闭设置在升级后保留"
+    },
+    {
+      "id": "context-selection",
+      "name": "省略名称时不重复询问明确的目标"
+    },
+    {
+      "id": "optional-acceptance",
+      "name": "关闭自动验收后自然收尾，显式验收仍可运行"
+    }
+  ],
+  "cases": [
+    {
+      "id": "persistent-setting",
+      "name": "新项目提供验收开关，关闭设置在升级后保留",
+      "status": "pass",
+      "observation": "使用本次构建的 Workspace 在隔离目录初始化，实际生成 acceptance.enabled: true；设置为 false 后从 0.8.3 更新到 0.8.4，配置仍为 false。已安装的 Codex 工作流文件同步生成。未修改当前项目配置。",
+      "evidence": []
+    },
+    {
+      "id": "context-selection",
+      "name": "省略名称时不重复询问明确的目标",
+      "status": "blocked",
+      "observation": "五个入口已统一优先级，源模板、生成常量和已安装文件一致。当前会话依据上下文进入了正确变更；尚未对更新后的五个入口分别开展独立 Agent 对话验证，不能据静态检查宣称全部运行场景通过。",
+      "evidence": []
+    },
+    {
+      "id": "optional-acceptance",
+      "name": "关闭自动验收后自然收尾，显式验收仍可运行",
+      "status": "blocked",
+      "observation": "apply 两种完成路径、lite 选项、archive 未签核检查以及显式验收覆盖规则均已更新。尚未在独立 Agent 会话完整演练关闭、历史 rejected 和显式验收组合；本轮只确认模板规则，不声称模型行为已验证。",
+      "evidence": []
+    }
+  ],
+  "summary": {
+    "verdict": "blocked",
+    "conclusion": "配置实际生成与升级保留已确认；工作流模板已同步，跨 Agent 对话行为仍待实际走查。"
+  },
+  "commit": "9f2401f93dc393beb4556bbc1fdabdbf52ee37d0 (工作区未提交改动)",
+  "surfaces": [
+    "CLI",
+    "工作流模板"
+  ]
+}

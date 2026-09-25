@@ -411,6 +411,11 @@ export interface UpdateResult {
  * 对应 config.yaml 的结构
  */
 export interface WorkspaceConfig {
+  /** 自动验收配置；缺省开启，显式调用验收不受此开关限制 */
+  readonly acceptance?: {
+    /** 是否自动进入验收；仅 false 关闭 */
+    readonly enabled?: boolean
+  }
   /** 默认 schema */
   readonly schema: string
   /** 已安装的 AI 工具 provider ID 列表 */

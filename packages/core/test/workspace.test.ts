@@ -81,6 +81,7 @@ describe('workspace', () => {
         .mock.calls.find(([path]) => path.endsWith('config.yaml'))
       expect(configCall?.[1]).not.toHaveProperty('search')
       expect(configCall?.[1]).not.toHaveProperty('models')
+      expect(configCall?.[1]).toHaveProperty('acceptance.enabled', true)
       expect(
         vi
           .mocked(fs.ensureDir)
@@ -278,7 +279,100 @@ describe('workspace', () => {
     })
   })
 
+  describe('getConfigValue', () => {
+    it.each([
+      [{}, true],
+      [{ acceptance: {} }, true],
+      [{ acceptance: { enabled: true } }, true],
+      [{ acceptance: { enabled: false } }, false],
+    ])('返回生效值：%j', async (config, expected) => {
+      vi.mocked(fs.readYaml).mockResolvedValueOnce(config)
+      expect(
+        await new Workspace('/test/root').getConfigValue('acceptance.enabled'),
+      ).toBe(expected)
+      expect(fs.writeYaml).not.toHaveBeenCalled()
+    })
+
+    it.each([
+      null,
+      [],
+      false,
+      { acceptance: null },
+      { acceptance: [] },
+      { acceptance: false },
+      { acceptance: { enabled: 'false' } },
+      { acceptance: { enabled: null } },
+      { acceptance: { enabled: 0 } },
+    ])('拒绝非法配置：%j', async (config) => {
+      vi.mocked(fs.readYaml).mockResolvedValueOnce(config)
+      await expect(
+        new Workspace('/test/root').getConfigValue('acceptance.enabled'),
+      ).rejects.toThrow()
+    })
+
+    it('拒绝未知字段且不读取配置', async () => {
+      await expect(
+        new Workspace('/test/root').getConfigValue('unknown'),
+      ).rejects.toThrow('未知配置项')
+      expect(fs.readYaml).not.toHaveBeenCalled()
+    })
+
+    it('读取或解析失败时传播错误，不返回默认值', async () => {
+      vi.mocked(fs.readYaml).mockRejectedValueOnce(new Error('读取失败'))
+      await expect(
+        new Workspace('/test/root').getConfigValue('acceptance.enabled'),
+      ).rejects.toThrow('读取失败')
+    })
+  })
+
   describe('update', () => {
+    it.each([
+      { version: '0.8.3', search: undefined },
+      { version: '1.0.0', search: undefined },
+      { version: '1.0.0', search: { enabled: true } },
+    ])('更新保留关闭验收配置：%j', async ({ version, search }) => {
+      const config = {
+        schema: 'full',
+        providers: ['claude-code'],
+        version,
+        acceptance: { enabled: false },
+        custom: '保留',
+        ...(search ? { search } : {}),
+      }
+      vi.mocked(fs.readYaml).mockResolvedValueOnce(config)
+      const workspace = new Workspace('/test/root')
+      await workspace.update({ version: '1.0.0' })
+
+      if (version === '1.0.0' && !search) {
+        expect(fs.writeYaml).not.toHaveBeenCalled()
+        expect(config.acceptance.enabled).toBe(false)
+      } else {
+        expect(fs.writeYaml).toHaveBeenCalledWith(
+          expect.stringContaining('config.yaml'),
+          expect.objectContaining({
+            acceptance: { enabled: false },
+            custom: '保留',
+            version: '1.0.0',
+          }),
+        )
+      }
+    })
+
+    it('旧配置可读取并更新，无需迁移验收字段', async () => {
+      const config = { schema: 'full', providers: ['codex'] }
+      vi.mocked(fs.readYaml)
+        .mockResolvedValueOnce(config)
+        .mockResolvedValueOnce(config)
+      const workspace = new Workspace('/test/root')
+      expect(await workspace.readConfig()).toEqual(config)
+      await workspace.update({ version: '1.0.0' })
+      expect(fs.writeYaml).toHaveBeenCalledWith(
+        expect.stringContaining('config.yaml'),
+        expect.objectContaining({ schema: 'full', providers: ['codex'] }),
+      )
+      expect(config).not.toHaveProperty('acceptance')
+    })
+
     it('正常更新：覆盖 skill/command 文件并更新 version', async () => {
       vi.mocked(fs.readYaml).mockResolvedValueOnce({
         schema: 'full',

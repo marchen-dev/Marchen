@@ -13,16 +13,20 @@ argument-hint: <change-name>
 
 **输入**：变更名称，或从上下文推断。
 
+用户显式调用时始终执行验收，不受自动验收开关影响，也不修改项目配置；apply/lite 自动衔接时遵循其配置查询结果。
+
 **流程**
 
 1. **选择变更**
 
-   有名称就用，没有则：
-   - 从对话上下文推断
-   - 只有一个 open 变更时自动选择
-   - 多个变更时 \`marchen list --json\` + **AskUserQuestion**
+   按以下优先级确定目标：
+   - 用户显式指定名称：使用该名称。
+   - 未指定名称但对话上下文唯一明确指向某个变更：直接使用，即使有多个 open 变更也不重复确认。
+   - 上下文无法确定：运行 \`marchen list --json\`，只有一个 open 变更时自动使用。
+   - 仍有多个合理候选：展示候选并询问，使用当前环境可用的原生询问工具或普通文本，不绑定特定工具；得到答案前不执行依赖目标的操作。
 
-   显示："Acceptance 变更: \`<name>\`"
+   没有 open 变更、显式名称或上下文目标不存在时，说明未找到目标，不擅自切换或创建变更。
+   确定后显示："使用变更: \`<name>\`"。
 
 2. **预检**
 
@@ -110,16 +114,22 @@ description: 按变更的 tasks.md 逐个实现任务。适用于用户想按任
 
 **输入**：用户的请求应包含变更名称，或可从上下文推断。
 
+**自动验收配置**
+
+进入流程及收尾前执行 \`marchen config get acceptance.enabled --json\`，根据 \`value\` 判断是否启用自动验收。命令失败时报告错误并停止，不自行读取配置兜底。关闭不代表验收通过，不免除正常检查，也不修改已有证据或人的决定。
+
 **流程**
 
 1. **选择变更**
 
-   有名称就用，没有则：
-   - 从对话上下文推断
-   - 只有一个 open 变更时自动选择
-   - 多个变更时 \`marchen list --json\` + **AskUserQuestion** 让用户选
+   按以下优先级确定目标：
+   - 用户显式指定名称：使用该名称。
+   - 未指定名称但对话上下文唯一明确指向某个变更：直接使用，即使有多个 open 变更也不重复确认。
+   - 上下文无法确定：运行 \`marchen list --json\`，只有一个 open 变更时自动使用。
+   - 仍有多个合理候选：展示候选并询问，使用当前环境可用的原生询问工具或普通文本，不绑定特定工具；得到答案前不执行依赖目标的操作。
 
-   显示："使用变更: \`<name>\`"
+   没有 open 变更、显式名称或上下文目标不存在时，说明未找到目标，不擅自切换或创建变更。
+   确定后显示："使用变更: \`<name>\`"。
 
 2. **获取实现指令**
 
@@ -136,7 +146,7 @@ description: 按变更的 tasks.md 逐个实现任务。适用于用户想按任
 
    根据 \`state\` 处理：
    - \`"blocked"\` → 提示先完成 artifacts
-   - \`"all_done"\` → 先 \`marchen acceptance status <name> --json\`：已 accepted 则提示归档且不要开新轮；rejected 则按待修改项修改后开新一轮 acceptance；尚无验收则走第 5 步的验收收尾
+   - \`"all_done"\` → 先查询自动验收配置。关闭时报告任务完成和正常检查结果，提示可归档，不自动归档；已有 pending/rejected/accepted 状态仅如实报告，不因历史 rejected 自动返工或开新轮，不将关闭说成验收通过，然后结束。开启时先 \`marchen acceptance status <name> --json\`：已 accepted 则提示归档且不要开新轮；rejected 则按待修改项修改后开新一轮 acceptance；尚无验收则走第 5 步的验收收尾
    - \`"ready"\` → 继续
 
 3. **显示进度**
@@ -165,7 +175,8 @@ description: 按变更的 tasks.md 逐个实现任务。适用于用户想按任
 5. **显示结果**
 
    全部完成时（任务从「未全部完成」变为「全部完成」的这一次）：
-   MUST 接着执行 \`marchen-acceptance\` 的流程（预检、写 \`rounds/1\`、\`render\`、\`serve\`、轮询决定）。不要只打印一句提示就结束。
+   先重新查询自动验收配置。关闭时报告实现和正常检查结果，提示 \`/marchen:archive <name>\`，然后结束；不创建验收证据、不启动服务、不轮询、不自动归档。
+   开启时 MUST 接着执行 \`marchen-acceptance\` 的流程（预检、写 \`rounds/1\`、\`render\`、\`serve\`、轮询决定）。不要只打印一句提示就结束。
    禁止代人点验收页上的接受、打回修改或「让 AI 修改」。
 
    人接受后询问是否归档；提交待修改则按 \`decision.items\` 继续改，修完开新轮。
@@ -194,16 +205,22 @@ description: 归档已完成的变更。检查完成度后执行归档，适用�
 
 **输入**：用户的请求可包含变更名称（如 \`/marchen:archive add-auth\`），也可不带。
 
+**自动验收配置**
+
+进入流程及收尾前执行 \`marchen config get acceptance.enabled --json\`，根据 \`value\` 判断是否启用自动验收。命令失败时报告错误并停止，不自行读取配置兜底。关闭不代表验收通过，不免除正常检查，也不修改已有证据或人的决定。
+
 **流程**
 
 1. **确定变更名称**
 
-   有名称就用，没有则：
-   - 从对话上下文推断
-   - 只有一个 open 变更时自动选择
-   - 多个变更时 \`marchen list --json\` + **AskUserQuestion** 让用户选
+   按以下优先级确定目标：
+   - 用户显式指定名称：使用该名称。
+   - 未指定名称但对话上下文唯一明确指向某个变更：直接使用，即使有多个 open 变更也不重复确认。
+   - 上下文无法确定：运行 \`marchen list --json\`，只有一个 open 变更时自动使用。
+   - 仍有多个合理候选：展示候选并询问，使用当前环境可用的原生询问工具或普通文本，不绑定特定工具；得到答案前不执行依赖目标的操作。
 
-   **重要**：不要猜测或自动选择，必须让用户确认。
+   没有 open 变更、显式名称或上下文目标不存在时，说明未找到目标，不擅自切换或创建变更。
+   确定后显示："使用变更: \`<name>\`"。
 
 2. **检查完成度**
 
@@ -212,20 +229,22 @@ description: 归档已完成的变更。检查完成度后执行归档，适用�
    marchen acceptance status <name> --json
    \`\`\`
 
-   解析 JSON，检查：
+   重新查询自动验收配置。解析 JSON，检查：
    - \`artifacts\`：每个 artifact 的 \`status\` 是否为 \`filled\`
    - \`tasks.completed\` vs \`tasks.total\`（\`tasks\` 为 null 时视为无任务，跳过检查）
-   - 验收：\`acceptance exists\` 为 false，或 \`decision\` 不是 accepted → 警告「尚未签核」
+   - 仅自动验收开启且本次不是 lite「直接归档」时检查签核：\`acceptance exists\` 为 false，或 \`decision\` 不是 accepted → 警告「尚未签核」
 
    **如果本次来自 lite「直接归档」：** 不要再问尚未验收，继续。
 
-   **如果全部完成且已 accepted（或 lite 已声明跳过）：** 直接进入下一步。先 \`marchen acceptance stop <name>\`。
+   **如果 artifact 和任务全部完成，且已 accepted、自动验收关闭或 lite 已声明跳过三者之一成立：** 直接进入下一步。先 \`marchen acceptance stop <name>\`。
 
-   **如果有未完成的 artifact、task，或尚未签核：**
+   **如果有未完成的 artifact、task，或在需要检查签核时尚未签核：**
    - 显示警告，列出未完成项
    - 用 **AskUserQuestion** 确认是否继续
    - 用户确认后继续，不阻塞
    - 归档前尽量 \`marchen acceptance stop <name>\`
+
+   自动验收关闭时，不因验收缺失或 pending/rejected 再次确认；已有状态可如实报告，证据和决定随目录归档，不改写为 accepted。任务或 artifact 未完成仍须按上述规则确认。
 
 3. **生成摘要**
 
@@ -251,7 +270,6 @@ description: 归档已完成的变更。检查完成度后执行归档，适用�
 
 **护栏**
 
-- 未提供名称时必须用 AskUserQuestion 让用户选择
 - 用 \`status --json\` 检查完成度，不要自己读文件判断
 - 警告不阻塞归档，只提醒 + 确认
 - 使用 AskUserQuestion 时，选项不超过 4 个
@@ -633,6 +651,10 @@ marchen idea show <name> --json
 
 把完整 Idea 作为 tasks 的探索背景。只使用用户显式指定的 Idea，不通过模糊语义匹配自动消费其他 Idea。任一指定 Idea 不存在或损坏时先停止。
 
+**自动验收配置**
+
+进入流程及收尾前执行 \`marchen config get acceptance.enabled --json\`，根据 \`value\` 判断是否启用自动验收。命令失败时报告错误并停止，不自行读取配置兜底。关闭不代表验收通过，不免除正常检查，也不修改已有证据或人的决定。
+
 **流程**
 
 1. **确定变更名称**
@@ -733,7 +755,7 @@ marchen idea show <name> --json
 
 7. **全部完成 → 一道题**
 
-   所有任务完成后，用 **AskUserQuestion** 只问一次：
+   所有任务完成后重新查询自动验收配置，用 **AskUserQuestion** 只问一次。关闭时仅提供「直接归档」「先不动」，不展示验收选项；开启时提供以下四项：
 
    > "全部任务已完成 (N/N)，下一步？"
    > - 验收再归档
@@ -743,11 +765,11 @@ marchen idea show <name> --json
 
    **验收再归档：** 执行 \`marchen-acceptance\` 全文。等到 \`decision.status\` 为 accepted 再归档；若人点了「让 AI 修改」（\`rejected\`）则不归档，按待修改项修并开新轮。归档前 \`marchen acceptance stop\`。
 
-   **直接归档：** 不要创建 \`acceptance/\`。读取 tasks.md 背景段生成一句话摘要，执行 \`marchen archive <name> --summary "<摘要>" --json\`。不要再问「尚未验收」。
+   **直接归档：** 归档前用 \`marchen acceptance stop <name>\` 清理已有服务，保留已有验收记录随变更归档。不要创建 \`acceptance/\`。读取 tasks.md 背景段生成一句话摘要，执行 \`marchen archive <name> --summary "<摘要>" --json\`。不要再问「尚未验收」。
 
    **只验收：** 执行 acceptance，不要 archive。
 
-   **先不动：** 显示后续可用 \`/marchen:acceptance <name>\` 或 \`/marchen:archive <name>\`。
+   **先不动：** 关闭时仅提示 \`/marchen:archive <name>\`；开启时显示后续可用 \`/marchen:acceptance <name>\` 或 \`/marchen:archive <name>\`。
 
 **护栏**
 
@@ -785,12 +807,14 @@ argument-hint: <change-name>
 
 1. **选择变更**
 
-   有名称就用，没有则：
-   - 从对话上下文推断
-   - 只有一个 open 变更时自动选择
-   - 多个变更时 \`marchen list --json\` + **AskUserQuestion** 让用户选
+   按以下优先级确定目标：
+   - 用户显式指定名称：使用该名称。
+   - 未指定名称但对话上下文唯一明确指向某个变更：直接使用，即使有多个 open 变更也不重复确认。
+   - 上下文无法确定：运行 \`marchen list --json\`，只有一个 open 变更时自动使用。
+   - 仍有多个合理候选：展示候选并询问，使用当前环境可用的原生询问工具或普通文本，不绑定特定工具；得到答案前不执行依赖目标的操作。
 
-   显示："Preview 变更: \`<name>\`"
+   没有 open 变更、显式名称或上下文目标不存在时，说明未找到目标，不擅自切换或创建变更。
+   确定后显示："使用变更: \`<name>\`"。
 
 2. **获取 artifact 内容**
 
@@ -1079,13 +1103,14 @@ description: 修订变更的已有规划产物并双向调和保持一致。适�
 
 1. **选择变更**
 
-   有名称就用,没有则:
-   - 从对话上下文推断
-   - 只有一个 open 变更时自动选择,并明示"使用变更: \`<name>\`"
-   - 多个变更时 \`marchen list --json\` + **AskUserQuestion** 让用户选,选项展示名称、schema、任务进度、创建时间(\`createdAt\`),最近创建的标记"(推荐)"
-   - open 变更较多、创建时间不足以判断时,可用 \`ls -dt marchen/changes/*/\` 按最近改动排序辅助推荐(该命令不可用时忽略,退回 createdAt)
+   按以下优先级确定目标：
+   - 用户显式指定名称：使用该名称。
+   - 未指定名称但对话上下文唯一明确指向某个变更：直接使用，即使有多个 open 变更也不重复确认。
+   - 上下文无法确定：运行 \`marchen list --json\`，只有一个 open 变更时自动使用。
+   - 仍有多个合理候选：展示候选并询问，使用当前环境可用的原生询问工具或普通文本，不绑定特定工具；得到答案前不执行依赖目标的操作。
 
-   **重要**:多个候选时绝不猜测或自动选定,始终让用户决定。
+   没有 open 变更、显式名称或上下文目标不存在时，说明未找到目标，不擅自切换或创建变更。
+   确定后显示："使用变更: \`<name>\`"。
 
 2. **获取产物清单**
 

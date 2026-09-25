@@ -59,7 +59,7 @@ marchen:archive                       # 完成后归档留痕
 - **`marchen:lite`** — 轻量一气呵成。创建 lite 变更 → 实现任务 → 询问归档，全程一条命令。适合 bug 修复、小改动、快速迭代。
 - **`marchen:apply`** — 按生成的任务清单逐个实现，完成后勾选 checkbox。
 - **`marchen:update`** — 修订变更的已有规划产物（proposal / specs / design / tasks），并双向调和保持彼此一致。只改计划，绝不修改代码。
-- **`marchen:acceptance`** — apply 完成后出示本地验收页（截图与结论），等人签核后再归档。
+- **`marchen:acceptance`** — 默认在 apply 完成后出示本地验收页（截图与结论），等人签核后再归档。
 - **`marchen:archive`** — 归档已完成的变更，自动写入 changelog 索引。
 
 尚未准备实施时，可以把探索停放在 `marchen/ideas/<name>.md`：
@@ -86,6 +86,19 @@ cat marchen/changelog.md
 3. AI 按需读取候选归档中的 proposal、design 或 spec，恢复决策上下文
 
 内置 `marchen search`、QMD 和模型下载链路已经退役。升级后请运行 `marchen update`：它会删除废弃的 `search`、`models` 配置，并重新生成所选 AI 工具的 Skill/Command 文件。
+
+可在 `marchen/config.yaml` 关闭自动验收（默认开启，旧项目无需补配置）：
+
+```yaml
+acceptance:
+  enabled: false
+```
+
+用 `marchen config get acceptance.enabled --json` 查询生效值，返回 `{"value":false}`。未配置时返回 true；非法类型、未知配置项或文件读取/解析失败时报错并以非零状态退出。工作流通过此命令读取配置。
+
+关闭后，apply 完成时报告结果并提示归档，lite 只提供「直接归档 / 先不动」，archive 不再因未签核重复询问。正常测试和未完成任务检查仍执行；已有证据与人工决定保留，关闭不代表验收通过。显式执行 `/marchen:acceptance <name>` 仍可当次验收，不改变配置。`marchen acceptance stop <name>` 只停止本地服务，和关闭自动验收开关相互独立。
+
+apply、update、archive、acceptance、propose-preview 可省略变更名称：优先使用明确的对话上下文，否则使用唯一 open 变更，仅有歧义时询问。
 
 `marchen init` 和 `marchen update` 还会在项目根目录幂等补齐 `.gitattributes`，将归档中的单文件验收页标记为生成产物，避免 GitHub 将仓库语言错误识别为 HTML；已有属性规则不会被覆盖。
 

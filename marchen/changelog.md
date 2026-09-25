@@ -59,3 +59,4 @@
 - 2026-08-29: [rename-to-marchen](./archive/2026-08-29-rename-to-marchen/) — 将活跃代码与文档命名统一为 Marchen
 - 2026-08-29: [add-idea-capture-workflow](./archive/2026-08-29-add-idea-capture-workflow/) — 新增 Idea CLI 与 Capture 工作流，支持想法保存、恢复、安全更新及晋升归档
 - 2026-08-29: [retire-marchen-search](./archive/2026-08-29-retire-marchen-search/) — 退役内置 search/QMD，旧工作区迁移至 changelog 与 archive 历史调查
+- 2026-09-25: [streamline-workflow-controls](./archive/2026-09-25-streamline-workflow-controls/) — 统一上下文名称选择，新增自动验收开关并保留手动验收

@@ -59,7 +59,7 @@ Each skill addresses one step in the workflow. After `marchen init`, invoke them
 - **`marchen:lite`** — Lightweight end-to-end. Create a lite change → implement tasks → ask to archive, all in one command. For bug fixes, small changes, quick iterations.
 - **`marchen:apply`** — Implement the generated task list one by one, checking off each as you go.
 - **`marchen:update`** — Revise a change's existing planning artifacts (proposal / specs / design / tasks) and reconcile them in any direction to stay coherent. Plans only, never code.
-- **`marchen:acceptance`** — After apply, publish a local acceptance page with evidence for a human to sign off before archive.
+- **`marchen:acceptance`** — By default, after apply, publish a local acceptance page with evidence for a human to sign off before archive.
 - **`marchen:archive`** — Archive completed changes and automatically append to the changelog index.
 
 When a discussion is not ready for implementation, park it in `marchen/ideas/<name>.md`:
@@ -86,6 +86,19 @@ Long-term memory now follows a deterministic archive → changelog → artifact 
 3. The AI reads the relevant proposal, design, or spec files to restore decision context
 
 The built-in `marchen search` command, QMD integration, and model download path have been retired. After upgrading, run `marchen update`; it removes the obsolete `search` and `models` configuration and regenerates managed Skill/Command files.
+
+To disable automatic acceptance, set the following in `marchen/config.yaml`. It defaults to enabled; existing projects need no migration.
+
+```yaml
+acceptance:
+  enabled: false
+```
+
+Query the effective value with `marchen config get acceptance.enabled --json` (`{"value":false}`). Missing settings default to true. Invalid types, unknown keys, and file read/parse errors exit nonzero. Workflows use this command to read the setting.
+
+When disabled, apply reports completion and suggests archiving, lite offers only direct archive or no action, and archive does not ask again about missing sign-off. Normal tests and incomplete-task checks remain in effect. Existing evidence and human decisions are preserved; disabling does not mean accepted. An explicit `/marchen:acceptance <name>` still runs acceptance for that invocation without changing the setting. `marchen acceptance stop <name>` only stops the local server and is independent of this setting.
+
+The apply, update, archive, acceptance, and propose-preview workflows can infer an omitted change name from clear conversation context, then from a single open change. They ask only when the target remains ambiguous.
 
 `marchen init` and `marchen update` also idempotently add a root `.gitattributes` rule that marks archived single-file acceptance pages as generated, preventing GitHub from misclassifying the repository as HTML without overwriting existing attributes.
 

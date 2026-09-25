@@ -25,7 +25,11 @@ import {
   writeFile,
   writeYaml,
 } from '@marchen/fs'
-import { CONFIG_FILE_NAME, IDEA_DIRECTORY_NAME } from '@marchen/shared'
+import {
+  CONFIG_FILE_NAME,
+  IDEA_DIRECTORY_NAME,
+  ValidationError,
+} from '@marchen/shared'
 
 const LINGUIST_ACCEPTANCE_RULE =
   'marchen/archive/**/acceptance/index.html linguist-generated'
@@ -130,6 +134,7 @@ export class Workspace {
     const configPath = join(this.specDir, CONFIG_FILE_NAME)
     const configData: Record<string, unknown> = {
       schema: 'full',
+      acceptance: { enabled: true },
       providers: [...providerIds],
     }
     if (options?.version) {
@@ -165,6 +170,32 @@ export class Workspace {
   async readConfig(): Promise<WorkspaceConfig> {
     const configPath = join(this.specDir, CONFIG_FILE_NAME)
     return await readYaml<WorkspaceConfig>(configPath)
+  }
+
+  /** 查询支持的工作区配置项，校验类型并返回生效值。 */
+  async getConfigValue(key: string): Promise<boolean> {
+    if (key !== 'acceptance.enabled') {
+      throw new ValidationError(`未知配置项 "${key}"，支持 acceptance.enabled`)
+    }
+    const config = await readYaml<unknown>(join(this.specDir, CONFIG_FILE_NAME))
+    if (!config || typeof config !== 'object' || Array.isArray(config)) {
+      throw new ValidationError('config.yaml 必须是配置对象')
+    }
+    if (!Object.hasOwn(config, 'acceptance')) return true
+    const acceptance = (config as Record<string, unknown>).acceptance
+    if (
+      !acceptance ||
+      typeof acceptance !== 'object' ||
+      Array.isArray(acceptance)
+    ) {
+      throw new ValidationError('acceptance 必须是配置对象')
+    }
+    if (!Object.hasOwn(acceptance, 'enabled')) return true
+    const enabled = (acceptance as Record<string, unknown>).enabled
+    if (typeof enabled !== 'boolean') {
+      throw new ValidationError('acceptance.enabled 必须是布尔值 true 或 false')
+    }
+    return enabled
   }
 
   /**
